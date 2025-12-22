@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
   LabelList,
+  ReferenceArea,
 } from "recharts";
 import { subMonths, startOfMonth } from "date-fns";
 
@@ -19,8 +20,6 @@ import { StickyXAxis } from "./StickyXAxis";
 import { StickyYAxis } from "./StickyYAxis";
 import { UsageBarShape } from "./UsageBarShape";
 import { OverUsageLabel } from "./OverUsageLabel";
-import { MonthReferenceAreas } from "./MonthReferenceAreas";
-import { WeekReferenceAreas } from "./WeekReferenceAreas";
 import { CHART_CONFIG, ANIMATION_CONFIG } from "./constants";
 import {
   generateDailyData,
@@ -238,13 +237,41 @@ export function UsageChart() {
                         >
                           <CartesianGrid strokeDasharray="3 3" horizontal={false} vertical={true} stroke="#CFCFCF" strokeOpacity={1} />
                           
-                          {viewMode === 'day' && (
-                            <WeekReferenceAreas weekBlocks={weekBlocks} maxDomainValue={maxDomainValue} />
-                          )}
+                          {viewMode === 'day' && weekBlocks.map((block, index) => (
+                            <ReferenceArea
+                              key={`week-${block.weekNumber}-${index}`}
+                              y1={block.start}
+                              y2={block.end}
+                              x1={0}
+                              x2={maxDomainValue}
+                              fill={index % 2 === 0 ? "#F5F5F5" : "transparent"}
+                              fillOpacity={1}
+                              strokeOpacity={0}
+                              ifOverflow="extendDomain"
+                            />
+                          ))}
                           
-                          {viewMode === 'week' && (
-                            <MonthReferenceAreas monthBlocks={monthBlocks} maxDomainValue={maxDomainValue} />
-                          )}
+                          {viewMode === 'week' && monthBlocks.map((block, index) => (
+                            <ReferenceArea
+                              key={`${block.month}-${index}`}
+                              y1={block.start}
+                              y2={block.end}
+                              x1={0}
+                              x2={maxDomainValue}
+                              fill={index % 2 === 0 ? "#F5F5F5" : "transparent"}
+                              fillOpacity={1}
+                              strokeOpacity={0}
+                              ifOverflow="extendDomain"
+                              label={{
+                                value: block.month,
+                                position: 'insideTopRight',
+                                fill: 'hsl(var(--muted-foreground))',
+                                fontSize: 12,
+                                fontWeight: 500,
+                                offset: 10,
+                              }}
+                            />
+                          ))}
 
                           <XAxis 
                             type="number"
