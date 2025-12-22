@@ -267,11 +267,30 @@ export function UsageChart() {
       return options;
   }, []);
 
+  // Dynamic bar height - thicker bars for fewer data points
   const chartHeight = React.useMemo(() => {
      const count = chartData.length;
-     const barHeight = 35;
+     const minBarHeight = 35;
+     const maxBarHeight = 80;
+     
+     // Calculate dynamic bar height based on data count
+     const dynamicBarHeight = count <= 5 
+       ? Math.min(maxBarHeight, Math.max(minBarHeight, 160 / count))
+       : minBarHeight;
+     
      const padding = 25;
-     return count * barHeight + padding; 
+     return count * dynamicBarHeight + padding; 
+  }, [chartData.length]);
+
+  // Dynamic bar size for the actual bars
+  const dynamicBarSize = React.useMemo(() => {
+     const count = chartData.length;
+     const minSize = 24;
+     const maxSize = 50;
+     
+     if (count <= 2) return maxSize;
+     if (count <= 5) return Math.round(maxSize - ((count - 2) * 8));
+     return minSize;
   }, [chartData.length]);
 
   const YAxisWidth = 60;
@@ -379,7 +398,7 @@ export function UsageChart() {
                             data={chartData}
                             margin={{ top: 10, right: ChartRightMargin, left: ChartLeftMargin, bottom: 10 }}
                             barGap={3}
-                            barSize={24}
+                            barSize={dynamicBarSize}
                         >
                             <CartesianGrid strokeDasharray="3 3" horizontal={false} vertical={true} stroke="#CFCFCF" strokeOpacity={1} />
                             
