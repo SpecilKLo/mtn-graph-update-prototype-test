@@ -141,90 +141,95 @@ export function UsageChart() {
         />
         
         {/* Main Chart Content Area */}
-        <div className="flex-1 overflow-hidden relative flex flex-col w-full bg-card min-w-0">
-          {/* Scrollable Chart */}
-          <div 
-            ref={scrollContainerRef}
-            className="flex-1 overflow-y-auto overflow-x-hidden w-full px-4 scrollbar-thin scrollbar-thumb-border/30 scrollbar-track-transparent min-w-0"
-          >
-            <div style={{ minHeight: `${chartHeight}px` }} className="h-full w-full pr-2 min-w-0">
-              {isMounted && (
-                <ResponsiveContainer width="99%" height="100%" debounce={ANIMATION_CONFIG.DEBOUNCE} minWidth={0}>
-                  <BarChart
-                    layout="vertical"
-                    data={chartData}
-                    margin={{ top: 10, right: RIGHT_MARGIN, left: LEFT_MARGIN, bottom: 10 }}
-                    barGap={3}
-                    barSize={dynamicBarSize}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" horizontal={false} vertical={true} stroke="#CFCFCF" strokeOpacity={1} />
-                    
-                    {viewMode === 'week' && (
-                      <MonthReferenceAreas monthBlocks={monthBlocks} maxDomainValue={maxDomainValue} />
-                    )}
+        <div className="flex-1 overflow-hidden relative flex flex-col w-full bg-card">
+          {/* Horizontal scroll wrapper for chart + X-axis */}
+          <div className="flex-1 flex flex-col overflow-x-auto overflow-y-hidden">
+            <div style={{ minWidth: `${CHART_CONFIG.MIN_CHART_WIDTH}px` }} className="flex flex-col flex-1">
+              {/* Scrollable Chart (vertical) */}
+              <div 
+                ref={scrollContainerRef}
+                className="flex-1 overflow-y-auto overflow-x-hidden w-full px-4 scrollbar-thin scrollbar-thumb-border/30 scrollbar-track-transparent"
+              >
+                <div style={{ minHeight: `${chartHeight}px` }} className="h-full w-full pr-2">
+                  {isMounted && (
+                    <ResponsiveContainer width="99%" height="100%" debounce={ANIMATION_CONFIG.DEBOUNCE}>
+                      <BarChart
+                        layout="vertical"
+                        data={chartData}
+                        margin={{ top: 10, right: RIGHT_MARGIN, left: LEFT_MARGIN, bottom: 10 }}
+                        barGap={3}
+                        barSize={dynamicBarSize}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" horizontal={false} vertical={true} stroke="#CFCFCF" strokeOpacity={1} />
+                        
+                        {viewMode === 'week' && (
+                          <MonthReferenceAreas monthBlocks={monthBlocks} maxDomainValue={maxDomainValue} />
+                        )}
 
-                    <XAxis 
-                      type="number"
-                      domain={[0, maxDomainValue]}
-                      hide 
-                    />
-                    <YAxis 
-                      dataKey="label" 
-                      type="category"
-                      axisLine={false}
-                      tickLine={false}
-                      tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
-                      width={Y_AXIS_WIDTH}
-                      interval={0}
-                    />
-                    <Tooltip 
-                      content={<ChartTooltip />} 
-                      cursor={{ fill: 'hsl(var(--input-background))', opacity: 0.5 }} 
-                    />
-                    
-                    <Bar 
-                      dataKey="usage" 
-                      stackId="a" 
-                      fill="hsl(var(--chart-2))" 
-                      animationDuration={ANIMATION_CONFIG.BAR_DURATION}
-                      shape={UsageBarShape}
-                    >
-                      <LabelList 
-                        dataKey="usage" 
-                        position="insideRight" 
-                        fill="white"
-                        fontSize={11}
-                        fontWeight={700}
-                        formatter={(val: number) => val > 15 ? formatGBValue(val) : ''} 
-                        offset={10}
-                      />
-                    </Bar>
-                    <Bar 
-                      dataKey="overUsage" 
-                      stackId="a" 
-                      fill="hsl(var(--chart-3))" 
-                      radius={[0, 4, 4, 0]} 
-                      animationDuration={ANIMATION_CONFIG.BAR_DURATION}
-                    >
-                      <LabelList 
-                        dataKey="overUsage" 
-                        content={OverUsageLabel}
-                      />
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              )}
+                        <XAxis 
+                          type="number"
+                          domain={[0, maxDomainValue]}
+                          hide 
+                        />
+                        <YAxis 
+                          dataKey="label" 
+                          type="category"
+                          axisLine={false}
+                          tickLine={false}
+                          tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+                          width={Y_AXIS_WIDTH}
+                          interval={0}
+                        />
+                        <Tooltip 
+                          content={<ChartTooltip />} 
+                          cursor={{ fill: 'hsl(var(--input-background))', opacity: 0.5 }} 
+                        />
+                        
+                        <Bar 
+                          dataKey="usage" 
+                          stackId="a" 
+                          fill="hsl(var(--chart-2))" 
+                          animationDuration={ANIMATION_CONFIG.BAR_DURATION}
+                          shape={UsageBarShape}
+                        >
+                          <LabelList 
+                            dataKey="usage" 
+                            position="insideRight" 
+                            fill="white"
+                            fontSize={11}
+                            fontWeight={700}
+                            formatter={(val: number) => val > 15 ? formatGBValue(val) : ''} 
+                            offset={10}
+                          />
+                        </Bar>
+                        <Bar 
+                          dataKey="overUsage" 
+                          stackId="a" 
+                          fill="hsl(var(--chart-3))" 
+                          radius={[0, 4, 4, 0]} 
+                          animationDuration={ANIMATION_CONFIG.BAR_DURATION}
+                        >
+                          <LabelList 
+                            dataKey="overUsage" 
+                            content={OverUsageLabel}
+                          />
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  )}
+                </div>
+              </div>
+
+              {/* Sticky X-Axis */}
+              <StickyXAxis 
+                maxDomainValue={maxDomainValue}
+                scrollbarWidth={scrollbarWidth}
+                isMounted={isMounted}
+              />
             </div>
           </div>
 
-          {/* Sticky X-Axis */}
-          <StickyXAxis 
-            maxDomainValue={maxDomainValue}
-            scrollbarWidth={scrollbarWidth}
-            isMounted={isMounted}
-          />
-
-          {/* Footer */}
+          {/* Footer stays fixed, doesn't scroll horizontally */}
           <ChartFooter totalUsage={totalUsage} />
         </div>
       </Card>
