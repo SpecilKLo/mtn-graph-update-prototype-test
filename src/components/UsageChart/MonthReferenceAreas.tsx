@@ -21,7 +21,7 @@ export const MonthReferenceAreas = ({ monthBlocks, maxDomainValue }: MonthRefere
           x1={0}
           x2={maxDomainValue}
           fill="hsl(var(--muted-foreground))"
-          fillOpacity={index % 2 === 0 ? 0.08 : 0}
+          fillOpacity={index % 2 === 0 ? 0.06 : 0}
           strokeOpacity={0}
           ifOverflow="extendDomain"
           label={{
