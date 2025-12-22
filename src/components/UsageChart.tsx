@@ -280,7 +280,7 @@ export function UsageChart() {
 
   return (
     <div className="w-full h-full min-h-[500px] flex flex-col font-sans">
-      <Card className="w-full h-full bg-card shadow-elevation-sm border border-border rounded-[14px] overflow-hidden flex flex-col relative">
+      <Card className="w-full h-full max-h-[590px] bg-card shadow-elevation-sm border border-border rounded-[14px] overflow-hidden flex flex-col relative">
         {/* Header */}
         <div className="h-[72px] shrink-0 flex items-center justify-between px-6 border-b border-border/50 relative z-10 bg-card">
           <div className="flex items-center">
