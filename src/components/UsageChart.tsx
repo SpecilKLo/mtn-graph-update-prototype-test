@@ -475,7 +475,6 @@ export function UsageChart() {
                               data={[{}]} 
                               margin={{ top: 0, right: ChartRightMargin + 8, left: ChartLeftMargin, bottom: 0 }} 
                           >
-                               <CartesianGrid strokeDasharray="3 3" horizontal={false} vertical={true} stroke="#CFCFCF" strokeOpacity={1} />
                                <YAxis 
                                   type="category" 
                                   width={YAxisWidth} 
