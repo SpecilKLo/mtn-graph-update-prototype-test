@@ -49,86 +49,92 @@ export const ChartHeader = ({
   })();
 
   return (
-    <div className="min-h-[72px] shrink-0 flex flex-col sm:flex-row items-stretch sm:items-center justify-between px-4 sm:px-6 py-3 sm:py-4 gap-3 sm:gap-0 border-b border-border/50 relative z-10 bg-card font-display">
-      <div className="flex items-center justify-center sm:justify-start">
-        <Tabs value={viewMode} onValueChange={(v) => onViewModeChange(v as ViewMode)} className="w-full sm:w-auto">
-          <AnimatedTabsList 
-            activeValue={viewMode}
-            tabs={[
-              { value: "day", label: "Daily View" },
-              { value: "week", label: "Weekly View" },
-              { value: "month", label: "Monthly View" },
-            ]}
-            onTabChange={(v) => onViewModeChange(v as ViewMode)}
-            className="bg-muted h-10 p-1.5 rounded-lg gap-1 w-full sm:w-auto"
-          />
-        </Tabs>
+    <div className="shrink-0 flex flex-col gap-3 px-4 sm:px-6 py-3 sm:py-4 border-b border-border/50 relative z-10 bg-card font-display">
+      {/* Top row: Tabs and controls */}
+      <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 lg:gap-4">
+        <div className="flex items-center justify-center lg:justify-start">
+          <Tabs value={viewMode} onValueChange={(v) => onViewModeChange(v as ViewMode)} className="w-full lg:w-auto">
+            <AnimatedTabsList 
+              activeValue={viewMode}
+              tabs={[
+                { value: "day", label: "Daily View" },
+                { value: "week", label: "Weekly View" },
+                { value: "month", label: "Monthly View" },
+              ]}
+              onTabChange={(v) => onViewModeChange(v as ViewMode)}
+              className="bg-muted h-10 p-1.5 rounded-lg gap-1 w-full lg:w-auto"
+            />
+          </Tabs>
+        </div>
+
+        <div className="flex items-center justify-center lg:justify-end gap-2 sm:gap-3">
+          {viewMode === "day" ? (
+            <div className="relative flex-1 lg:flex-none">
+              <Select 
+                value={format(selectedMonth, "yyyy-MM")} 
+                onValueChange={onMonthChange}
+              >
+                <SelectTrigger className="w-full lg:w-[180px] h-[40px] bg-background border border-border rounded-lg text-primary font-normal focus:ring-0 focus:ring-offset-0 text-sm">
+                  <CalendarIcon className="mr-2 h-4 w-4 text-muted-foreground shrink-0" />
+                  <SelectValue>{format(selectedMonth, "MMMM yyyy")}</SelectValue>
+                </SelectTrigger>
+                <SelectContent className="bg-popover border-border">
+                  {monthOptions.map(opt => (
+                    <SelectItem key={opt.value} value={opt.value} className="hover:bg-secondary/10 cursor-pointer">
+                      <span>{opt.label}</span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 flex-1 lg:flex-none">
+              <Select value={rangePreset} onValueChange={onPresetChange}>
+                <SelectTrigger className="w-full sm:w-[150px] h-[40px] bg-background border border-border rounded-lg text-primary font-normal focus:ring-0 focus:ring-offset-0 text-sm">
+                  <SelectValue placeholder="Range" />
+                </SelectTrigger>
+                <SelectContent className="bg-popover border-border">
+                  <SelectItem value="12months"><span>Last 12 Months</span></SelectItem>
+                  <SelectItem value="6months"><span>Last 6 Months</span></SelectItem>
+                  <SelectItem value="ytd"><span>Year to Date</span></SelectItem>
+                  <SelectItem value="custom"><span>Custom Range</span></SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
+          <Button 
+            variant="outline" 
+            size="icon"
+            className="h-[40px] w-[40px] border-border text-muted-foreground hover:bg-muted hover:text-foreground rounded-lg shrink-0"
+            onClick={onExport}
+            title="Export CSV"
+          >
+            <Download className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
 
-      <div className="flex items-center justify-center sm:justify-end gap-2 sm:gap-4">
-        {viewMode === "day" ? (
-          <div className="relative flex-1 sm:flex-none">
-            <Select 
-              value={format(selectedMonth, "yyyy-MM")} 
-              onValueChange={onMonthChange}
-            >
-              <SelectTrigger className="w-full sm:w-[180px] h-[36px] sm:h-[40px] bg-background border border-border rounded-[8px] text-primary font-normal focus:ring-0 focus:ring-offset-0 text-sm">
-                <CalendarIcon className="mr-2 h-4 w-4 text-muted-foreground" />
-                <SelectValue>{format(selectedMonth, "MMMM yyyy")}</SelectValue>
-              </SelectTrigger>
-              <SelectContent className="bg-popover border-border">
-                {monthOptions.map(opt => (
-                  <SelectItem key={opt.value} value={opt.value} className="hover:bg-secondary/10 cursor-pointer">
-                    <span>{opt.label}</span>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+      {/* Custom range row - separate row for better tablet layout */}
+      {viewMode !== "day" && rangePreset === "custom" && (
+        <div className="flex items-center justify-center lg:justify-end">
+          <div className="flex items-center gap-2 bg-muted p-1.5 rounded-lg border border-border">
+            <input 
+              type="month" 
+              className="bg-transparent border-none text-sm text-foreground focus:ring-0 p-1.5 w-28 sm:w-32 outline-none"
+              value={format(customRange.from, "yyyy-MM")}
+              onChange={(e) => onCustomRangeChange('from', e.target.value)}
+            />
+            <span className="text-muted-foreground font-medium">–</span>
+            <input 
+              type="month" 
+              className="bg-transparent border-none text-sm text-foreground focus:ring-0 p-1.5 w-28 sm:w-32 outline-none"
+              value={format(customRange.to, "yyyy-MM")}
+              onChange={(e) => onCustomRangeChange('to', e.target.value)}
+            />
           </div>
-        ) : (
-          <div className="flex items-center gap-2 flex-1 sm:flex-none">
-            <Select value={rangePreset} onValueChange={onPresetChange}>
-              <SelectTrigger className="w-full sm:w-[160px] h-[36px] sm:h-[40px] bg-background border border-border rounded-[8px] text-primary font-normal focus:ring-0 focus:ring-offset-0 text-sm">
-                <SelectValue placeholder="Range" />
-              </SelectTrigger>
-              <SelectContent className="bg-popover border-border">
-                <SelectItem value="12months"><span>Last 12 Months</span></SelectItem>
-                <SelectItem value="6months"><span>Last 6 Months</span></SelectItem>
-                <SelectItem value="ytd"><span>Year to Date</span></SelectItem>
-                <SelectItem value="custom"><span>Custom Range</span></SelectItem>
-              </SelectContent>
-            </Select>
-            
-            {rangePreset === "custom" && (
-              <div className="hidden sm:flex items-center gap-2 bg-muted p-1.5 rounded-lg border border-border">
-                <input 
-                  type="month" 
-                  className="bg-transparent border-none text-sm text-foreground focus:ring-0 p-1.5 w-32 outline-none"
-                  value={format(customRange.from, "yyyy-MM")}
-                  onChange={(e) => onCustomRangeChange('from', e.target.value)}
-                />
-                <span className="text-muted-foreground font-medium">–</span>
-                <input 
-                  type="month" 
-                  className="bg-transparent border-none text-sm text-foreground focus:ring-0 p-1.5 w-32 outline-none"
-                  value={format(customRange.to, "yyyy-MM")}
-                  onChange={(e) => onCustomRangeChange('to', e.target.value)}
-                />
-              </div>
-            )}
-          </div>
-        )}
-
-        <Button 
-          variant="outline" 
-          size="icon"
-          className="h-[36px] w-[36px] sm:h-[40px] sm:w-[40px] border-border text-muted-foreground hover:bg-input-background hover:text-foreground rounded-[8px] shrink-0"
-          onClick={onExport}
-          title="Export CSV"
-        >
-          <Download className="h-4 w-4" />
-        </Button>
-      </div>
+        </div>
+      )}
     </div>
   );
 };
