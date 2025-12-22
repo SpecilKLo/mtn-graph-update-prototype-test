@@ -124,8 +124,8 @@ export function UsageChart() {
   const { Y_AXIS_WIDTH, RIGHT_MARGIN, LEFT_MARGIN } = CHART_CONFIG;
 
   return (
-    <div className="w-full h-full min-h-[500px] flex flex-col font-sans">
-      <Card className="w-full h-full max-h-[590px] bg-card shadow-elevation-sm border border-border rounded-[14px] overflow-hidden flex flex-col relative">
+    <div className="w-full h-full min-h-[500px] sm:min-h-[500px] flex flex-col font-sans">
+      <Card className="w-full h-full max-h-none sm:max-h-[590px] bg-card shadow-elevation-sm border border-border rounded-[14px] overflow-hidden flex flex-col relative">
         {/* Header */}
         <ChartHeader
           viewMode={viewMode}
