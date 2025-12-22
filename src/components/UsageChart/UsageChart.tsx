@@ -50,10 +50,13 @@ export function UsageChart() {
   // UI state
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
   const yAxisRef = React.useRef<HTMLDivElement>(null);
+  const chartHScrollRef = React.useRef<HTMLDivElement>(null);
+  const xAxisHScrollRef = React.useRef<HTMLDivElement>(null);
   const [scrollbarWidth, setScrollbarWidth] = React.useState(0);
   const [isMounted, setIsMounted] = React.useState(false);
   const [syncScrollTop, setSyncScrollTop] = React.useState(0);
   const isScrollSyncing = React.useRef(false);
+  const isHScrollSyncing = React.useRef(false);
 
   // Computed chart data based on view mode
   const chartData = React.useMemo(() => {
@@ -121,6 +124,29 @@ export function UsageChart() {
     });
   };
 
+  // Sync horizontal scroll between chart and X-axis
+  const handleChartHScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    if (isHScrollSyncing.current) return;
+    isHScrollSyncing.current = true;
+    if (xAxisHScrollRef.current) {
+      xAxisHScrollRef.current.scrollLeft = e.currentTarget.scrollLeft;
+    }
+    requestAnimationFrame(() => {
+      isHScrollSyncing.current = false;
+    });
+  };
+
+  const handleXAxisHScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    if (isHScrollSyncing.current) return;
+    isHScrollSyncing.current = true;
+    if (chartHScrollRef.current) {
+      chartHScrollRef.current.scrollLeft = e.currentTarget.scrollLeft;
+    }
+    requestAnimationFrame(() => {
+      isHScrollSyncing.current = false;
+    });
+  };
+
   // Event handlers
   const handlePresetChange = (value: string) => {
     setRangePreset(value);
@@ -180,7 +206,11 @@ export function UsageChart() {
             />
 
             {/* Horizontal scroll wrapper for chart */}
-            <div className="flex-1 flex flex-col overflow-x-auto overflow-y-hidden min-w-0">
+            <div 
+              ref={chartHScrollRef}
+              onScroll={handleChartHScroll}
+              className="flex-1 flex flex-col overflow-x-auto overflow-y-hidden min-w-0"
+            >
               <div style={{ minWidth: `${CHART_CONFIG.MIN_CHART_WIDTH}px` }} className="flex flex-col flex-1">
                 {/* Scrollable Chart (vertical) */}
                 <div 
@@ -266,7 +296,11 @@ export function UsageChart() {
             {/* Empty space for Y-axis alignment */}
             <div style={{ width: CHART_CONFIG.Y_AXIS_WIDTH + 16 }} className="shrink-0" />
             {/* X-axis content - scrolls horizontally with chart */}
-            <div className="flex-1 overflow-x-auto overflow-y-hidden min-w-0">
+            <div 
+              ref={xAxisHScrollRef}
+              onScroll={handleXAxisHScroll}
+              className="flex-1 overflow-x-auto overflow-y-hidden min-w-0"
+            >
               <div style={{ minWidth: `${CHART_CONFIG.MIN_CHART_WIDTH}px` }}>
                 <StickyXAxis 
                   maxDomainValue={maxDomainValue}
