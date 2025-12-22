@@ -270,8 +270,6 @@ export function UsageChart() {
                           barGap={3}
                           barSize={dynamicBarSize}
                         >
-                          <CartesianGrid strokeDasharray="3 3" horizontal={false} vertical={true} stroke="#CFCFCF" strokeOpacity={1} />
-                          
                           {viewMode === 'day' && weekBlocks.map((block, index) => (
                             <ReferenceArea
                               key={`week-${block.weekNumber}-${index}`}
@@ -307,6 +305,8 @@ export function UsageChart() {
                               }}
                             />
                           ))}
+
+                          <CartesianGrid strokeDasharray="3 3" horizontal={false} vertical={true} stroke="#CFCFCF" strokeOpacity={1} />
 
                           <XAxis 
                             type="number"
