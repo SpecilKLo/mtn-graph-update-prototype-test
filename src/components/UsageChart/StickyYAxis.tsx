@@ -1,16 +1,16 @@
 import * as React from "react";
-import { CHART_CONFIG, BAR_SIZE_CONFIG } from "./constants";
+import { CHART_CONFIG } from "./constants";
 import type { ChartData } from "./types";
 
 interface StickyYAxisProps {
   data: ChartData[];
-  dynamicBarSize: number;
+  chartHeight: number;
   scrollTop: number;
   onScroll: (scrollTop: number) => void;
 }
 
 export const StickyYAxis = React.forwardRef<HTMLDivElement, StickyYAxisProps>(
-  ({ data, dynamicBarSize, scrollTop, onScroll }, ref) => {
+  ({ data, chartHeight, scrollTop, onScroll }, ref) => {
     const internalRef = React.useRef<HTMLDivElement>(null);
     const combinedRef = (node: HTMLDivElement) => {
       internalRef.current = node;
@@ -18,9 +18,15 @@ export const StickyYAxis = React.forwardRef<HTMLDivElement, StickyYAxisProps>(
       else if (ref) ref.current = node;
     };
 
-    // Calculate row height to match the bar chart
-    const barGap = 3;
-    const rowHeight = dynamicBarSize + barGap + BAR_SIZE_CONFIG.PADDING;
+    // Chart margin top/bottom from Recharts
+    const marginTop = 10;
+    const marginBottom = 10;
+    
+    // Calculate usable chart area (excluding margins)
+    const usableHeight = chartHeight - marginTop - marginBottom;
+    
+    // Each row gets equal height in the usable area
+    const rowHeight = usableHeight / data.length;
 
     // Sync scroll position from parent
     React.useEffect(() => {
@@ -41,18 +47,18 @@ export const StickyYAxis = React.forwardRef<HTMLDivElement, StickyYAxisProps>(
         style={{ width: CHART_CONFIG.Y_AXIS_WIDTH + 16 }}
       >
         {/* Top padding to match chart margin */}
-        <div style={{ paddingTop: 10 }}>
+        <div style={{ paddingTop: marginTop }}>
           {data.map((item, index) => (
             <div
               key={index}
-              className="flex items-center justify-start pl-4 text-xs text-muted-foreground"
+              className="flex items-center justify-end pr-2 text-xs text-muted-foreground"
               style={{ height: rowHeight }}
             >
               {item.label}
             </div>
           ))}
           {/* Bottom padding to match chart margin */}
-          <div style={{ height: 10 }} />
+          <div style={{ height: marginBottom }} />
         </div>
       </div>
     );
