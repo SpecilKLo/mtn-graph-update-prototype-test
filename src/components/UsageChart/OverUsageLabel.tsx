@@ -19,7 +19,7 @@ export const OverUsageLabel = (props: OverUsageLabelProps) => {
   if (!value || value === 0) return null;
 
   const text = formatGBValue(value);
-  const minWidthForInside = 45;
+  const minWidthForInside = 55;
   const isSmall = width < minWidthForInside;
 
   return (

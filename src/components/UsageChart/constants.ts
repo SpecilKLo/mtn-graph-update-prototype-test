@@ -1,12 +1,12 @@
 // Chart layout constants
 export const CHART_CONFIG = {
-  Y_AXIS_WIDTH: 60,
-  RIGHT_MARGIN: 40,
+  Y_AXIS_WIDTH: 75,
+  RIGHT_MARGIN: 50,
   LEFT_MARGIN: 0,
   HEADER_HEIGHT: 72,
   FOOTER_HEIGHT: 64,
   X_AXIS_HEIGHT: 40,
-  MIN_CHART_WIDTH: 480,
+  MIN_CHART_WIDTH: 520,
 } as const;
 
 // Dynamic bar sizing configuration

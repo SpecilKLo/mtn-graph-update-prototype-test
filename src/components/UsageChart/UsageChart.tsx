@@ -338,10 +338,10 @@ export function UsageChart() {
                               dataKey="usage" 
                               position="insideRight" 
                               fill="white"
-                              fontSize={11}
-                              fontWeight={700}
-                              formatter={(val: number) => val > 15 ? formatGBValue(val) : ''} 
-                              offset={10}
+                              fontSize={10}
+                              fontWeight={600}
+                              formatter={(val: number) => val > 18 ? formatGBValue(val) : ''} 
+                              offset={8}
                             />
                           </Bar>
                           <Bar 
