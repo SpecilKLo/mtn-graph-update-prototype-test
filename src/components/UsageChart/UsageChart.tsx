@@ -210,6 +210,9 @@ export function UsageChart() {
               chartHeight={chartHeight}
               scrollTop={syncScrollTop}
               onScroll={handleYAxisScroll}
+              viewMode={viewMode}
+              weekBlocks={weekBlocks}
+              monthBlocks={monthBlocks}
             />
 
             {/* Horizontal scroll wrapper for chart */}
