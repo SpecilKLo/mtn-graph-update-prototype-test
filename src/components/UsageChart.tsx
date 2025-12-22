@@ -269,7 +269,7 @@ export function UsageChart() {
 
   const chartHeight = React.useMemo(() => {
      const count = chartData.length;
-     const barHeight = 40;
+     const barHeight = 28;
      const padding = 20;
      return Math.max(count * barHeight + padding, 100); 
   }, [chartData.length]);
