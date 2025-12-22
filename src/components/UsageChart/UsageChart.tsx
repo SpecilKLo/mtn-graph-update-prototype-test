@@ -7,7 +7,6 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  ReferenceArea,
   LabelList,
 } from "recharts";
 import { subMonths, startOfMonth } from "date-fns";
@@ -17,6 +16,9 @@ import { ChartHeader } from "./ChartHeader";
 import { ChartFooter } from "./ChartFooter";
 import { ChartTooltip } from "./ChartTooltip";
 import { StickyXAxis } from "./StickyXAxis";
+import { UsageBarShape } from "./UsageBarShape";
+import { OverUsageLabel } from "./OverUsageLabel";
+import { MonthReferenceAreas } from "./MonthReferenceAreas";
 import { CHART_CONFIG, ANIMATION_CONFIG } from "./constants";
 import {
   generateDailyData,
@@ -156,27 +158,9 @@ export function UsageChart() {
                   >
                     <CartesianGrid strokeDasharray="3 3" horizontal={false} vertical={true} stroke="#CFCFCF" strokeOpacity={1} />
                     
-                    {viewMode === 'week' && monthBlocks.map((block, index) => (
-                      <ReferenceArea 
-                        key={`${block.month}-${index}`}
-                        y1={block.start}
-                        y2={block.end}
-                        x1={0}
-                        x2={maxDomainValue}
-                        fill="hsl(var(--muted-foreground))"
-                        fillOpacity={index % 2 === 0 ? 0.08 : 0}
-                        strokeOpacity={0}
-                        ifOverflow="extendDomain"
-                        label={{ 
-                          value: block.month,
-                          position: 'insideTopRight', 
-                          fill: 'hsl(var(--muted-foreground))', 
-                          fontSize: 12,
-                          fontWeight: 500,
-                          offset: 10
-                        }}
-                      />
-                    ))}
+                    {viewMode === 'week' && (
+                      <MonthReferenceAreas monthBlocks={monthBlocks} maxDomainValue={maxDomainValue} />
+                    )}
 
                     <XAxis 
                       type="number"
@@ -202,24 +186,7 @@ export function UsageChart() {
                       stackId="a" 
                       fill="hsl(var(--chart-2))" 
                       animationDuration={ANIMATION_CONFIG.BAR_DURATION}
-                      shape={(props: any) => {
-                        const { x, y, width, height, payload } = props;
-                        const hasOverUsage = payload?.overUsage && payload.overUsage > 0;
-                        const radius = hasOverUsage ? 0 : 4;
-                        
-                        return (
-                          <path
-                            d={`M${x},${y} 
-                               L${x + width - radius},${y} 
-                               Q${x + width},${y} ${x + width},${y + radius}
-                               L${x + width},${y + height - radius}
-                               Q${x + width},${y + height} ${x + width - radius},${y + height}
-                               L${x},${y + height}
-                               Z`}
-                            fill="hsl(var(--chart-2))"
-                          />
-                        );
-                      }}
+                      shape={UsageBarShape}
                     >
                       <LabelList 
                         dataKey="usage" 
@@ -240,28 +207,7 @@ export function UsageChart() {
                     >
                       <LabelList 
                         dataKey="overUsage" 
-                        content={(props) => {
-                          const { x, y, width, height, value } = props;
-                          if (!value || value === 0) return null;
-                          
-                          const text = `${value} GB`;
-                          const minWidthForInside = 45;
-                          const isSmall = (width as number) < minWidthForInside;
-                          
-                          return (
-                            <text
-                              x={isSmall ? (x as number) + (width as number) + 8 : (x as number) + (width as number) - 10}
-                              y={(y as number) + (height as number) / 2}
-                              fill="hsl(var(--foreground))"
-                              fontSize={11}
-                              fontWeight={700}
-                              textAnchor={isSmall ? "start" : "end"}
-                              dominantBaseline="middle"
-                            >
-                              {text}
-                            </text>
-                          );
-                        }}
+                        content={OverUsageLabel}
                       />
                     </Bar>
                   </BarChart>
