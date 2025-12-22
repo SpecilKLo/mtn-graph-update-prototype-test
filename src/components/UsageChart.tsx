@@ -32,7 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
+import { Tabs, AnimatedTabsList } from "./ui/tabs";
 
 // Types
 type ViewMode = "day" | "week" | "month";
@@ -285,26 +285,16 @@ export function UsageChart() {
         <div className="h-[72px] shrink-0 flex items-center justify-between px-6 border-b border-border/50 relative z-10 bg-card">
           <div className="flex items-center">
             <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)} className="w-auto">
-                <TabsList className="bg-input-background h-9 p-1 rounded-[8px] gap-1">
-                  <TabsTrigger 
-                    value="day" 
-                    className="rounded-[6px] px-4 py-1 text-sm font-normal data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm shadow-none transition-all"
-                  >
-                    Daily View
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="week" 
-                    className="rounded-[6px] px-4 py-1 text-sm font-normal data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm shadow-none transition-all"
-                  >
-                    Weekly View
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="month" 
-                    className="rounded-[6px] px-4 py-1 text-sm font-normal data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm shadow-none transition-all"
-                  >
-                    Monthly View
-                  </TabsTrigger>
-                </TabsList>
+                <AnimatedTabsList 
+                  activeValue={viewMode}
+                  tabs={[
+                    { value: "day", label: "Daily View" },
+                    { value: "week", label: "Weekly View" },
+                    { value: "month", label: "Monthly View" },
+                  ]}
+                  onTabChange={(v) => setViewMode(v as ViewMode)}
+                  className="bg-input-background h-9 p-1 rounded-[8px] gap-1"
+                />
             </Tabs>
           </div>
 
