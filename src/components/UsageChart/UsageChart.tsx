@@ -179,7 +179,7 @@ export function UsageChart() {
               onScroll={handleYAxisScroll}
             />
 
-            {/* Horizontal scroll wrapper for chart + X-axis */}
+            {/* Horizontal scroll wrapper for chart */}
             <div className="flex-1 flex flex-col overflow-x-auto overflow-y-hidden min-w-0">
               <div style={{ minWidth: `${CHART_CONFIG.MIN_CHART_WIDTH}px` }} className="flex flex-col flex-1">
                 {/* Scrollable Chart (vertical) */}
@@ -257,8 +257,17 @@ export function UsageChart() {
                     )}
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
 
-                {/* Sticky X-Axis */}
+          {/* Sticky X-Axis - spans full width with Y-axis offset */}
+          <div className="flex flex-row shrink-0">
+            {/* Empty space for Y-axis alignment */}
+            <div style={{ width: CHART_CONFIG.Y_AXIS_WIDTH + 16 }} className="shrink-0" />
+            {/* X-axis content - scrolls horizontally with chart */}
+            <div className="flex-1 overflow-x-auto overflow-y-hidden min-w-0">
+              <div style={{ minWidth: `${CHART_CONFIG.MIN_CHART_WIDTH}px` }}>
                 <StickyXAxis 
                   maxDomainValue={maxDomainValue}
                   scrollbarWidth={scrollbarWidth}

@@ -13,16 +13,16 @@ interface StickyXAxisProps {
 }
 
 export const StickyXAxis = ({ maxDomainValue, scrollbarWidth, isMounted }: StickyXAxisProps) => {
-  const { Y_AXIS_WIDTH, RIGHT_MARGIN, LEFT_MARGIN } = CHART_CONFIG;
+  const { RIGHT_MARGIN } = CHART_CONFIG;
 
   return (
     <div className="h-[40px] bg-[hsl(var(--chart-axis-bg))] w-full shrink-0 border-t border-b border-border/20 z-20">
       <div 
-        className="w-full h-full px-4" 
+        className="w-full h-full pr-4" 
         style={{ paddingRight: `${16 + scrollbarWidth}px` }} 
       > 
         {isMounted && (
-          <ResponsiveContainer width="99%" height="100%" debounce={ANIMATION_CONFIG.DEBOUNCE}>
+          <ResponsiveContainer width="100%" height="100%" debounce={ANIMATION_CONFIG.DEBOUNCE}>
             <BarChart
               layout="vertical"
               data={[{}]} 
