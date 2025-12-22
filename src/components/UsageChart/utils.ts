@@ -133,6 +133,14 @@ export const calculateDynamicBarSize = (dataCount: number): number => {
   return Math.round(Math.min(MAX_BAR_SIZE, Math.max(MIN_BAR_SIZE, idealSize)));
 };
 
+// Format GB value - show decimals only when needed
+export const formatGBValue = (value: number): string => {
+  if (Number.isInteger(value) || value % 1 === 0) {
+    return `${Math.round(value)} GB`;
+  }
+  return `${value.toFixed(2)} GB`;
+};
+
 // Export CSV from chart data
 export const exportToCSV = (chartData: ChartData[]): void => {
   const headers = ["Date Label", "Start Date", "Usage (GB)", "Over Usage (GB)"];

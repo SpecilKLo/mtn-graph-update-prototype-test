@@ -1,3 +1,5 @@
+import { formatGBValue } from "./utils";
+
 interface OverUsageLabelProps {
   x?: number;
   y?: number;
@@ -16,7 +18,7 @@ export const OverUsageLabel = (props: OverUsageLabelProps) => {
   
   if (!value || value === 0) return null;
 
-  const text = `${value} GB`;
+  const text = formatGBValue(value);
   const minWidthForInside = 45;
   const isSmall = width < minWidthForInside;
 

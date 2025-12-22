@@ -9,6 +9,7 @@ import {
   calculateChartHeight,
   calculateDynamicBarSize,
   exportToCSV,
+  formatGBValue,
 } from './utils';
 import { BAR_SIZE_CONFIG } from './constants';
 
@@ -449,5 +450,24 @@ describe('exportToCSV', () => {
     
     expect(appendChildSpy).toHaveBeenCalled();
     expect(removeChildSpy).toHaveBeenCalled();
+  });
+});
+
+describe('formatGBValue', () => {
+  it('formats whole numbers without decimals', () => {
+    expect(formatGBValue(22)).toBe('22 GB');
+    expect(formatGBValue(88)).toBe('88 GB');
+    expect(formatGBValue(0)).toBe('0 GB');
+  });
+
+  it('formats decimal values with 2 decimal places', () => {
+    expect(formatGBValue(22.38)).toBe('22.38 GB');
+    expect(formatGBValue(7.5)).toBe('7.50 GB');
+    expect(formatGBValue(0.1)).toBe('0.10 GB');
+  });
+
+  it('handles .00 values as whole numbers', () => {
+    expect(formatGBValue(22.00)).toBe('22 GB');
+    expect(formatGBValue(100.00)).toBe('100 GB');
   });
 });
