@@ -6,6 +6,7 @@ export const CHART_CONFIG = {
   HEADER_HEIGHT: 72,
   FOOTER_HEIGHT: 64,
   X_AXIS_HEIGHT: 40,
+  MIN_CHART_WIDTH: 480,
 } as const;
 
 // Dynamic bar sizing configuration
