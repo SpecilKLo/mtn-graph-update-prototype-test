@@ -269,8 +269,8 @@ export function UsageChart() {
 
   const chartHeight = React.useMemo(() => {
      const count = chartData.length;
-     const barHeight = 28;
-     const padding = 20;
+     const barHeight = 35; // Increased by ~25% from 28
+     const padding = 25; // Increased padding
      return Math.max(count * barHeight + padding, 100); 
   }, [chartData.length]);
 
@@ -377,9 +377,9 @@ export function UsageChart() {
                         <BarChart
                             layout="vertical"
                             data={chartData}
-                            margin={{ top: 20, right: ChartRightMargin, left: ChartLeftMargin, bottom: 0 }}
-                            barGap={2}
-                            barSize={20}
+                            margin={{ top: 10, right: ChartRightMargin, left: ChartLeftMargin, bottom: 10 }}
+                            barGap={3}
+                            barSize={24}
                         >
                             <CartesianGrid strokeDasharray="3 3" horizontal={false} vertical={true} stroke="#CFCFCF" strokeOpacity={1} />
                             
