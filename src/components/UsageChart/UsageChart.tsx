@@ -20,12 +20,14 @@ import { StickyYAxis } from "./StickyYAxis";
 import { UsageBarShape } from "./UsageBarShape";
 import { OverUsageLabel } from "./OverUsageLabel";
 import { MonthReferenceAreas } from "./MonthReferenceAreas";
+import { WeekReferenceAreas } from "./WeekReferenceAreas";
 import { CHART_CONFIG, ANIMATION_CONFIG } from "./constants";
 import {
   generateDailyData,
   generateWeeklyData,
   generateMonthlyData,
   calculateMonthBlocks,
+  calculateWeekBlocks,
   calculateMaxDomain,
   calculateTotalUsage,
   calculateChartHeight,
@@ -79,6 +81,12 @@ export function UsageChart() {
   const monthBlocks = React.useMemo(() => {
     if (viewMode !== "week") return [];
     return calculateMonthBlocks(chartData);
+  }, [chartData, viewMode]);
+
+  // Week blocks for daily view
+  const weekBlocks = React.useMemo(() => {
+    if (viewMode !== "day") return [];
+    return calculateWeekBlocks(chartData);
   }, [chartData, viewMode]);
 
   // Setup scrollbar width observer
@@ -229,6 +237,10 @@ export function UsageChart() {
                           barSize={dynamicBarSize}
                         >
                           <CartesianGrid strokeDasharray="3 3" horizontal={false} vertical={true} stroke="#CFCFCF" strokeOpacity={1} />
+                          
+                          {viewMode === 'day' && (
+                            <WeekReferenceAreas weekBlocks={weekBlocks} maxDomainValue={maxDomainValue} />
+                          )}
                           
                           {viewMode === 'week' && (
                             <MonthReferenceAreas monthBlocks={monthBlocks} maxDomainValue={maxDomainValue} />

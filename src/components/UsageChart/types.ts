@@ -17,6 +17,13 @@ export type MonthBlock = {
   end: string;
 };
 
+// Week block for daily view reference areas
+export type WeekBlock = {
+  weekNumber: number;
+  start: string;
+  end: string;
+};
+
 // Custom range type
 export type DateRange = {
   from: Date;
