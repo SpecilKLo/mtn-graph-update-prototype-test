@@ -7,8 +7,9 @@ import {
   eachWeekOfInterval,
   getDate,
   endOfWeek,
+  getISOWeek,
 } from "date-fns";
-import type { ChartData, MonthBlock } from "./types";
+import type { ChartData, MonthBlock, WeekBlock } from "./types";
 import { BAR_SIZE_CONFIG } from "./constants";
 
 // Generate daily data for a given month
@@ -96,6 +97,29 @@ export const calculateMonthBlocks = (chartData: ChartData[]): MonthBlock[] => {
       if (currentBlock) blocks.push(currentBlock);
       currentBlock = {
         month: monthName,
+        start: item.label,
+        end: item.label
+      };
+    } else {
+      currentBlock.end = item.label;
+    }
+  });
+  
+  if (currentBlock) blocks.push(currentBlock);
+  return blocks;
+};
+
+// Calculate week blocks for daily view reference areas
+export const calculateWeekBlocks = (chartData: ChartData[]): WeekBlock[] => {
+  const blocks: WeekBlock[] = [];
+  let currentBlock: WeekBlock | null = null;
+  
+  chartData.forEach((item) => {
+    const weekNumber = getISOWeek(item.date);
+    if (!currentBlock || currentBlock.weekNumber !== weekNumber) {
+      if (currentBlock) blocks.push(currentBlock);
+      currentBlock = {
+        weekNumber,
         start: item.label,
         end: item.label
       };
