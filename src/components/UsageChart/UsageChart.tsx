@@ -250,7 +250,7 @@ export function UsageChart() {
                             <text
                               x={isSmall ? (x as number) + (width as number) + 8 : (x as number) + (width as number) - 10}
                               y={(y as number) + (height as number) / 2}
-                              fill={isSmall ? "hsl(var(--chart-3))" : "hsl(var(--foreground))"}
+                              fill="hsl(var(--foreground))"
                               fontSize={11}
                               fontWeight={700}
                               textAnchor={isSmall ? "start" : "end"}
