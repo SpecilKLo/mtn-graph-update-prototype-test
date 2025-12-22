@@ -49,9 +49,9 @@ export const ChartHeader = ({
   })();
 
   return (
-    <div className="h-[72px] shrink-0 flex items-center justify-between px-6 border-b border-border/50 relative z-10 bg-card">
-      <div className="flex items-center">
-        <Tabs value={viewMode} onValueChange={(v) => onViewModeChange(v as ViewMode)} className="w-auto">
+    <div className="min-h-[72px] shrink-0 flex flex-col sm:flex-row items-stretch sm:items-center justify-between px-3 sm:px-6 py-3 sm:py-0 gap-3 sm:gap-0 border-b border-border/50 relative z-10 bg-card">
+      <div className="flex items-center justify-center sm:justify-start">
+        <Tabs value={viewMode} onValueChange={(v) => onViewModeChange(v as ViewMode)} className="w-full sm:w-auto">
           <AnimatedTabsList 
             activeValue={viewMode}
             tabs={[
@@ -60,19 +60,19 @@ export const ChartHeader = ({
               { value: "month", label: "Monthly View" },
             ]}
             onTabChange={(v) => onViewModeChange(v as ViewMode)}
-            className="bg-input-background h-9 p-1 rounded-[8px] gap-1"
+            className="bg-input-background h-9 p-1 rounded-[8px] gap-1 w-full sm:w-auto"
           />
         </Tabs>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center justify-center sm:justify-end gap-2 sm:gap-4">
         {viewMode === "day" ? (
-          <div className="relative">
+          <div className="relative flex-1 sm:flex-none">
             <Select 
               value={format(selectedMonth, "yyyy-MM")} 
               onValueChange={onMonthChange}
             >
-              <SelectTrigger className="w-[180px] h-[40px] bg-background border border-border rounded-[8px] text-primary font-normal focus:ring-0 focus:ring-offset-0">
+              <SelectTrigger className="w-full sm:w-[180px] h-[36px] sm:h-[40px] bg-background border border-border rounded-[8px] text-primary font-normal focus:ring-0 focus:ring-offset-0 text-sm">
                 <CalendarIcon className="mr-2 h-4 w-4 text-muted-foreground" />
                 <SelectValue>{format(selectedMonth, "MMMM yyyy")}</SelectValue>
               </SelectTrigger>
@@ -86,9 +86,9 @@ export const ChartHeader = ({
             </Select>
           </div>
         ) : (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-1 sm:flex-none">
             <Select value={rangePreset} onValueChange={onPresetChange}>
-              <SelectTrigger className="w-[160px] h-[40px] bg-background border border-border rounded-[8px] text-primary font-normal focus:ring-0 focus:ring-offset-0">
+              <SelectTrigger className="w-full sm:w-[160px] h-[36px] sm:h-[40px] bg-background border border-border rounded-[8px] text-primary font-normal focus:ring-0 focus:ring-offset-0 text-sm">
                 <SelectValue placeholder="Range" />
               </SelectTrigger>
               <SelectContent className="bg-popover border-border">
@@ -100,7 +100,7 @@ export const ChartHeader = ({
             </Select>
             
             {rangePreset === "custom" && (
-              <div className="flex items-center gap-2 bg-input-background p-1 rounded-lg border border-border">
+              <div className="hidden sm:flex items-center gap-2 bg-input-background p-1 rounded-lg border border-border">
                 <input 
                   type="month" 
                   className="bg-transparent border-none text-xs text-foreground focus:ring-0 p-1 w-24 outline-none"
@@ -122,7 +122,7 @@ export const ChartHeader = ({
         <Button 
           variant="outline" 
           size="icon"
-          className="h-[40px] w-[40px] border-border text-muted-foreground hover:bg-input-background hover:text-foreground rounded-[8px]"
+          className="h-[36px] w-[36px] sm:h-[40px] sm:w-[40px] border-border text-muted-foreground hover:bg-input-background hover:text-foreground rounded-[8px] shrink-0"
           onClick={onExport}
           title="Export CSV"
         >
