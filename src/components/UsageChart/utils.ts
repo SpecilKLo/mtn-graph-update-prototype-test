@@ -28,7 +28,7 @@ export const generateDailyData = (currentMonth: Date): ChartData[] => {
       : 0;
 
     return {
-      label: getDate(day).toString(),
+      label: format(day, "EEE d"),
       date: day,
       usage,
       overUsage: overUsage > 0 ? overUsage : undefined,
