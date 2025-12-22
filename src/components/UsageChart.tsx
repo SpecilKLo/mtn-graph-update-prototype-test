@@ -267,7 +267,12 @@ export function UsageChart() {
       return options;
   }, []);
 
-  // Chart height will be 100% - bars will stretch to fill container
+  const chartHeight = React.useMemo(() => {
+     const count = chartData.length;
+     const barHeight = 35;
+     const padding = 25;
+     return count * barHeight + padding; 
+  }, [chartData.length]);
 
   const YAxisWidth = 60;
   const ChartRightMargin = 40; 
@@ -366,7 +371,7 @@ export function UsageChart() {
                 ref={scrollContainerRef}
                 className="flex-1 overflow-y-auto overflow-x-hidden w-full px-4 scrollbar-thin scrollbar-thumb-border/30 scrollbar-track-transparent min-w-0"
             >
-                <div className="h-full w-full pr-2 min-w-0">
+                <div style={{ minHeight: `${chartHeight}px` }} className="h-full w-full pr-2 min-w-0">
                     {isMounted && (
                         <ResponsiveContainer width="99%" height="100%" debounce={50} minWidth={0}>
                         <BarChart
