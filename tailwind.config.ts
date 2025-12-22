@@ -77,6 +77,7 @@ export default {
       },
       fontFamily: {
         sans: ["var(--font-family-body)"],
+        display: ["var(--font-family-display)"],
       },
       keyframes: {
         "accordion-down": {

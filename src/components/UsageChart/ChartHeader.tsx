@@ -49,7 +49,7 @@ export const ChartHeader = ({
   })();
 
   return (
-    <div className="min-h-[72px] shrink-0 flex flex-col sm:flex-row items-stretch sm:items-center justify-between px-3 sm:px-6 py-3 sm:py-0 gap-3 sm:gap-0 border-b border-border/50 relative z-10 bg-card">
+    <div className="min-h-[72px] shrink-0 flex flex-col sm:flex-row items-stretch sm:items-center justify-between px-3 sm:px-6 py-3 sm:py-0 gap-3 sm:gap-0 border-b border-border/50 relative z-10 bg-card font-display">
       <div className="flex items-center justify-center sm:justify-start">
         <Tabs value={viewMode} onValueChange={(v) => onViewModeChange(v as ViewMode)} className="w-full sm:w-auto">
           <AnimatedTabsList 
