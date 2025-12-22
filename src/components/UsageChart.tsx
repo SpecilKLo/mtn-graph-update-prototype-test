@@ -267,30 +267,33 @@ export function UsageChart() {
       return options;
   }, []);
 
+  // Container height estimate (card max ~590px - header 72px - footer ~60px = ~458px available)
+  const estimatedContainerHeight = 450;
+  const targetFillRatio = 0.65; // Bars should fill 65% of available space
+
   // Dynamic bar height - thicker bars for fewer data points
   const chartHeight = React.useMemo(() => {
      const count = chartData.length;
      const minBarHeight = 35;
-     const maxBarHeight = 80;
+     const maxBarHeight = 140; // Allow much thicker bars
      
-     // Calculate dynamic bar height based on data count
-     const dynamicBarHeight = count <= 5 
-       ? Math.min(maxBarHeight, Math.max(minBarHeight, 160 / count))
-       : minBarHeight;
+     // Calculate ideal bar height to fill target ratio of container
+     const idealBarHeight = (estimatedContainerHeight * targetFillRatio) / count;
+     const dynamicBarHeight = Math.min(maxBarHeight, Math.max(minBarHeight, idealBarHeight));
      
      const padding = 25;
      return count * dynamicBarHeight + padding; 
   }, [chartData.length]);
 
-  // Dynamic bar size for the actual bars
+  // Dynamic bar size for the actual bars (visual thickness)
   const dynamicBarSize = React.useMemo(() => {
      const count = chartData.length;
      const minSize = 24;
-     const maxSize = 50;
+     const maxSize = 100; // Allow much thicker bars
      
-     if (count <= 2) return maxSize;
-     if (count <= 5) return Math.round(maxSize - ((count - 2) * 8));
-     return minSize;
+     // Calculate ideal bar size to fill target ratio
+     const idealSize = (estimatedContainerHeight * targetFillRatio) / count * 0.7; // 70% of row height
+     return Math.round(Math.min(maxSize, Math.max(minSize, idealSize)));
   }, [chartData.length]);
 
   const YAxisWidth = 60;
