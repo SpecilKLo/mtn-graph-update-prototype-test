@@ -337,7 +337,7 @@ export function UsageChart() {
           <div 
             ref={xAxisHScrollRef}
             onScroll={handleXAxisHScroll}
-            className="flex flex-row shrink-0 overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-thumb-border/75 scrollbar-track-transparent"
+            className="flex flex-row shrink-0 overflow-x-auto overflow-y-hidden scrollbar-none"
           >
             {/* Corner area - same background as X-axis, scrolls with it */}
             <div 
