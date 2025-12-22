@@ -4,7 +4,7 @@ interface ChartFooterProps {
 
 export const ChartFooter = ({ totalUsage }: ChartFooterProps) => {
   return (
-    <div className="min-h-[64px] shrink-0 bg-background flex flex-col sm:flex-row items-center justify-between px-4 sm:px-10 py-3 sm:py-0 gap-3 sm:gap-0 relative z-10 border-t border-border/10">
+    <div className="min-h-[64px] shrink-0 bg-background flex flex-col sm:flex-row items-center justify-between px-4 sm:px-10 py-3 sm:py-0 gap-3 sm:gap-0 relative z-10 border-t border-border/10 font-display">
       <div className="flex items-center gap-4 sm:gap-6">
         <div className="flex items-center gap-2">
           <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-chart-2" />
