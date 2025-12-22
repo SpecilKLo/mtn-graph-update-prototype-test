@@ -215,11 +215,11 @@ export function UsageChart() {
               monthBlocks={monthBlocks}
             />
 
-            {/* Horizontal scroll wrapper for chart */}
+            {/* Horizontal scroll wrapper for chart - hidden scrollbar, synced with X-axis */}
             <div 
               ref={chartHScrollRef}
               onScroll={handleChartHScroll}
-              className="flex-1 flex flex-col overflow-x-auto min-w-0"
+              className="flex-1 flex flex-col overflow-x-auto min-w-0 scrollbar-none"
             >
               <div style={{ minWidth: `${CHART_CONFIG.MIN_CHART_WIDTH}px` }} className="flex flex-col flex-1 overflow-hidden">
                 {/* Scrollable Chart (vertical) */}
@@ -337,7 +337,7 @@ export function UsageChart() {
           <div 
             ref={xAxisHScrollRef}
             onScroll={handleXAxisHScroll}
-            className="flex flex-row shrink-0 overflow-x-auto overflow-y-hidden"
+            className="flex flex-row shrink-0 overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-thumb-border/75 scrollbar-track-transparent"
           >
             {/* Corner area - same background as X-axis, scrolls with it */}
             <div 
