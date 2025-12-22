@@ -381,7 +381,7 @@ export function UsageChart() {
                             barGap={2}
                             barSize={20}
                         >
-                            <CartesianGrid strokeDasharray="3 3" horizontal={false} vertical={true} stroke="#F5F5F5" strokeOpacity={1} />
+                            <CartesianGrid strokeDasharray="3 3" horizontal={false} vertical={true} stroke="#CFCFCF" strokeOpacity={1} />
                             
                             {viewMode === 'week' && monthBlocks.map((block, index) => (
                                 <ReferenceArea 
@@ -475,7 +475,7 @@ export function UsageChart() {
                               data={[{}]} 
                               margin={{ top: 0, right: ChartRightMargin + 8, left: ChartLeftMargin, bottom: 0 }} 
                           >
-                               <CartesianGrid strokeDasharray="3 3" horizontal={false} vertical={true} stroke="#F5F5F5" strokeOpacity={1} />
+                               <CartesianGrid strokeDasharray="3 3" horizontal={false} vertical={true} stroke="#CFCFCF" strokeOpacity={1} />
                                <YAxis 
                                   type="category" 
                                   width={YAxisWidth} 
