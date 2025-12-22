@@ -333,23 +333,24 @@ export function UsageChart() {
             </div>
           </div>
 
-          {/* Sticky X-Axis - spans full width with Y-axis offset */}
-          <div className="flex flex-row shrink-0">
-            {/* Empty space for Y-axis alignment */}
-            <div style={{ width: CHART_CONFIG.Y_AXIS_WIDTH + 16 }} className="shrink-0" />
-            {/* X-axis content - scrolls horizontally with chart */}
+          {/* Sticky X-Axis - entire row scrolls together */}
+          <div 
+            ref={xAxisHScrollRef}
+            onScroll={handleXAxisHScroll}
+            className="flex flex-row shrink-0 overflow-x-auto overflow-y-hidden"
+          >
+            {/* Corner area - same background as X-axis, scrolls with it */}
             <div 
-              ref={xAxisHScrollRef}
-              onScroll={handleXAxisHScroll}
-              className="flex-1 overflow-x-auto overflow-y-hidden min-w-0"
-            >
-              <div style={{ minWidth: `${CHART_CONFIG.MIN_CHART_WIDTH}px` }}>
-                <StickyXAxis 
-                  maxDomainValue={maxDomainValue}
-                  scrollbarWidth={scrollbarWidth}
-                  isMounted={isMounted}
-                />
-              </div>
+              style={{ width: CHART_CONFIG.Y_AXIS_WIDTH + 16 }} 
+              className="shrink-0 h-[40px] bg-[hsl(var(--chart-axis-bg))] border-t border-b border-border/20"
+            />
+            {/* X-axis content */}
+            <div style={{ minWidth: `${CHART_CONFIG.MIN_CHART_WIDTH}px` }} className="flex-1">
+              <StickyXAxis 
+                maxDomainValue={maxDomainValue}
+                scrollbarWidth={scrollbarWidth}
+                isMounted={isMounted}
+              />
             </div>
           </div>
 
