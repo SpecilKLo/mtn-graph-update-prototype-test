@@ -26,11 +26,11 @@ export const StickyXAxis = ({ maxDomainValue, scrollbarWidth, isMounted }: Stick
             <BarChart
               layout="vertical"
               data={[{}]} 
-              margin={{ top: 0, right: RIGHT_MARGIN + 8, left: LEFT_MARGIN, bottom: 0 }} 
+              margin={{ top: 0, right: RIGHT_MARGIN + 8, left: 0, bottom: 0 }} 
             >
               <YAxis 
                 type="category" 
-                width={Y_AXIS_WIDTH} 
+                width={0} 
                 tick={false} 
                 axisLine={false} 
               />
