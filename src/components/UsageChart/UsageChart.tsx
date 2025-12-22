@@ -199,8 +199,25 @@ export function UsageChart() {
                       dataKey="usage" 
                       stackId="a" 
                       fill="hsl(var(--chart-2))" 
-                      radius={[0, 4, 4, 0]} 
                       animationDuration={ANIMATION_CONFIG.BAR_DURATION}
+                      shape={(props: any) => {
+                        const { x, y, width, height, payload } = props;
+                        const hasOverUsage = payload?.overUsage && payload.overUsage > 0;
+                        const radius = hasOverUsage ? 0 : 4;
+                        
+                        return (
+                          <path
+                            d={`M${x},${y} 
+                               L${x + width - radius},${y} 
+                               Q${x + width},${y} ${x + width},${y + radius}
+                               L${x + width},${y + height - radius}
+                               Q${x + width},${y + height} ${x + width - radius},${y + height}
+                               L${x},${y + height}
+                               Z`}
+                            fill="hsl(var(--chart-2))"
+                          />
+                        );
+                      }}
                     >
                       <LabelList 
                         dataKey="usage" 
@@ -221,12 +238,28 @@ export function UsageChart() {
                     >
                       <LabelList 
                         dataKey="overUsage" 
-                        position="insideRight" 
-                        fill="hsl(var(--foreground))"
-                        fontSize={11}
-                        fontWeight={700}
-                        formatter={(val: number) => val ? `${val} GB` : ''} 
-                        offset={10}
+                        content={(props) => {
+                          const { x, y, width, height, value } = props;
+                          if (!value || value === 0) return null;
+                          
+                          const text = `${value} GB`;
+                          const minWidthForInside = 45;
+                          const isSmall = (width as number) < minWidthForInside;
+                          
+                          return (
+                            <text
+                              x={isSmall ? (x as number) + (width as number) + 8 : (x as number) + (width as number) - 10}
+                              y={(y as number) + (height as number) / 2}
+                              fill={isSmall ? "hsl(var(--chart-3))" : "hsl(var(--foreground))"}
+                              fontSize={11}
+                              fontWeight={700}
+                              textAnchor={isSmall ? "start" : "end"}
+                              dominantBaseline="middle"
+                            >
+                              {text}
+                            </text>
+                          );
+                        }}
                       />
                     </Bar>
                   </BarChart>
