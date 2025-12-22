@@ -63,7 +63,7 @@ const AnimatedTabsList = React.forwardRef<
     >
       {/* Animated indicator */}
       <div
-        className="absolute h-[calc(100%-12px)] rounded-md bg-background shadow-sm transition-all duration-300 ease-out"
+        className="absolute h-[calc(100%-12px)] rounded-md bg-background shadow-[0_1px_3px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.06)] border border-border/40 transition-all duration-300 ease-out"
         style={{
           left: indicatorStyle.left,
           width: indicatorStyle.width,
@@ -76,10 +76,11 @@ const AnimatedTabsList = React.forwardRef<
           value={tab.value}
           onClick={() => onTabChange?.(tab.value)}
           className={cn(
-            "relative z-10 inline-flex items-center justify-center whitespace-nowrap rounded-sm px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium ring-offset-background transition-colors duration-200",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+            "relative z-10 inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-medium ring-offset-background transition-all duration-200",
+            "hover:text-foreground/80",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
             "disabled:pointer-events-none disabled:opacity-50",
-            "data-[state=active]:text-foreground data-[state=inactive]:text-muted-foreground"
+            "data-[state=active]:text-foreground data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:bg-background/50"
           )}
         >
           {tab.label}
