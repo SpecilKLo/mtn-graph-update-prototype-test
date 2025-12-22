@@ -1,4 +1,4 @@
-import { UsageChart } from "@/components/UsageChart";
+import { UsageChart } from "@/components/UsageChart/index";
 
 const Index = () => {
   return (
