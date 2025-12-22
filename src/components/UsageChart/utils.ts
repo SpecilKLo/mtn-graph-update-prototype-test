@@ -18,8 +18,14 @@ export const generateDailyData = (currentMonth: Date): ChartData[] => {
   const days = eachDayOfInterval({ start, end });
 
   return days.map((day) => {
-    const usage = Math.floor(Math.random() * 80) + 10;
-    const overUsage = Math.random() > 0.9 ? Math.floor(Math.random() * 20) : 0;
+    // 30% chance of decimal value
+    const hasDecimal = Math.random() > 0.7;
+    const usage = hasDecimal 
+      ? Math.round((Math.random() * 80 + 10) * 100) / 100
+      : Math.floor(Math.random() * 80) + 10;
+    const overUsage = Math.random() > 0.9 
+      ? (hasDecimal ? Math.round(Math.random() * 20 * 100) / 100 : Math.floor(Math.random() * 20))
+      : 0;
 
     return {
       label: getDate(day).toString(),
@@ -36,8 +42,13 @@ export const generateWeeklyData = (from: Date, to: Date): ChartData[] => {
 
   return weeks.map((weekStart) => {
     const weekEnd = endOfWeek(weekStart, { weekStartsOn: 1 });
-    const usage = Math.floor(Math.random() * 400) + 100;
-    const overUsage = Math.random() > 0.85 ? Math.floor(Math.random() * 50) : 0;
+    const hasDecimal = Math.random() > 0.7;
+    const usage = hasDecimal
+      ? Math.round((Math.random() * 400 + 100) * 100) / 100
+      : Math.floor(Math.random() * 400) + 100;
+    const overUsage = Math.random() > 0.85 
+      ? (hasDecimal ? Math.round(Math.random() * 50 * 100) / 100 : Math.floor(Math.random() * 50))
+      : 0;
     
     const isSameMonth = weekStart.getMonth() === weekEnd.getMonth();
     const label = format(weekStart, "MMM d"); 
@@ -57,8 +68,13 @@ export const generateMonthlyData = (from: Date, to: Date): ChartData[] => {
   const months = eachMonthOfInterval({ start: from, end: to });
 
   return months.map((month) => {
-    const usage = Math.floor(Math.random() * 800) + 200;
-    const overUsage = Math.random() > 0.8 ? Math.floor(Math.random() * 100) : 0;
+    const hasDecimal = Math.random() > 0.7;
+    const usage = hasDecimal
+      ? Math.round((Math.random() * 800 + 200) * 100) / 100
+      : Math.floor(Math.random() * 800) + 200;
+    const overUsage = Math.random() > 0.8 
+      ? (hasDecimal ? Math.round(Math.random() * 100 * 100) / 100 : Math.floor(Math.random() * 100))
+      : 0;
 
     return {
       label: format(month, "MMM yy"),
