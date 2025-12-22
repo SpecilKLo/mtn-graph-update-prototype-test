@@ -56,14 +56,14 @@ const AnimatedTabsList = React.forwardRef<
         (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
       }}
       className={cn(
-        "relative inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
+        "relative inline-flex h-10 items-center justify-center rounded-lg bg-muted p-1.5 text-muted-foreground",
         className,
       )}
       {...props}
     >
       {/* Animated indicator */}
       <div
-        className="absolute h-[calc(100%-8px)] rounded-sm bg-background shadow-sm transition-all duration-300 ease-out"
+        className="absolute h-[calc(100%-12px)] rounded-md bg-background shadow-sm transition-all duration-300 ease-out"
         style={{
           left: indicatorStyle.left,
           width: indicatorStyle.width,
