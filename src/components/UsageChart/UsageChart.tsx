@@ -30,6 +30,7 @@ import {
   calculateChartHeight,
   calculateDynamicBarSize,
   exportToCSV,
+  formatGBValue,
 } from "./utils";
 import type { ViewMode, DateRange } from "./types";
 
@@ -194,7 +195,7 @@ export function UsageChart() {
                         fill="white"
                         fontSize={11}
                         fontWeight={700}
-                        formatter={(val: number) => val > 15 ? `${val.toFixed(2)} GB` : ''} 
+                        formatter={(val: number) => val > 15 ? formatGBValue(val) : ''} 
                         offset={10}
                       />
                     </Bar>
