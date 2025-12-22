@@ -162,9 +162,11 @@ export function UsageChart() {
                         y1={block.start}
                         y2={block.end}
                         x1={0}
-                        fill="hsl(var(--muted))"
-                        fillOpacity={index % 2 === 0 ? 0.1 : 0}
+                        x2={maxDomainValue}
+                        fill="hsl(var(--muted-foreground))"
+                        fillOpacity={index % 2 === 0 ? 0.08 : 0}
                         strokeOpacity={0}
+                        ifOverflow="extendDomain"
                         label={{ 
                           value: block.month,
                           position: 'insideTopRight', 
