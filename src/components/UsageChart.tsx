@@ -378,7 +378,7 @@ export function UsageChart() {
                             layout="vertical"
                             data={chartData}
                             margin={{ top: 20, right: ChartRightMargin, left: ChartLeftMargin, bottom: 0 }}
-                            barGap={6}
+                            barGap={0}
                             barSize={14}
                         >
                             <CartesianGrid strokeDasharray="3 3" horizontal={false} vertical={true} stroke="hsl(var(--muted))" strokeOpacity={0.3} />
