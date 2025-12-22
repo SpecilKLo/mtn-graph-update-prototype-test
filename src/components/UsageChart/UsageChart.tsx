@@ -200,7 +200,7 @@ export function UsageChart() {
             <StickyYAxis
               ref={yAxisRef}
               data={chartData}
-              dynamicBarSize={dynamicBarSize}
+              chartHeight={chartHeight}
               scrollTop={syncScrollTop}
               onScroll={handleYAxisScroll}
             />
