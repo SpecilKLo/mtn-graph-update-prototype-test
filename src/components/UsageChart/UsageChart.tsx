@@ -209,9 +209,9 @@ export function UsageChart() {
             <div 
               ref={chartHScrollRef}
               onScroll={handleChartHScroll}
-              className="flex-1 flex flex-col overflow-x-auto overflow-y-hidden min-w-0"
+              className="flex-1 flex flex-col overflow-x-auto min-w-0"
             >
-              <div style={{ minWidth: `${CHART_CONFIG.MIN_CHART_WIDTH}px` }} className="flex flex-col flex-1">
+              <div style={{ minWidth: `${CHART_CONFIG.MIN_CHART_WIDTH}px` }} className="flex flex-col flex-1 overflow-hidden">
                 {/* Scrollable Chart (vertical) */}
                 <div 
                   ref={scrollContainerRef}
