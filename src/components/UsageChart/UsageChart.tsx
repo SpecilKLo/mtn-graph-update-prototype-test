@@ -218,23 +218,23 @@ export function UsageChart() {
         />
         
         {/* Main Chart Content Area */}
-        <div className="flex-1 overflow-hidden relative flex flex-col w-full bg-card">
-          {/* Left fade indicator */}
-          <div 
-            className={`absolute top-0 bottom-0 z-10 pointer-events-none transition-opacity duration-300 ${canScrollLeft ? 'opacity-100' : 'opacity-0'}`}
-            style={{ 
-              left: CHART_CONFIG.Y_AXIS_WIDTH + 16,
-              width: 6,
-              background: 'linear-gradient(to right, rgba(19, 21, 23, 0.1), transparent)'
-            }}
-          />
-          {/* Right fade indicator */}
-          <div 
-            className={`absolute right-0 top-0 bottom-0 z-10 pointer-events-none transition-opacity duration-300 ${canScrollRight ? 'opacity-100' : 'opacity-0'}`}
-            style={{ width: 6, background: 'linear-gradient(to left, rgba(19, 21, 23, 0.1), transparent)' }}
-          />
+        <div className="flex-1 overflow-hidden flex flex-col w-full bg-card">
           {/* Content row: Fixed Y-Axis + Scrollable Chart */}
-          <div className="flex-1 flex flex-row overflow-hidden">
+          <div className="flex-1 flex flex-row overflow-hidden relative">
+            {/* Left fade indicator */}
+            <div 
+              className={`absolute top-0 bottom-0 z-10 pointer-events-none transition-opacity duration-300 ${canScrollLeft ? 'opacity-100' : 'opacity-0'}`}
+              style={{ 
+                left: CHART_CONFIG.Y_AXIS_WIDTH + 16,
+                width: 6,
+                background: 'linear-gradient(to right, rgba(19, 21, 23, 0.1), transparent)'
+              }}
+            />
+            {/* Right fade indicator */}
+            <div 
+              className={`absolute right-0 top-0 bottom-0 z-10 pointer-events-none transition-opacity duration-300 ${canScrollRight ? 'opacity-100' : 'opacity-0'}`}
+              style={{ width: 6, background: 'linear-gradient(to left, rgba(19, 21, 23, 0.1), transparent)' }}
+            />
             {/* Fixed Y-Axis - doesn't scroll horizontally */}
             <StickyYAxis
               ref={yAxisRef}
