@@ -58,6 +58,8 @@ export function UsageChart() {
   const [syncScrollTop, setSyncScrollTop] = React.useState(0);
   const isScrollSyncing = React.useRef(false);
   const isHScrollSyncing = React.useRef(false);
+  const [canScrollLeft, setCanScrollLeft] = React.useState(false);
+  const [canScrollRight, setCanScrollRight] = React.useState(true);
 
   // Computed chart data based on view mode
   const chartData = React.useMemo(() => {
@@ -131,10 +133,18 @@ export function UsageChart() {
     });
   };
 
+  // Update scroll indicators
+  const updateScrollIndicators = (element: HTMLElement) => {
+    const { scrollLeft, scrollWidth, clientWidth } = element;
+    setCanScrollLeft(scrollLeft > 0);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+  };
+
   // Sync horizontal scroll between chart and X-axis
   const handleChartHScroll = (e: React.UIEvent<HTMLDivElement>) => {
     if (isHScrollSyncing.current) return;
     isHScrollSyncing.current = true;
+    updateScrollIndicators(e.currentTarget);
     if (xAxisHScrollRef.current) {
       xAxisHScrollRef.current.scrollLeft = e.currentTarget.scrollLeft;
     }
@@ -146,6 +156,7 @@ export function UsageChart() {
   const handleXAxisHScroll = (e: React.UIEvent<HTMLDivElement>) => {
     if (isHScrollSyncing.current) return;
     isHScrollSyncing.current = true;
+    updateScrollIndicators(e.currentTarget);
     if (chartHScrollRef.current) {
       chartHScrollRef.current.scrollLeft = e.currentTarget.scrollLeft;
     }
@@ -153,6 +164,13 @@ export function UsageChart() {
       isHScrollSyncing.current = false;
     });
   };
+
+  // Initialize scroll indicators on mount
+  React.useEffect(() => {
+    if (chartHScrollRef.current) {
+      updateScrollIndicators(chartHScrollRef.current);
+    }
+  }, [isMounted, chartData]);
 
   // Event handlers
   const handlePresetChange = (value: string) => {
@@ -201,6 +219,15 @@ export function UsageChart() {
         
         {/* Main Chart Content Area */}
         <div className="flex-1 overflow-hidden relative flex flex-col w-full bg-card">
+          {/* Left fade indicator */}
+          <div 
+            className={`absolute left-[${CHART_CONFIG.Y_AXIS_WIDTH + 16}px] top-0 bottom-0 w-8 bg-gradient-to-r from-card to-transparent z-10 pointer-events-none transition-opacity duration-200 ${canScrollLeft ? 'opacity-100' : 'opacity-0'}`}
+            style={{ left: CHART_CONFIG.Y_AXIS_WIDTH + 16 }}
+          />
+          {/* Right fade indicator */}
+          <div 
+            className={`absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-card to-transparent z-10 pointer-events-none transition-opacity duration-200 ${canScrollRight ? 'opacity-100' : 'opacity-0'}`}
+          />
           {/* Content row: Fixed Y-Axis + Scrollable Chart */}
           <div className="flex-1 flex flex-row overflow-hidden">
             {/* Fixed Y-Axis - doesn't scroll horizontally */}
