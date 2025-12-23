@@ -116,25 +116,33 @@ export const ChartHeader = ({
       </div>
 
       {/* Custom range row - separate row for better tablet layout */}
-      {viewMode !== "day" && rangePreset === "custom" && (
-        <div className="flex items-center justify-center lg:justify-end">
-          <div className="flex items-center gap-2 bg-muted p-1.5 rounded-lg border border-border">
-            <input 
-              type="month" 
-              className="bg-transparent border-none text-sm text-foreground focus:ring-0 p-1.5 w-28 sm:w-32 outline-none"
-              value={format(customRange.from, "yyyy-MM")}
-              onChange={(e) => onCustomRangeChange('from', e.target.value)}
-            />
-            <span className="text-muted-foreground font-medium">–</span>
-            <input 
-              type="month" 
-              className="bg-transparent border-none text-sm text-foreground focus:ring-0 p-1.5 w-28 sm:w-32 outline-none"
-              value={format(customRange.to, "yyyy-MM")}
-              onChange={(e) => onCustomRangeChange('to', e.target.value)}
-            />
+      <div 
+        className={`grid transition-all duration-300 ease-out ${
+          viewMode !== "day" && rangePreset === "custom" 
+            ? "grid-rows-[1fr] opacity-100" 
+            : "grid-rows-[0fr] opacity-0"
+        }`}
+      >
+        <div className="overflow-hidden">
+          <div className="flex items-center justify-center lg:justify-end pt-1">
+            <div className="flex items-center gap-2 bg-muted p-1.5 rounded-lg border border-border">
+              <input 
+                type="month" 
+                className="bg-transparent border-none text-sm text-foreground focus:ring-0 p-1.5 w-28 sm:w-32 outline-none"
+                value={format(customRange.from, "yyyy-MM")}
+                onChange={(e) => onCustomRangeChange('from', e.target.value)}
+              />
+              <span className="text-muted-foreground font-medium">–</span>
+              <input 
+                type="month" 
+                className="bg-transparent border-none text-sm text-foreground focus:ring-0 p-1.5 w-28 sm:w-32 outline-none"
+                value={format(customRange.to, "yyyy-MM")}
+                onChange={(e) => onCustomRangeChange('to', e.target.value)}
+              />
+            </div>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
