@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
   LabelList,
+  Cell,
 } from "recharts";
 
 import { ChartTooltip } from "./ChartTooltip";
@@ -21,6 +22,67 @@ interface VerticalBarChartProps {
   dynamicBarSize: number;
   isMounted: boolean;
 }
+
+// Custom shape for usage bar - flat top when there's overage, rounded when no overage
+const VerticalUsageBarShape = (props: any) => {
+  const { x, y, width, height, payload } = props;
+  const hasOverage = payload?.overUsage && payload.overUsage > 0;
+  const radius = 4;
+  
+  if (height <= 0) return null;
+  
+  if (hasOverage) {
+    // Flat top when overage stacks on top
+    return (
+      <rect
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        fill="hsl(var(--chart-2))"
+      />
+    );
+  }
+  
+  // Rounded top corners when no overage
+  return (
+    <path
+      d={`
+        M ${x},${y + height}
+        L ${x},${y + radius}
+        Q ${x},${y} ${x + radius},${y}
+        L ${x + width - radius},${y}
+        Q ${x + width},${y} ${x + width},${y + radius}
+        L ${x + width},${y + height}
+        Z
+      `}
+      fill="hsl(var(--chart-2))"
+    />
+  );
+};
+
+// Custom label component that shows total (usage + overUsage) above the bar
+const TotalLabel = (props: any) => {
+  const { x, y, width, payload } = props;
+  const usage = payload?.usage || 0;
+  const overUsage = payload?.overUsage || 0;
+  const total = usage + overUsage;
+  
+  if (total < 5) return null;
+  
+  return (
+    <text
+      x={x + width / 2}
+      y={y - 8}
+      fill="hsl(var(--muted-foreground))"
+      fontSize={10}
+      fontWeight={600}
+      textAnchor="middle"
+    >
+      {formatGBValue(total)}
+    </text>
+  );
+};
 
 export function VerticalBarChart({
   chartData,
@@ -38,7 +100,7 @@ export function VerticalBarChart({
           <ResponsiveContainer width="100%" height="100%" debounce={ANIMATION_CONFIG.DEBOUNCE}>
             <BarChart
               data={chartData}
-              margin={{ top: 20, right: 20, left: 20, bottom: 60 }}
+              margin={{ top: 30, right: 20, left: 20, bottom: 60 }}
               barGap={3}
               barSize={dynamicBarSize}
             >
@@ -82,17 +144,11 @@ export function VerticalBarChart({
                 stackId="a" 
                 fill="hsl(var(--chart-2))" 
                 animationDuration={ANIMATION_CONFIG.BAR_DURATION}
-                radius={[4, 4, 0, 0]}
+                shape={VerticalUsageBarShape}
               >
-                <LabelList 
-                  dataKey="usage" 
-                  position="top" 
-                  fill="hsl(var(--muted-foreground))"
-                  fontSize={9}
-                  fontWeight={600}
-                  formatter={(val: number) => val > 10 ? formatGBValue(val) : ''} 
-                  offset={4}
-                />
+                {chartData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} />
+                ))}
               </Bar>
               <Bar 
                 dataKey="overUsage" 
@@ -100,7 +156,11 @@ export function VerticalBarChart({
                 fill="hsl(var(--chart-3))" 
                 radius={[4, 4, 0, 0]} 
                 animationDuration={ANIMATION_CONFIG.BAR_DURATION}
-              />
+              >
+                <LabelList 
+                  content={TotalLabel}
+                />
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         )}
