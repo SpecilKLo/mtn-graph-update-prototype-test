@@ -67,31 +67,29 @@ export const ChartHeader = ({
           </Tabs>
         </div>
 
-        <div className="flex items-center justify-center lg:justify-end gap-2 sm:gap-3">
+        <div className="flex items-center gap-3">
           {viewMode === "day" ? (
-            <div className="relative flex-1 lg:flex-none">
-              <Select 
-                value={format(selectedMonth, "yyyy-MM")} 
-                onValueChange={onMonthChange}
-              >
-                <SelectTrigger className="w-full lg:w-[180px] h-[40px] bg-background border border-border rounded-lg text-primary font-normal focus:ring-0 focus:ring-offset-0 text-sm">
-                  <CalendarIcon className="mr-2 h-4 w-4 text-muted-foreground shrink-0" />
-                  <SelectValue>{format(selectedMonth, "MMMM yyyy")}</SelectValue>
-                </SelectTrigger>
-                <SelectContent className="bg-popover border-border">
-                  {monthOptions.map(opt => (
-                    <SelectItem key={opt.value} value={opt.value} className="hover:bg-secondary/10 cursor-pointer">
-                      <span>{opt.label}</span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <Select 
+              value={format(selectedMonth, "yyyy-MM")} 
+              onValueChange={onMonthChange}
+            >
+              <SelectTrigger className="w-[200px] h-[40px] bg-background border border-border rounded-lg text-primary font-normal focus:ring-0 focus:ring-offset-0 text-sm">
+                <CalendarIcon className="mr-2 h-4 w-4 text-muted-foreground shrink-0" />
+                <SelectValue>{format(selectedMonth, "MMMM yyyy")}</SelectValue>
+              </SelectTrigger>
+              <SelectContent className="bg-popover border-border">
+                {monthOptions.map(opt => (
+                  <SelectItem key={opt.value} value={opt.value} className="hover:bg-secondary/10 cursor-pointer">
+                    <span>{opt.label}</span>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           ) : (
             <>
               <Select value={rangePreset} onValueChange={onPresetChange}>
-                <SelectTrigger className="w-[140px] h-[40px] bg-background border border-border rounded-lg text-primary font-normal focus:ring-0 focus:ring-offset-0 text-sm shrink-0">
-                  <SelectValue placeholder="Range" />
+                <SelectTrigger className="w-[180px] h-[40px] bg-background border border-border rounded-lg text-primary font-normal focus:ring-0 focus:ring-offset-0 text-sm">
+                  <SelectValue placeholder="Select range" />
                 </SelectTrigger>
                 <SelectContent className="bg-popover border-border">
                   <SelectItem value="12months"><span>Last 12 Months</span></SelectItem>
@@ -101,25 +99,25 @@ export const ChartHeader = ({
                 </SelectContent>
               </Select>
 
-              {/* Custom range inputs - inline with controls */}
+              {/* Custom range inputs - smooth inline expand */}
               <div 
                 className={`flex items-center transition-all duration-300 ease-out overflow-hidden ${
                   rangePreset === "custom" 
-                    ? "max-w-[340px] opacity-100" 
+                    ? "max-w-[380px] opacity-100" 
                     : "max-w-0 opacity-0"
                 }`}
               >
-                <div className="flex items-center gap-2 bg-muted p-1.5 rounded-lg border border-border">
+                <div className="flex items-center gap-2 bg-muted px-3 py-1.5 rounded-lg border border-border">
                   <input 
                     type="month" 
-                    className="bg-transparent border-none text-sm text-foreground focus:ring-0 p-1.5 w-[130px] outline-none"
+                    className="bg-transparent border-none text-sm text-foreground focus:ring-0 p-1 w-[140px] outline-none"
                     value={format(customRange.from, "yyyy-MM")}
                     onChange={(e) => onCustomRangeChange('from', e.target.value)}
                   />
-                  <span className="text-muted-foreground font-medium">–</span>
+                  <span className="text-muted-foreground font-medium px-1">–</span>
                   <input 
                     type="month" 
-                    className="bg-transparent border-none text-sm text-foreground focus:ring-0 p-1.5 w-[130px] outline-none"
+                    className="bg-transparent border-none text-sm text-foreground focus:ring-0 p-1 w-[140px] outline-none"
                     value={format(customRange.to, "yyyy-MM")}
                     onChange={(e) => onCustomRangeChange('to', e.target.value)}
                   />
@@ -131,7 +129,7 @@ export const ChartHeader = ({
           <Button 
             variant="outline" 
             size="icon"
-            className="h-[40px] w-[40px] border-border text-muted-foreground hover:bg-muted hover:text-foreground rounded-lg shrink-0"
+            className="h-[40px] w-[40px] border-border text-muted-foreground hover:bg-muted hover:text-foreground rounded-lg"
             onClick={onExport}
             title="Export CSV"
           >
