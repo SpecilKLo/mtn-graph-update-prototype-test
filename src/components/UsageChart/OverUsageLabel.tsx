@@ -26,7 +26,7 @@ export const OverUsageLabel = (props: OverUsageLabelProps) => {
     <text
       x={isSmall ? x + width + 8 : x + width - 10}
       y={y + height / 2}
-      fill="hsl(var(--foreground))"
+      fill="hsl(var(--warning))"
       fontSize={11}
       fontWeight={700}
       textAnchor={isSmall ? "start" : "end"}
