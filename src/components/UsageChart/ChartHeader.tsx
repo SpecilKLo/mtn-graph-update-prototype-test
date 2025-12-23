@@ -88,9 +88,9 @@ export const ChartHeader = ({
               </Select>
             </div>
           ) : (
-            <div className="flex items-center gap-2 flex-1 lg:flex-none">
+            <>
               <Select value={rangePreset} onValueChange={onPresetChange}>
-                <SelectTrigger className="w-full sm:w-[150px] h-[40px] bg-background border border-border rounded-lg text-primary font-normal focus:ring-0 focus:ring-offset-0 text-sm">
+                <SelectTrigger className="w-[140px] h-[40px] bg-background border border-border rounded-lg text-primary font-normal focus:ring-0 focus:ring-offset-0 text-sm shrink-0">
                   <SelectValue placeholder="Range" />
                 </SelectTrigger>
                 <SelectContent className="bg-popover border-border">
@@ -100,7 +100,32 @@ export const ChartHeader = ({
                   <SelectItem value="custom"><span>Custom Range</span></SelectItem>
                 </SelectContent>
               </Select>
-            </div>
+
+              {/* Custom range inputs - inline with controls */}
+              <div 
+                className={`flex items-center transition-all duration-300 ease-out overflow-hidden ${
+                  rangePreset === "custom" 
+                    ? "max-w-[340px] opacity-100" 
+                    : "max-w-0 opacity-0"
+                }`}
+              >
+                <div className="flex items-center gap-2 bg-muted p-1.5 rounded-lg border border-border">
+                  <input 
+                    type="month" 
+                    className="bg-transparent border-none text-sm text-foreground focus:ring-0 p-1.5 w-[130px] outline-none"
+                    value={format(customRange.from, "yyyy-MM")}
+                    onChange={(e) => onCustomRangeChange('from', e.target.value)}
+                  />
+                  <span className="text-muted-foreground font-medium">–</span>
+                  <input 
+                    type="month" 
+                    className="bg-transparent border-none text-sm text-foreground focus:ring-0 p-1.5 w-[130px] outline-none"
+                    value={format(customRange.to, "yyyy-MM")}
+                    onChange={(e) => onCustomRangeChange('to', e.target.value)}
+                  />
+                </div>
+              </div>
+            </>
           )}
 
           <Button 
@@ -112,35 +137,6 @@ export const ChartHeader = ({
           >
             <Download className="h-4 w-4" />
           </Button>
-        </div>
-      </div>
-
-      {/* Custom range row - separate row for better tablet layout */}
-      <div 
-        className={`grid transition-all duration-300 ease-out ${
-          viewMode !== "day" && rangePreset === "custom" 
-            ? "grid-rows-[1fr] opacity-100" 
-            : "grid-rows-[0fr] opacity-0"
-        }`}
-      >
-        <div className="overflow-hidden">
-          <div className="flex items-center justify-center lg:justify-end pt-1">
-            <div className="flex items-center gap-2 bg-muted p-1.5 rounded-lg border border-border">
-              <input 
-                type="month" 
-                className="bg-transparent border-none text-sm text-foreground focus:ring-0 p-1.5 w-36 sm:w-40 outline-none"
-                value={format(customRange.from, "yyyy-MM")}
-                onChange={(e) => onCustomRangeChange('from', e.target.value)}
-              />
-              <span className="text-muted-foreground font-medium">–</span>
-              <input 
-                type="month" 
-                className="bg-transparent border-none text-sm text-foreground focus:ring-0 p-1.5 w-36 sm:w-40 outline-none"
-                value={format(customRange.to, "yyyy-MM")}
-                onChange={(e) => onCustomRangeChange('to', e.target.value)}
-              />
-            </div>
-          </div>
         </div>
       </div>
     </div>
