@@ -1,6 +1,9 @@
 // View mode types
 export type ViewMode = "day" | "week" | "month";
 
+// Chart orientation type
+export type ChartOrientation = "horizontal" | "vertical";
+
 // Chart data point structure
 export type ChartData = {
   label: string;
