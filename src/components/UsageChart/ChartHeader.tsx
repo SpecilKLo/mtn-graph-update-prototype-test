@@ -1,5 +1,5 @@
 import { format, subMonths } from "date-fns";
-import { Calendar as CalendarIcon, Download } from "lucide-react";
+import { Calendar as CalendarIcon, Download, BarChart2, BarChart3 } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Select,
@@ -8,8 +8,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { Switch } from "../ui/switch";
 import { Tabs, AnimatedTabsList } from "../ui/tabs";
-import type { ViewMode, DateRange } from "./types";
+import type { ViewMode, DateRange, ChartOrientation } from "./types";
 
 interface ChartHeaderProps {
   viewMode: ViewMode;
@@ -21,6 +22,8 @@ interface ChartHeaderProps {
   customRange: DateRange;
   onCustomRangeChange: (type: 'from' | 'to', value: string) => void;
   onExport: () => void;
+  orientation: ChartOrientation;
+  onOrientationChange: (orientation: ChartOrientation) => void;
 }
 
 export const ChartHeader = ({
@@ -33,6 +36,8 @@ export const ChartHeader = ({
   customRange,
   onCustomRangeChange,
   onExport,
+  orientation,
+  onOrientationChange,
 }: ChartHeaderProps) => {
   // Generate month options for the last 24 months
   const monthOptions = (() => {
@@ -125,6 +130,17 @@ export const ChartHeader = ({
               </div>
             </>
           )}
+
+          {/* Orientation toggle */}
+          <div className="flex items-center gap-2 px-3 py-2 bg-muted rounded-lg border border-border">
+            <BarChart2 className={`h-4 w-4 transition-colors ${orientation === 'horizontal' ? 'text-primary' : 'text-muted-foreground'}`} />
+            <Switch
+              checked={orientation === 'vertical'}
+              onCheckedChange={(checked) => onOrientationChange(checked ? 'vertical' : 'horizontal')}
+              className="data-[state=checked]:bg-primary"
+            />
+            <BarChart3 className={`h-4 w-4 transition-colors ${orientation === 'vertical' ? 'text-primary' : 'text-muted-foreground'}`} />
+          </div>
 
           <Button 
             variant="outline" 
