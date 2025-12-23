@@ -8,19 +8,22 @@ import {
   Tooltip,
   ResponsiveContainer,
   LabelList,
-  Cell,
+  ReferenceArea,
 } from "recharts";
 
 import { ChartTooltip } from "./ChartTooltip";
-import { ANIMATION_CONFIG } from "./constants";
+import { ANIMATION_CONFIG, CHART_CONFIG } from "./constants";
 import { formatGBValue } from "./utils";
-import type { ChartData } from "./types";
+import type { ChartData, ViewMode, MonthBlock, WeekBlock } from "./types";
 
 interface VerticalBarChartProps {
   chartData: ChartData[];
   maxDomainValue: number;
   dynamicBarSize: number;
   isMounted: boolean;
+  viewMode: ViewMode;
+  weekBlocks: WeekBlock[];
+  monthBlocks: MonthBlock[];
 }
 
 // Custom shape for usage bar - flat top when there's overage, rounded when no overage
@@ -61,25 +64,47 @@ const VerticalUsageBarShape = (props: any) => {
   );
 };
 
-// Custom label component that shows total (usage + overUsage) above the bar
-const TotalLabel = (props: any) => {
-  const { x, y, width, payload } = props;
-  const usage = payload?.usage || 0;
-  const overUsage = payload?.overUsage || 0;
-  const total = usage + overUsage;
+// Custom label for usage value - inside bar (white text)
+const UsageLabel = (props: any) => {
+  const { x, y, width, height, value } = props;
   
-  if (total < 5) return null;
+  if (!value || value < 18 || height < 30) return null;
   
   return (
     <text
       x={x + width / 2}
-      y={y - 8}
-      fill="hsl(var(--muted-foreground))"
+      y={y + height - 10}
+      fill="white"
       fontSize={10}
       fontWeight={600}
       textAnchor="middle"
     >
-      {formatGBValue(total)}
+      {formatGBValue(value)}
+    </text>
+  );
+};
+
+// Custom label for over usage - warning color, positioned above if small
+const OverUsageLabel = (props: any) => {
+  const { x, y, width, height, value } = props;
+  
+  if (!value || value === 0) return null;
+
+  const text = formatGBValue(value);
+  const minHeightForInside = 30;
+  const isSmall = height < minHeightForInside;
+
+  return (
+    <text
+      x={x + width / 2}
+      y={isSmall ? y - 8 : y + height / 2}
+      fill="hsl(var(--warning))"
+      fontSize={11}
+      fontWeight={700}
+      textAnchor="middle"
+      dominantBaseline={isSmall ? "auto" : "middle"}
+    >
+      {text}
     </text>
   );
 };
@@ -89,6 +114,9 @@ export function VerticalBarChart({
   maxDomainValue,
   dynamicBarSize,
   isMounted,
+  viewMode,
+  weekBlocks,
+  monthBlocks,
 }: VerticalBarChartProps) {
   // Calculate dynamic width based on data count
   const chartWidth = Math.max(chartData.length * (dynamicBarSize + 20), 600);
@@ -100,10 +128,47 @@ export function VerticalBarChart({
           <ResponsiveContainer width="100%" height="100%" debounce={ANIMATION_CONFIG.DEBOUNCE}>
             <BarChart
               data={chartData}
-              margin={{ top: 30, right: 20, left: 20, bottom: 60 }}
+              margin={{ top: 30, right: CHART_CONFIG.RIGHT_MARGIN, left: CHART_CONFIG.LEFT_MARGIN, bottom: 60 }}
               barGap={3}
               barSize={dynamicBarSize}
             >
+              {/* Reference areas for alternating backgrounds */}
+              {viewMode === 'day' && weekBlocks.map((block, index) => (
+                <ReferenceArea
+                  key={`week-${block.weekNumber}-${index}`}
+                  x1={block.start}
+                  x2={block.end}
+                  y1={0}
+                  y2={maxDomainValue}
+                  fill={index % 2 === 0 ? "#F5F5F5" : "transparent"}
+                  fillOpacity={1}
+                  strokeOpacity={0}
+                  ifOverflow="extendDomain"
+                />
+              ))}
+              
+              {viewMode === 'week' && monthBlocks.map((block, index) => (
+                <ReferenceArea
+                  key={`${block.month}-${index}`}
+                  x1={block.start}
+                  x2={block.end}
+                  y1={0}
+                  y2={maxDomainValue}
+                  fill={index % 2 === 0 ? "#F5F5F5" : "transparent"}
+                  fillOpacity={1}
+                  strokeOpacity={0}
+                  ifOverflow="extendDomain"
+                  label={{
+                    value: block.month,
+                    position: 'insideTopLeft',
+                    fill: 'hsl(var(--muted-foreground))',
+                    fontSize: 12,
+                    fontWeight: 500,
+                    offset: 10,
+                  }}
+                />
+              ))}
+
               <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#CFCFCF" strokeOpacity={1} />
 
               <XAxis 
@@ -146,9 +211,10 @@ export function VerticalBarChart({
                 animationDuration={ANIMATION_CONFIG.BAR_DURATION}
                 shape={VerticalUsageBarShape}
               >
-                {chartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} />
-                ))}
+                <LabelList 
+                  dataKey="usage"
+                  content={UsageLabel}
+                />
               </Bar>
               <Bar 
                 dataKey="overUsage" 
@@ -158,7 +224,8 @@ export function VerticalBarChart({
                 animationDuration={ANIMATION_CONFIG.BAR_DURATION}
               >
                 <LabelList 
-                  content={TotalLabel}
+                  dataKey="overUsage"
+                  content={OverUsageLabel}
                 />
               </Bar>
             </BarChart>

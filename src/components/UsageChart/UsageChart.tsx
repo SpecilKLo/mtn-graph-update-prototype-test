@@ -231,6 +231,9 @@ export function UsageChart() {
                 maxDomainValue={maxDomainValue}
                 dynamicBarSize={dynamicBarSize}
                 isMounted={isMounted}
+                viewMode={viewMode}
+                weekBlocks={weekBlocks}
+                monthBlocks={monthBlocks}
               />
             </div>
           ) : (
