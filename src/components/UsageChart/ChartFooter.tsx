@@ -19,7 +19,7 @@ export const ChartFooter = ({ totalUsage }: ChartFooterProps) => {
       <div className="flex items-center gap-4 sm:gap-12">
         <div className="flex items-center gap-2">
           <span className="text-[12px] sm:text-[14px] text-muted-foreground font-semibold whitespace-nowrap">Total Usage:</span>
-          <span className="text-[14px] sm:text-[16px] font-bold" style={{ color: '#676767' }}>
+          <span className="text-[14px] sm:text-[16px] font-bold" style={{ color: 'hsl(var(--chart-usage-value))' }}>
             {totalUsage.toFixed(2)} GB
           </span>
         </div>
