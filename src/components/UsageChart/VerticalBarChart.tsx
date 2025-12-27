@@ -64,40 +64,41 @@ const VerticalUsageBarShape = (props: any) => {
   );
 };
 
-// Custom label for usage value - inside bar (white text)
-const UsageLabel = (props: any) => {
-  const { x, y, width, height, value } = props;
+// Custom label for total value - positioned above the bar
+const TotalValueLabel = (props: any) => {
+  const { x, y, width, payload } = props;
   
-  if (!value || value < 18 || height < 30) return null;
+  const total = (payload?.usage || 0) + (payload?.overUsage || 0);
+  if (total === 0) return null;
   
   return (
     <text
       x={x + width / 2}
-      y={y + height - 10}
-      fill="white"
-      fontSize={10}
+      y={y - 8}
+      fill="hsl(var(--foreground))"
+      fontSize={11}
       fontWeight={600}
       textAnchor="middle"
     >
-      {formatGBValue(value)}
+      {formatGBValue(total)}
     </text>
   );
 };
 
-// Custom label for over usage - warning color, positioned above if small
+// Custom label for over usage - warning color inside bar
 const OverUsageLabel = (props: any) => {
   const { x, y, width, height, value } = props;
   
   if (!value || value === 0) return null;
 
   const text = formatGBValue(value);
-  const minHeightForInside = 30;
+  const minHeightForInside = 25;
   const isSmall = height < minHeightForInside;
 
   return (
     <text
       x={x + width / 2}
-      y={isSmall ? y - 8 : y + height / 2}
+      y={isSmall ? y - 6 : y + height / 2}
       fill="hsl(var(--warning))"
       fontSize={11}
       fontWeight={700}
@@ -109,6 +110,10 @@ const OverUsageLabel = (props: any) => {
   );
 };
 
+// Minimum bar width to ensure labels fit comfortably
+const MIN_VERTICAL_BAR_WIDTH = 75;
+const BAR_SPACING = 35;
+
 export function VerticalBarChart({
   chartData,
   maxDomainValue,
@@ -118,8 +123,11 @@ export function VerticalBarChart({
   weekBlocks,
   monthBlocks,
 }: VerticalBarChartProps) {
-  // Calculate dynamic width based on data count
-  const chartWidth = Math.max(chartData.length * (dynamicBarSize + 20), 600);
+  // Calculate bar size - ensure minimum width for labels
+  const barWidth = Math.max(dynamicBarSize, MIN_VERTICAL_BAR_WIDTH);
+  
+  // Calculate dynamic width based on data count with generous spacing
+  const chartWidth = Math.max(chartData.length * (barWidth + BAR_SPACING), 600);
 
   return (
     <div className="flex-1 overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-thumb-border/30 scrollbar-track-transparent">
@@ -128,9 +136,9 @@ export function VerticalBarChart({
           <ResponsiveContainer width="100%" height="100%" debounce={ANIMATION_CONFIG.DEBOUNCE}>
             <BarChart
               data={chartData}
-              margin={{ top: 30, right: CHART_CONFIG.RIGHT_MARGIN, left: CHART_CONFIG.LEFT_MARGIN, bottom: 60 }}
-              barGap={3}
-              barSize={dynamicBarSize}
+              margin={{ top: 40, right: CHART_CONFIG.RIGHT_MARGIN, left: CHART_CONFIG.LEFT_MARGIN, bottom: 60 }}
+              barGap={8}
+              barSize={barWidth}
             >
               {/* Reference areas for alternating backgrounds */}
               {viewMode === 'day' && weekBlocks.map((block, index) => (
@@ -213,7 +221,7 @@ export function VerticalBarChart({
               >
                 <LabelList 
                   dataKey="usage"
-                  content={UsageLabel}
+                  content={TotalValueLabel}
                 />
               </Bar>
               <Bar 
