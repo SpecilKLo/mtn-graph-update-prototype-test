@@ -40,7 +40,7 @@ import type { ViewMode, DateRange, ChartOrientation } from "./types";
 export function UsageChart() {
   // View mode state
   const [viewMode, setViewMode] = React.useState<ViewMode>("day");
-  const [orientation, setOrientation] = React.useState<ChartOrientation>("horizontal");
+  const [orientation, setOrientation] = React.useState<ChartOrientation>("vertical");
   
   // Date selection state
   const [selectedMonth, setSelectedMonth] = React.useState<Date>(new Date());
