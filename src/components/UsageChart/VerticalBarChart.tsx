@@ -64,23 +64,22 @@ const VerticalUsageBarShape = (props: any) => {
   );
 };
 
-// Custom label for total value - positioned above the bar
-const TotalValueLabel = (props: any) => {
-  const { x, y, width, payload } = props;
+// Custom label for usage value - white text inside bar
+const UsageLabel = (props: any) => {
+  const { x, y, width, height, value } = props;
   
-  const total = (payload?.usage || 0) + (payload?.overUsage || 0);
-  if (total === 0) return null;
+  if (!value || value < 18 || height < 30) return null;
   
   return (
     <text
       x={x + width / 2}
-      y={y - 8}
-      fill="hsl(var(--foreground))"
+      y={y + height - 12}
+      fill="white"
       fontSize={11}
       fontWeight={600}
       textAnchor="middle"
     >
-      {formatGBValue(total)}
+      {formatGBValue(value)}
     </text>
   );
 };
@@ -221,7 +220,7 @@ export function VerticalBarChart({
               >
                 <LabelList 
                   dataKey="usage"
-                  content={TotalValueLabel}
+                  content={UsageLabel}
                 />
               </Bar>
               <Bar 
