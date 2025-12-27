@@ -1,6 +1,6 @@
 // Chart layout constants
 export const CHART_CONFIG = {
-  Y_AXIS_WIDTH: 75,
+  Y_AXIS_WIDTH: 55,
   RIGHT_MARGIN: 50,
   LEFT_MARGIN: 0,
   HEADER_HEIGHT: 72,
