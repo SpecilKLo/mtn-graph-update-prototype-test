@@ -64,7 +64,7 @@ const VerticalUsageBarShape = (props: any) => {
   );
 };
 
-// Custom label for usage value - white text inside bar
+// Custom label for usage value - white text inside bar at top
 const UsageLabel = (props: any) => {
   const { x, y, width, height, value } = props;
   
@@ -73,7 +73,7 @@ const UsageLabel = (props: any) => {
   return (
     <text
       x={x + width / 2}
-      y={y + height - 12}
+      y={y + 16}
       fill="white"
       fontSize={11}
       fontWeight={600}
