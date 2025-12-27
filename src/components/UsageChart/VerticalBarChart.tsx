@@ -205,6 +205,7 @@ export function VerticalBarChart({
                 }}
                 tickFormatter={(value) => formatGBValue(value)}
                 width={60}
+                ticks={[0, Math.round(maxDomainValue / 4), Math.round(maxDomainValue / 2), Math.round(maxDomainValue * 3 / 4), maxDomainValue]}
               />
               <Tooltip 
                 content={<ChartTooltip />} 
