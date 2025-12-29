@@ -50,7 +50,7 @@ const AnimatedTabsList = React.forwardRef<React.ElementRef<typeof TabsPrimitive.
       width: indicatorStyle.width
     }} className="absolute h-[calc(100%-12px)] rounded-md bg-background shadow-[0_1px_3px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.06)] border transition-all duration-300 ease-out border-primary" />
       {/* Tab triggers */}
-      {tabs.map(tab => <TabsPrimitive.Trigger key={tab.value} value={tab.value} onClick={() => onTabChange?.(tab.value)} className={cn("relative z-10 inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-medium ring-offset-background transition-all duration-200", "hover:text-foreground/80", "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1", "disabled:pointer-events-none disabled:opacity-50", "data-[state=active]:text-foreground data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:bg-background/50")}>
+      {tabs.map(tab => <TabsPrimitive.Trigger key={tab.value} value={tab.value} onClick={() => onTabChange?.(tab.value)} className={cn("relative z-10 inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-medium ring-offset-background transition-all duration-200", "hover:text-foreground/80 hover:bg-[#EAF2FB]", "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1", "disabled:pointer-events-none disabled:opacity-50", "data-[state=active]:text-foreground data-[state=inactive]:text-muted-foreground")}>
           {tab.label}
         </TabsPrimitive.Trigger>)}
     </TabsPrimitive.List>;
