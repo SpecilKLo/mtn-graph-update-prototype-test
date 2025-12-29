@@ -26,7 +26,7 @@ export const StickyXAxis = ({ maxDomainValue, scrollbarWidth, isMounted }: Stick
             <BarChart
               layout="vertical"
               data={[{}]} 
-              margin={{ top: 0, right: RIGHT_MARGIN + 8, left: 25, bottom: 0 }} 
+              margin={{ top: 0, right: RIGHT_MARGIN + 8, left: 0, bottom: 0 }} 
             >
               <YAxis 
                 type="category" 
@@ -43,6 +43,7 @@ export const StickyXAxis = ({ maxDomainValue, scrollbarWidth, isMounted }: Stick
                 tick={{ fill: '#676767', fontSize: 11, fontWeight: 500 }}
                 tickFormatter={(value) => `${value} GB`}
                 ticks={[0, Math.round(maxDomainValue / 4), Math.round(maxDomainValue / 2), Math.round(maxDomainValue * 3 / 4), maxDomainValue]}
+                padding={{ left: 10 }}
               />
             </BarChart>
           </ResponsiveContainer>
