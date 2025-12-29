@@ -358,7 +358,7 @@ export function UsageChart() {
                                   fill="white"
                                   fontSize={10}
                                   fontWeight={600}
-                                  formatter={(val: number) => val > 18 ? formatGBValue(val) : ''} 
+                                  formatter={(val: number) => formatGBValue(val)} 
                                   offset={8}
                                 />
                               </Bar>
