@@ -68,20 +68,20 @@ const VerticalUsageBarShape = (props: any) => {
 
 // Custom label for usage value - white text inside bar at top
 const UsageLabel = (props: any) => {
-  const { x, y, width, height, value } = props;
+  const { x, y, width, value } = props;
   
-  if (!value || value < 18 || height < 30) return null;
+  const displayValue = value ?? 0;
   
   return (
     <text
       x={x + width / 2}
       y={y + 16}
-      fill="white"
+      fill={displayValue === 0 ? "hsl(var(--muted-foreground))" : "white"}
       fontSize={11}
       fontWeight={600}
       textAnchor="middle"
     >
-      {formatGBValue(value)}
+      {formatGBValue(displayValue)}
     </text>
   );
 };
