@@ -284,7 +284,7 @@ export function UsageChart() {
                             <BarChart
                               layout="vertical"
                               data={chartData}
-                              margin={{ top: 10, right: RIGHT_MARGIN, left: LEFT_MARGIN + 25, bottom: 10 }}
+                              margin={{ top: 10, right: RIGHT_MARGIN, left: LEFT_MARGIN, bottom: 10 }}
                               barGap={3}
                               barSize={dynamicBarSize}
                             >
