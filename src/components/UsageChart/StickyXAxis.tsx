@@ -43,7 +43,7 @@ export const StickyXAxis = ({ maxDomainValue, scrollbarWidth, isMounted }: Stick
                 tick={{ fill: '#676767', fontSize: 11, fontWeight: 500 }}
                 tickFormatter={(value) => `${value} GB`}
                 ticks={[0, Math.round(maxDomainValue / 4), Math.round(maxDomainValue / 2), Math.round(maxDomainValue * 3 / 4), maxDomainValue]}
-                padding={{ left: 10 }}
+                padding={{ left: 25 }}
               />
             </BarChart>
           </ResponsiveContainer>
