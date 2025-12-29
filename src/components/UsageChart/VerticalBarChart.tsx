@@ -100,7 +100,7 @@ const OverUsageLabel = (props: any) => {
     <text
       x={x + width / 2}
       y={isSmall ? y - 6 : y + height / 2}
-      fill="hsl(var(--warning))"
+      fill="black"
       fontSize={11}
       fontWeight={700}
       textAnchor="middle"
