@@ -13,16 +13,16 @@ export const ChartTooltip = ({ active, payload }: CustomTooltipProps) => {
     const dateLabel = data.dateRange || format(data.date, "PP");
     
     return (
-      <div className="bg-popover text-popover-foreground p-3 border border-border rounded-lg shadow-elevation-sm text-sm min-w-[180px] z-50">
-        <p className="font-semibold mb-2 text-primary">{dateLabel}</p>
+      <div className="p-3 border border-border rounded-lg shadow-elevation-sm text-sm min-w-[180px] z-50" style={{ backgroundColor: '#3B3B3B' }}>
+        <p className="font-semibold mb-2 text-white">{dateLabel}</p>
         <div className="flex flex-col gap-1">
           <div className="flex items-center justify-between gap-3">
-            <span className="text-muted-foreground">Usage:</span>
+            <span className="text-white">Usage:</span>
             <span className="font-semibold" style={{ color: 'hsl(var(--chart-usage-value))' }}>{formatGBValue(data.usage)}</span>
           </div>
           {data.overUsage && (
             <div className="flex items-center justify-between gap-3">
-              <span className="text-muted-foreground">Over Usage:</span>
+              <span className="text-white">Over Usage:</span>
               <span className="font-semibold text-warning">{data.overUsage} GB</span>
             </div>
           )}
