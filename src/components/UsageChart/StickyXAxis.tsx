@@ -26,7 +26,7 @@ export const StickyXAxis = ({ maxDomainValue, scrollbarWidth, isMounted }: Stick
             <BarChart
               layout="vertical"
               data={[{}]} 
-              margin={{ top: 0, right: RIGHT_MARGIN + 8, left: 0, bottom: 0 }} 
+              margin={{ top: 0, right: RIGHT_MARGIN + 8, left: 25, bottom: 0 }} 
             >
               <YAxis 
                 type="category" 
