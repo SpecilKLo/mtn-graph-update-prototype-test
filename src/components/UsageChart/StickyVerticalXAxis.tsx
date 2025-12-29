@@ -37,9 +37,9 @@ export function StickyVerticalXAxis({
                 fontWeight: 500,
               }}
               interval={0}
-              angle={-45}
-              textAnchor="end"
-              height={50}
+              angle={0}
+              textAnchor="middle"
+              height={30}
             />
           </BarChart>
         </ResponsiveContainer>
