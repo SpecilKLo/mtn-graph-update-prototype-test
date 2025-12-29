@@ -225,17 +225,15 @@ export function UsageChart() {
         <div className="flex-1 overflow-hidden flex flex-col w-full bg-card">
           {orientation === 'vertical' ? (
             /* Vertical orientation - standard bar chart */
-            <div className="flex-1 flex flex-col overflow-hidden p-4">
-              <VerticalBarChart
-                chartData={chartData}
-                maxDomainValue={maxDomainValue}
-                dynamicBarSize={dynamicBarSize}
-                isMounted={isMounted}
-                viewMode={viewMode}
-                weekBlocks={weekBlocks}
-                monthBlocks={monthBlocks}
-              />
-            </div>
+            <VerticalBarChart
+              chartData={chartData}
+              maxDomainValue={maxDomainValue}
+              dynamicBarSize={dynamicBarSize}
+              isMounted={isMounted}
+              viewMode={viewMode}
+              weekBlocks={weekBlocks}
+              monthBlocks={monthBlocks}
+            />
           ) : (
             /* Horizontal orientation - rotated bars */
             <>
