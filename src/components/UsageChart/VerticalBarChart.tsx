@@ -127,6 +127,10 @@ export function VerticalBarChart({
   const chartScrollRef = React.useRef<HTMLDivElement>(null);
   const xAxisScrollRef = React.useRef<HTMLDivElement>(null);
   const isScrollSyncing = React.useRef(false);
+  
+  // Scroll fade indicator states
+  const [canScrollLeft, setCanScrollLeft] = React.useState(false);
+  const [canScrollRight, setCanScrollRight] = React.useState(true);
 
   // Calculate bar size - ensure minimum width for labels
   const barWidth = Math.max(dynamicBarSize, MIN_VERTICAL_BAR_WIDTH);
@@ -134,10 +138,25 @@ export function VerticalBarChart({
   // Calculate dynamic width based on data count with generous spacing
   const chartWidth = Math.max(chartData.length * (barWidth + BAR_SPACING), 600);
 
+  // Update scroll indicator visibility
+  const updateScrollIndicators = (element: HTMLElement) => {
+    const { scrollLeft, scrollWidth, clientWidth } = element;
+    setCanScrollLeft(scrollLeft > 0);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+  };
+
+  // Initialize scroll indicators on mount and data change
+  React.useEffect(() => {
+    if (chartScrollRef.current) {
+      updateScrollIndicators(chartScrollRef.current);
+    }
+  }, [chartData]);
+
   // Sync horizontal scroll between chart and X-axis
   const handleChartScroll = (e: React.UIEvent<HTMLDivElement>) => {
     if (isScrollSyncing.current) return;
     isScrollSyncing.current = true;
+    updateScrollIndicators(e.currentTarget);
     if (xAxisScrollRef.current) {
       xAxisScrollRef.current.scrollLeft = e.currentTarget.scrollLeft;
     }
@@ -151,6 +170,7 @@ export function VerticalBarChart({
     isScrollSyncing.current = true;
     if (chartScrollRef.current) {
       chartScrollRef.current.scrollLeft = e.currentTarget.scrollLeft;
+      updateScrollIndicators(chartScrollRef.current);
     }
     requestAnimationFrame(() => {
       isScrollSyncing.current = false;
@@ -160,11 +180,29 @@ export function VerticalBarChart({
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
       {/* Main content row: Fixed Y-Axis + Scrollable Chart */}
-      <div className="flex-1 flex flex-row overflow-hidden">
+      <div className="flex-1 flex flex-row overflow-hidden relative">
         {/* Sticky Y-Axis - doesn't scroll horizontally */}
         <StickyVerticalYAxis
           maxDomainValue={maxDomainValue}
           isMounted={isMounted}
+        />
+
+        {/* Left fade indicator */}
+        <div 
+          className={`absolute top-0 bottom-0 z-10 pointer-events-none transition-opacity duration-300 ${canScrollLeft ? 'opacity-100' : 'opacity-0'}`}
+          style={{ 
+            left: 60,
+            width: 6,
+            background: 'linear-gradient(to right, rgba(19, 21, 23, 0.1), transparent)'
+          }}
+        />
+        {/* Right fade indicator */}
+        <div 
+          className={`absolute right-0 top-0 bottom-0 z-10 pointer-events-none transition-opacity duration-300 ${canScrollRight ? 'opacity-100' : 'opacity-0'}`}
+          style={{ 
+            width: 6, 
+            background: 'linear-gradient(to left, rgba(19, 21, 23, 0.1), transparent)' 
+          }}
         />
 
         {/* Scrollable Chart Area */}
