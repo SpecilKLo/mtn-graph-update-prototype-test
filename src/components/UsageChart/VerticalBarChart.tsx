@@ -216,7 +216,7 @@ export function VerticalBarChart({
               <ResponsiveContainer width="100%" height="100%" debounce={ANIMATION_CONFIG.DEBOUNCE}>
                 <BarChart
                   data={chartData}
-                  margin={{ top: 10, right: CHART_CONFIG.RIGHT_MARGIN, left: 0, bottom: 0 }}
+                  margin={{ top: 10, right: CHART_CONFIG.RIGHT_MARGIN, left: 0, bottom: 5 }}
                   barGap={8}
                   barSize={barWidth}
                 >
@@ -320,6 +320,7 @@ export function VerticalBarChart({
             chartData={chartData}
             chartWidth={chartWidth}
             isMounted={isMounted}
+            dynamicBarSize={dynamicBarSize}
           />
         </div>
       </div>
