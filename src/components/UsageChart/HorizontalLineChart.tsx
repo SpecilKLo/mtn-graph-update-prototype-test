@@ -192,8 +192,8 @@ export function HorizontalLineChart({
   // Calculate dynamic width based on data count (same calculation as bar chart)
   const chartWidth = Math.max(chartData.length * (barWidth + BAR_SPACING), 600);
 
-  // Use nice ticks for round values (same as bar chart)
-  const ticks = calculateNiceTicks(maxDomainValue, 5);
+  // Use nice ticks for round values (same as bar chart) - no buffer since maxDomainValue is already calculated
+  const ticks = calculateNiceTicks(maxDomainValue, 5, false);
 
   // Update scroll indicator visibility
   const updateScrollIndicators = (element: HTMLElement) => {

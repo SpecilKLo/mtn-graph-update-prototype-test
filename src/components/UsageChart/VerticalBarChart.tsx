@@ -273,7 +273,7 @@ export function VerticalBarChart({
                   <YAxis 
                     type="number"
                     domain={[0, maxDomainValue]}
-                    ticks={calculateNiceTicks(maxDomainValue, 5)}
+                    ticks={calculateNiceTicks(maxDomainValue, 5, false)}
                     hide
                   />
                   <Tooltip 

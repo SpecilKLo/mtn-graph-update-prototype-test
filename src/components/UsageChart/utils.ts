@@ -134,14 +134,14 @@ export const calculateWeekBlocks = (chartData: ChartData[]): WeekBlock[] => {
 
 // Calculate nice tick values for Y-axis with intelligent scaling
 // All intervals are multiples of 5 or 10 for clean, round tick values
-export const calculateNiceTicks = (maxValue: number, tickCount: number = 5): number[] => {
+export const calculateNiceTicks = (maxValue: number, tickCount: number = 5, addBuffer: boolean = true): number[] => {
   if (maxValue <= 0) return [0];
   
-  // Add 10% buffer to max value for headroom
-  const bufferedMax = maxValue * 1.1;
+  // Only add buffer when processing raw data (first call), not when called with already-calculated max
+  const targetMax = addBuffer ? maxValue * 1.1 : maxValue;
   
   // Calculate the ideal interval needed
-  const idealInterval = bufferedMax / (tickCount - 1);
+  const idealInterval = targetMax / (tickCount - 1);
   
   // Predefined nice intervals - all multiples of 5 or 10
   const niceIntervals = [
