@@ -306,7 +306,7 @@ export function VerticalBarChart({
       </div>
 
       {/* Sticky X-Axis - synced horizontal scroll */}
-      <div className="flex flex-row shrink-0 overflow-hidden">
+      <div className="flex flex-row shrink-0 overflow-hidden border-t border-border/20">
         {/* Corner area to align with Y-axis */}
         <div style={{ width: 60 }} className="shrink-0 bg-card" />
         
