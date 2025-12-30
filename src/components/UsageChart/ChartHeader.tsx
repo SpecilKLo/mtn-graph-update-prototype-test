@@ -108,7 +108,7 @@ export const ChartHeader = ({
               <div 
                 className={`flex items-center transition-all duration-300 ease-out overflow-hidden ${
                   rangePreset === "custom" 
-                    ? "max-w-[280px] opacity-100" 
+                    ? "max-w-[300px] opacity-100" 
                     : "max-w-0 opacity-0"
                 }`}
               >
@@ -117,7 +117,7 @@ export const ChartHeader = ({
                     value={format(customRange.from, "yyyy-MM")} 
                     onValueChange={(value) => onCustomRangeChange('from', value)}
                   >
-                    <SelectTrigger className="w-[90px] h-7 bg-transparent border-none text-sm text-foreground focus:ring-0 focus:ring-offset-0 px-2">
+                    <SelectTrigger className="w-[105px] h-7 bg-transparent border-none text-sm text-foreground focus:ring-0 focus:ring-offset-0 px-2">
                       <SelectValue>{format(customRange.from, "MMM yyyy")}</SelectValue>
                     </SelectTrigger>
                     <SelectContent className="bg-popover border-border">
@@ -135,7 +135,7 @@ export const ChartHeader = ({
                     value={format(customRange.to, "yyyy-MM")} 
                     onValueChange={(value) => onCustomRangeChange('to', value)}
                   >
-                    <SelectTrigger className="w-[90px] h-7 bg-transparent border-none text-sm text-foreground focus:ring-0 focus:ring-offset-0 px-2">
+                    <SelectTrigger className="w-[105px] h-7 bg-transparent border-none text-sm text-foreground focus:ring-0 focus:ring-offset-0 px-2">
                       <SelectValue>{format(customRange.to, "MMM yyyy")}</SelectValue>
                     </SelectTrigger>
                     <SelectContent className="bg-popover border-border">
