@@ -8,7 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { Switch } from "../ui/switch";
 import { Tabs, AnimatedTabsList } from "../ui/tabs";
 import type { ViewMode, DateRange, ChartOrientation } from "./types";
 
@@ -151,15 +150,35 @@ export const ChartHeader = ({
             </>
           )}
 
-          {/* Orientation toggle - Bar chart (vertical) is default/left, Line chart is right */}
-          <div className="flex items-center gap-2 px-3 py-2 bg-muted rounded-lg border border-border">
-            <BarChart3 className={`h-4 w-4 transition-colors ${orientation === 'vertical' ? 'text-primary' : 'text-muted-foreground'}`} />
-            <Switch
-              checked={orientation === 'horizontal'}
-              onCheckedChange={(checked) => onOrientationChange(checked ? 'horizontal' : 'vertical')}
-              className="data-[state=checked]:bg-primary"
-            />
-            <TrendingUp className={`h-4 w-4 transition-colors ${orientation === 'horizontal' ? 'text-primary' : 'text-muted-foreground'}`} />
+          {/* Orientation toggle - styled toggle with icons */}
+          <div 
+            className="relative flex items-center bg-white rounded-[10px] border border-[#CFCFCF] p-1.5"
+            style={{ boxShadow: '0px 1px 3px 1px rgba(0, 0, 0, 0.15)' }}
+          >
+            <button
+              onClick={() => onOrientationChange('vertical')}
+              className={`flex items-center justify-center w-[46px] h-[36px] rounded-[5px] transition-all duration-200 ${
+                orientation === 'vertical' ? 'bg-[#D4E5F7]' : 'hover:bg-gray-100'
+              }`}
+            >
+              <BarChart3 
+                className={`h-5 w-5 transition-colors ${
+                  orientation === 'vertical' ? 'text-primary' : 'text-[#B1B1B1]'
+                }`} 
+              />
+            </button>
+            <button
+              onClick={() => onOrientationChange('horizontal')}
+              className={`flex items-center justify-center w-[46px] h-[36px] rounded-[5px] transition-all duration-200 ${
+                orientation === 'horizontal' ? 'bg-[#D4E5F7]' : 'hover:bg-gray-100'
+              }`}
+            >
+              <TrendingUp 
+                className={`h-5 w-5 transition-colors ${
+                  orientation === 'horizontal' ? 'text-primary' : 'text-[#B1B1B1]'
+                }`} 
+              />
+            </button>
           </div>
 
           <Button 
