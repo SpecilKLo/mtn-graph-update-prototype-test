@@ -34,7 +34,7 @@ export const generateDailyData = (currentMonth: Date): ChartData[] => {
       usage,
       overUsage: overUsage > 0 ? overUsage : undefined,
     };
-  }).reverse();
+  });
 };
 
 // Generate weekly data for a date range
@@ -61,7 +61,7 @@ export const generateWeeklyData = (from: Date, to: Date): ChartData[] => {
       usage,
       overUsage: overUsage > 0 ? overUsage : undefined,
     };
-  }).reverse();
+  });
 };
 
 // Generate monthly data for a date range
@@ -83,7 +83,7 @@ export const generateMonthlyData = (from: Date, to: Date): ChartData[] => {
       usage,
       overUsage: overUsage > 0 ? overUsage : undefined,
     };
-  }).reverse();
+  });
 };
 
 // Calculate month blocks for weekly view reference areas
