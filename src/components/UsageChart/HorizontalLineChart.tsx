@@ -307,42 +307,52 @@ export function HorizontalLineChart({
                   barGap={8}
                   barSize={barWidth}
                 >
-                  {/* Reference areas for alternating backgrounds */}
-                  {viewMode === 'day' && weekBlocks.map((block, index) => (
-                    <ReferenceArea
-                      key={`week-${block.weekNumber}-${index}`}
-                      x1={block.start}
-                      x2={block.end}
-                      y1={0}
-                      y2={maxDomainValue}
-                      fill={index % 2 === 0 ? "#F5F5F5" : "transparent"}
-                      fillOpacity={1}
-                      strokeOpacity={0}
-                      ifOverflow="extendDomain"
-                    />
-                  ))}
+                  {/* Reference areas for alternating backgrounds - use index-based positioning */}
+                  {viewMode === 'day' && weekBlocks.map((block, index) => {
+                    const startIdx = processedData.findIndex(d => d.label === block.start);
+                    const endIdx = processedData.findIndex(d => d.label === block.end);
+                    if (startIdx === -1 || endIdx === -1) return null;
+                    return (
+                      <ReferenceArea
+                        key={`week-${block.weekNumber}-${index}`}
+                        x1={startIdx - 0.5}
+                        x2={endIdx + 0.5}
+                        y1={0}
+                        y2={maxDomainValue}
+                        fill={index % 2 === 0 ? "#F5F5F5" : "transparent"}
+                        fillOpacity={1}
+                        strokeOpacity={0}
+                        ifOverflow="extendDomain"
+                      />
+                    );
+                  })}
                   
-                  {viewMode === 'week' && monthBlocks.map((block, index) => (
-                    <ReferenceArea
-                      key={`${block.month}-${index}`}
-                      x1={block.start}
-                      x2={block.end}
-                      y1={0}
-                      y2={maxDomainValue}
-                      fill={index % 2 === 0 ? "#F5F5F5" : "transparent"}
-                      fillOpacity={1}
-                      strokeOpacity={0}
-                      ifOverflow="extendDomain"
-                      label={{
-                        value: block.month,
-                        position: 'insideTopLeft',
-                        fill: 'hsl(var(--muted-foreground))',
-                        fontSize: 12,
-                        fontWeight: 500,
-                        offset: 10,
-                      }}
-                    />
-                  ))}
+                  {viewMode === 'week' && monthBlocks.map((block, index) => {
+                    const startIdx = processedData.findIndex(d => d.label === block.start);
+                    const endIdx = processedData.findIndex(d => d.label === block.end);
+                    if (startIdx === -1 || endIdx === -1) return null;
+                    return (
+                      <ReferenceArea
+                        key={`${block.month}-${index}`}
+                        x1={startIdx - 0.5}
+                        x2={endIdx + 0.5}
+                        y1={0}
+                        y2={maxDomainValue}
+                        fill={index % 2 === 0 ? "#F5F5F5" : "transparent"}
+                        fillOpacity={1}
+                        strokeOpacity={0}
+                        ifOverflow="extendDomain"
+                        label={{
+                          value: block.month,
+                          position: 'insideTopLeft',
+                          fill: 'hsl(var(--muted-foreground))',
+                          fontSize: 12,
+                          fontWeight: 500,
+                          offset: 10,
+                        }}
+                      />
+                    );
+                  })}
 
                   {/* Gradient definitions */}
                   <defs>
