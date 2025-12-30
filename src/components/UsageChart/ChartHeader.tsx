@@ -1,5 +1,5 @@
 import { format, subMonths } from "date-fns";
-import { Calendar as CalendarIcon, Download, BarChart2, BarChart3 } from "lucide-react";
+import { Calendar as CalendarIcon, Download, BarChart3, TrendingUp } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Select,
@@ -131,15 +131,15 @@ export const ChartHeader = ({
             </>
           )}
 
-          {/* Orientation toggle */}
+          {/* Orientation toggle - Bar chart (vertical) is default/left, Line chart is right */}
           <div className="flex items-center gap-2 px-3 py-2 bg-muted rounded-lg border border-border">
-            <BarChart2 className={`h-4 w-4 transition-colors ${orientation === 'horizontal' ? 'text-primary' : 'text-muted-foreground'}`} />
+            <BarChart3 className={`h-4 w-4 transition-colors ${orientation === 'vertical' ? 'text-primary' : 'text-muted-foreground'}`} />
             <Switch
-              checked={orientation === 'vertical'}
-              onCheckedChange={(checked) => onOrientationChange(checked ? 'vertical' : 'horizontal')}
+              checked={orientation === 'horizontal'}
+              onCheckedChange={(checked) => onOrientationChange(checked ? 'horizontal' : 'vertical')}
               className="data-[state=checked]:bg-primary"
             />
-            <BarChart3 className={`h-4 w-4 transition-colors ${orientation === 'vertical' ? 'text-primary' : 'text-muted-foreground'}`} />
+            <TrendingUp className={`h-4 w-4 transition-colors ${orientation === 'horizontal' ? 'text-primary' : 'text-muted-foreground'}`} />
           </div>
 
           <Button 
