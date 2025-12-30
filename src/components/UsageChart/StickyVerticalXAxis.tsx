@@ -60,10 +60,14 @@ export function StickyVerticalXAxis({
     return 'transparent';
   };
 
+  // Calculate the offset to align with chart bars
+  // The chart starts with half a bar slot width on the left (category axis centering)
+  const leftOffset = totalBarSlotWidth / 2 - barWidth / 2;
+
   return (
     <div style={{ minWidth: `${chartWidth}px`, height: 40 }} className="relative pr-4">
       {/* Background layer for alternating colors */}
-      <div className="absolute inset-0 flex" style={{ paddingRight: 16 }}>
+      <div className="absolute inset-0 flex" style={{ paddingRight: 16, paddingLeft: leftOffset }}>
         {chartData.map((_, index) => (
           <div
             key={index}
