@@ -242,8 +242,9 @@ export function HorizontalLineChart({
   };
 
   // Combine usage and overUsage for total line value
-  const processedData = chartData.map(item => ({
+  const processedData = chartData.map((item, idx) => ({
     ...item,
+    index: idx,
     total: item.usage + (item.overUsage || 0),
   }));
 
@@ -375,9 +376,10 @@ export function HorizontalLineChart({
                   />
 
                   <XAxis 
-                    dataKey="label"
-                    type="category"
-                    hide
+                    dataKey="index" 
+                    type="number"
+                    domain={[-0.5, processedData.length - 0.5]}
+                    hide 
                   />
                   <YAxis 
                     type="number"
