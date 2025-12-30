@@ -108,24 +108,44 @@ export const ChartHeader = ({
               <div 
                 className={`flex items-center transition-all duration-300 ease-out overflow-hidden ${
                   rangePreset === "custom" 
-                    ? "max-w-[380px] opacity-100" 
+                    ? "max-w-[280px] opacity-100" 
                     : "max-w-0 opacity-0"
                 }`}
               >
-                <div className="flex items-center gap-2 bg-muted px-3 py-1.5 rounded-lg border border-border">
-                  <input 
-                    type="month" 
-                    className="bg-transparent border-none text-sm text-foreground focus:ring-0 p-1 w-[140px] outline-none"
-                    value={format(customRange.from, "yyyy-MM")}
-                    onChange={(e) => onCustomRangeChange('from', e.target.value)}
-                  />
-                  <span className="text-muted-foreground font-medium px-1">–</span>
-                  <input 
-                    type="month" 
-                    className="bg-transparent border-none text-sm text-foreground focus:ring-0 p-1 w-[140px] outline-none"
-                    value={format(customRange.to, "yyyy-MM")}
-                    onChange={(e) => onCustomRangeChange('to', e.target.value)}
-                  />
+                <div className="flex items-center gap-1 bg-muted px-2 py-1.5 rounded-lg border border-border">
+                  <Select 
+                    value={format(customRange.from, "yyyy-MM")} 
+                    onValueChange={(value) => onCustomRangeChange('from', value)}
+                  >
+                    <SelectTrigger className="w-[90px] h-7 bg-transparent border-none text-sm text-foreground focus:ring-0 focus:ring-offset-0 px-2">
+                      <SelectValue>{format(customRange.from, "MMM yyyy")}</SelectValue>
+                    </SelectTrigger>
+                    <SelectContent className="bg-popover border-border">
+                      {monthOptions.map(opt => (
+                        <SelectItem key={opt.value} value={opt.value} className="hover:bg-secondary/10 cursor-pointer">
+                          <span>{format(new Date(opt.value + "-01"), "MMM yyyy")}</span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  
+                  <span className="text-muted-foreground font-medium">–</span>
+                  
+                  <Select 
+                    value={format(customRange.to, "yyyy-MM")} 
+                    onValueChange={(value) => onCustomRangeChange('to', value)}
+                  >
+                    <SelectTrigger className="w-[90px] h-7 bg-transparent border-none text-sm text-foreground focus:ring-0 focus:ring-offset-0 px-2">
+                      <SelectValue>{format(customRange.to, "MMM yyyy")}</SelectValue>
+                    </SelectTrigger>
+                    <SelectContent className="bg-popover border-border">
+                      {monthOptions.map(opt => (
+                        <SelectItem key={opt.value} value={opt.value} className="hover:bg-secondary/10 cursor-pointer">
+                          <span>{format(new Date(opt.value + "-01"), "MMM yyyy")}</span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
             </>
