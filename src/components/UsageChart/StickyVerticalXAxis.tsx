@@ -4,9 +4,10 @@ import {
   BarChart,
   XAxis,
   ResponsiveContainer,
+  ReferenceArea,
 } from "recharts";
 import { ANIMATION_CONFIG, CHART_CONFIG } from "./constants";
-import type { ChartData } from "./types";
+import type { ChartData, ViewMode, WeekBlock, MonthBlock } from "./types";
 
 // Match the bar sizing from VerticalBarChart
 const MIN_VERTICAL_BAR_WIDTH = 75;
@@ -17,6 +18,9 @@ interface StickyVerticalXAxisProps {
   chartWidth: number;
   isMounted: boolean;
   dynamicBarSize: number;
+  viewMode: ViewMode;
+  weekBlocks: WeekBlock[];
+  monthBlocks: MonthBlock[];
 }
 
 export function StickyVerticalXAxis({
@@ -24,6 +28,9 @@ export function StickyVerticalXAxis({
   chartWidth,
   isMounted,
   dynamicBarSize,
+  viewMode,
+  weekBlocks,
+  monthBlocks,
 }: StickyVerticalXAxisProps) {
   const barWidth = Math.max(dynamicBarSize, MIN_VERTICAL_BAR_WIDTH);
 
@@ -37,6 +44,31 @@ export function StickyVerticalXAxis({
             barGap={8}
             barSize={barWidth}
           >
+            {/* Reference areas for alternating backgrounds - extends into X-axis */}
+            {viewMode === 'day' && weekBlocks.map((block, index) => (
+              <ReferenceArea
+                key={`xaxis-week-${block.weekNumber}-${index}`}
+                x1={block.start}
+                x2={block.end}
+                fill={index % 2 === 0 ? "#F5F5F5" : "transparent"}
+                fillOpacity={1}
+                strokeOpacity={0}
+                ifOverflow="extendDomain"
+              />
+            ))}
+            
+            {viewMode === 'week' && monthBlocks.map((block, index) => (
+              <ReferenceArea
+                key={`xaxis-${block.month}-${index}`}
+                x1={block.start}
+                x2={block.end}
+                fill={index % 2 === 0 ? "#F5F5F5" : "transparent"}
+                fillOpacity={1}
+                strokeOpacity={0}
+                ifOverflow="extendDomain"
+              />
+            ))}
+
             <XAxis
               dataKey="label"
               type="category"

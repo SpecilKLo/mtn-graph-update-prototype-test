@@ -321,6 +321,9 @@ export function VerticalBarChart({
             chartWidth={chartWidth}
             isMounted={isMounted}
             dynamicBarSize={dynamicBarSize}
+            viewMode={viewMode}
+            weekBlocks={weekBlocks}
+            monthBlocks={monthBlocks}
           />
         </div>
       </div>
