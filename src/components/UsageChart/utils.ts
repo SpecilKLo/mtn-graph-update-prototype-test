@@ -170,7 +170,7 @@ export const calculateNiceTicks = (maxValue: number, tickCount: number = 5): num
 // Calculate max domain value for Y axis (returns the last tick from nice ticks)
 export const calculateMaxDomain = (chartData: ChartData[]): number => {
   const maxVal = Math.max(...chartData.map(d => d.usage + (d.overUsage || 0)));
-  const ticks = calculateNiceTicks(maxVal * 1.1, 5);
+  const ticks = calculateNiceTicks(maxVal, 5); // No buffer here - calculateNiceTicks already adds 10%
   return ticks[ticks.length - 1];
 };
 
