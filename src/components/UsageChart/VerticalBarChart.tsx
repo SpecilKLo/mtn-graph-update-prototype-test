@@ -263,12 +263,6 @@ export function VerticalBarChart({
                     vertical={false} 
                     stroke="#CFCFCF" 
                     strokeOpacity={1}
-                    horizontalCoordinatesGenerator={(props) => {
-                      const { height } = props;
-                      const ticks = calculateNiceTicks(maxDomainValue, 5);
-                      // Map tick values to Y coordinates
-                      return ticks.map(tick => height - (tick / maxDomainValue) * height);
-                    }}
                   />
 
                   <XAxis 
@@ -279,6 +273,7 @@ export function VerticalBarChart({
                   <YAxis 
                     type="number"
                     domain={[0, maxDomainValue]}
+                    ticks={calculateNiceTicks(maxDomainValue, 5)}
                     hide
                   />
                   <Tooltip 
