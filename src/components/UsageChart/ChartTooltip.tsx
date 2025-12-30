@@ -23,7 +23,13 @@ export const ChartTooltip = ({ active, payload }: CustomTooltipProps) => {
           {data.overUsage && (
             <div className="flex items-center justify-between gap-3">
               <span className="text-white">Over Usage:</span>
-              <span className="font-semibold text-warning">{data.overUsage} GB</span>
+              <span className="font-semibold text-warning">{formatGBValue(data.overUsage)}</span>
+            </div>
+          )}
+          {data.overUsage && (
+            <div className="flex items-center justify-between gap-3 mt-1 pt-1 border-t border-white/20">
+              <span className="text-white">Total Usage:</span>
+              <span className="font-semibold text-white">{formatGBValue(data.usage + data.overUsage)}</span>
             </div>
           )}
         </div>
