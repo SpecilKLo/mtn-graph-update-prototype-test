@@ -3,6 +3,7 @@ import {
   Bar,
   BarChart,
   XAxis,
+  YAxis,
   ResponsiveContainer,
   ReferenceArea,
 } from "recharts";
@@ -68,6 +69,9 @@ export function StickyVerticalXAxis({
                 ifOverflow="extendDomain"
               />
             ))}
+
+            {/* Hidden YAxis to establish domain for ReferenceArea */}
+            <YAxis domain={[0, 1]} hide />
 
             <XAxis
               dataKey="label"
