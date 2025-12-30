@@ -128,9 +128,9 @@ export function VerticalBarChart({
   const xAxisScrollRef = React.useRef<HTMLDivElement>(null);
   const isScrollSyncing = React.useRef(false);
   
-  // Scroll fade indicator states
-  const [canScrollLeft, setCanScrollLeft] = React.useState(false);
-  const [canScrollRight, setCanScrollRight] = React.useState(true);
+  // Scroll fade indicator states - start at right (newest dates)
+  const [canScrollLeft, setCanScrollLeft] = React.useState(true);
+  const [canScrollRight, setCanScrollRight] = React.useState(false);
 
   // Calculate bar size - ensure minimum width for labels
   const barWidth = Math.max(dynamicBarSize, MIN_VERTICAL_BAR_WIDTH);
@@ -145,10 +145,17 @@ export function VerticalBarChart({
     setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
   };
 
-  // Initialize scroll indicators on mount and data change
+  // Initialize scroll to rightmost position (most recent dates) on mount and data change
   React.useEffect(() => {
-    if (chartScrollRef.current) {
-      updateScrollIndicators(chartScrollRef.current);
+    if (chartScrollRef.current && xAxisScrollRef.current) {
+      const scrollContainer = chartScrollRef.current;
+      const maxScrollLeft = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+      
+      // Scroll to the rightmost position (newest dates)
+      scrollContainer.scrollLeft = maxScrollLeft;
+      xAxisScrollRef.current.scrollLeft = maxScrollLeft;
+      
+      updateScrollIndicators(scrollContainer);
     }
   }, [chartData]);
 
