@@ -173,8 +173,18 @@ export const calculateDynamicBarSize = (dataCount: number): number => {
   return Math.round(Math.min(MAX_BAR_SIZE, Math.max(MIN_BAR_SIZE, idealSize)));
 };
 
-// Format GB value - show decimals only when needed
+// Format GB value - show decimals only when needed, convert to TB for values over 999.99 GB
 export const formatGBValue = (value: number): string => {
+  // Convert to TB if value exceeds 999.99 GB
+  if (value > 999.99) {
+    const tbValue = value / 1000;
+    if (Number.isInteger(tbValue) || tbValue % 1 === 0) {
+      return `${Math.round(tbValue)} TB`;
+    }
+    return `${tbValue.toFixed(2)} TB`;
+  }
+  
+  // Keep as GB for values <= 999.99
   if (Number.isInteger(value) || value % 1 === 0) {
     return `${Math.round(value)} GB`;
   }
