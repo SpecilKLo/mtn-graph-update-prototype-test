@@ -12,21 +12,41 @@ import {
 import type { ChartData, MonthBlock, WeekBlock } from "./types";
 import { BAR_SIZE_CONFIG } from "./constants";
 
-// Generate daily data for a given month
+// Monthly allowance in GB (1TB = 1000GB)
+const MONTHLY_ALLOWANCE_GB = 1000;
+const DAILY_ALLOWANCE_GB = MONTHLY_ALLOWANCE_GB / 30; // ~33.33 GB per day
+
+// Generate daily data for a given month - realistic 1TB monthly scenario
 export const generateDailyData = (currentMonth: Date): ChartData[] => {
   const start = startOfMonth(currentMonth);
   const end = endOfMonth(currentMonth);
   const days = eachDayOfInterval({ start, end });
 
-  return days.map((day) => {
-    // 30% chance of decimal value
-    const hasDecimal = Math.random() > 0.7;
-    const usage = hasDecimal 
-      ? Math.round((Math.random() * 80 + 10) * 100) / 100
-      : Math.floor(Math.random() * 80) + 10;
-    const overUsage = Math.random() > 0.9 
-      ? (hasDecimal ? Math.round(Math.random() * 20 * 100) / 100 : Math.floor(Math.random() * 20))
-      : 0;
+  return days.map((day, index) => {
+    // Create realistic daily usage pattern (varies between 20-50GB with occasional spikes)
+    const baseUsage = DAILY_ALLOWANCE_GB;
+    const variance = (Math.random() - 0.5) * 20; // +/- 10GB variance
+    const dayOfWeek = day.getDay();
+    
+    // Weekend boost (higher usage on weekends)
+    const weekendBoost = (dayOfWeek === 0 || dayOfWeek === 6) ? 8 : 0;
+    
+    // Occasional high-usage days (streaming, downloads, etc.)
+    const isHighUsageDay = Math.random() > 0.85;
+    const highUsageBoost = isHighUsageDay ? 15 + Math.random() * 10 : 0;
+    
+    let usage = Math.max(15, baseUsage + variance + weekendBoost + highUsageBoost);
+    usage = Math.round(usage * 100) / 100;
+    
+    // Calculate if we're over the daily "fair share" allowance
+    // Over usage kicks in when daily usage exceeds ~40GB (120% of daily allowance)
+    const dailyLimit = DAILY_ALLOWANCE_GB * 1.2;
+    let overUsage = 0;
+    
+    if (usage > dailyLimit) {
+      overUsage = Math.round((usage - dailyLimit) * 100) / 100;
+      usage = Math.round(dailyLimit * 100) / 100;
+    }
 
     return {
       label: format(day, "EEE d"),
@@ -37,19 +57,24 @@ export const generateDailyData = (currentMonth: Date): ChartData[] => {
   });
 };
 
-// Generate weekly data for a date range
+// Generate weekly data for a date range - realistic 1TB monthly scenario
 export const generateWeeklyData = (from: Date, to: Date): ChartData[] => {
   const weeks = eachWeekOfInterval({ start: from, end: to }, { weekStartsOn: 1 });
+  const weeklyAllowance = MONTHLY_ALLOWANCE_GB / 4; // ~250GB per week
 
   return weeks.map((weekStart) => {
     const weekEnd = endOfWeek(weekStart, { weekStartsOn: 1 });
-    const hasDecimal = Math.random() > 0.7;
-    const usage = hasDecimal
-      ? Math.round((Math.random() * 400 + 100) * 100) / 100
-      : Math.floor(Math.random() * 400) + 100;
-    const overUsage = Math.random() > 0.85 
-      ? (hasDecimal ? Math.round(Math.random() * 50 * 100) / 100 : Math.floor(Math.random() * 50))
-      : 0;
+    
+    // Weekly usage varies around 200-280GB
+    const baseUsage = weeklyAllowance * (0.8 + Math.random() * 0.4);
+    let usage = Math.round(baseUsage * 100) / 100;
+    
+    // Calculate over usage when exceeding weekly allowance
+    let overUsage = 0;
+    if (usage > weeklyAllowance) {
+      overUsage = Math.round((usage - weeklyAllowance) * 100) / 100;
+      usage = Math.round(weeklyAllowance * 100) / 100;
+    }
     
     const isSameMonth = weekStart.getMonth() === weekEnd.getMonth();
     const label = format(weekStart, "MMM d"); 
@@ -64,18 +89,21 @@ export const generateWeeklyData = (from: Date, to: Date): ChartData[] => {
   });
 };
 
-// Generate monthly data for a date range
+// Generate monthly data for a date range - realistic 1TB monthly scenario
 export const generateMonthlyData = (from: Date, to: Date): ChartData[] => {
   const months = eachMonthOfInterval({ start: from, end: to });
 
   return months.map((month) => {
-    const hasDecimal = Math.random() > 0.7;
-    const usage = hasDecimal
-      ? Math.round((Math.random() * 800 + 200) * 100) / 100
-      : Math.floor(Math.random() * 800) + 200;
-    const overUsage = Math.random() > 0.8 
-      ? (hasDecimal ? Math.round(Math.random() * 100 * 100) / 100 : Math.floor(Math.random() * 100))
-      : 0;
+    // Monthly usage varies between 850GB - 1150GB (some months under, some over)
+    const baseUsage = MONTHLY_ALLOWANCE_GB * (0.85 + Math.random() * 0.3);
+    let usage = Math.round(baseUsage * 100) / 100;
+    
+    // Calculate over usage when exceeding 1TB
+    let overUsage = 0;
+    if (usage > MONTHLY_ALLOWANCE_GB) {
+      overUsage = Math.round((usage - MONTHLY_ALLOWANCE_GB) * 100) / 100;
+      usage = MONTHLY_ALLOWANCE_GB;
+    }
 
     return {
       label: format(month, "MMM yy"),
