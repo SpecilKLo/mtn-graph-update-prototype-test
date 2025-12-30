@@ -155,7 +155,7 @@ export const ChartHeader = ({
             <button
               onClick={() => onOrientationChange('vertical')}
               className={`flex items-center justify-center w-[38px] h-[32px] rounded-md transition-all duration-200 ${
-                orientation === 'vertical' ? 'bg-[#D4E5F7]' : 'hover:bg-gray-100'
+                orientation === 'vertical' ? 'bg-[#D4E5F7]' : 'hover:bg-[#EAF2FB]'
               }`}
             >
               <BarChart3 
@@ -167,7 +167,7 @@ export const ChartHeader = ({
             <button
               onClick={() => onOrientationChange('horizontal')}
               className={`flex items-center justify-center w-[38px] h-[32px] rounded-md transition-all duration-200 ${
-                orientation === 'horizontal' ? 'bg-[#D4E5F7]' : 'hover:bg-gray-100'
+                orientation === 'horizontal' ? 'bg-[#D4E5F7]' : 'hover:bg-[#EAF2FB]'
               }`}
             >
               <TrendingUp 
@@ -181,7 +181,7 @@ export const ChartHeader = ({
           <Button 
             variant="outline" 
             size="icon"
-            className="h-[40px] w-[40px] border-border text-muted-foreground hover:bg-muted hover:text-foreground rounded-lg"
+            className="h-[40px] w-[40px] border-border text-muted-foreground hover:bg-[#EAF2FB] hover:text-foreground rounded-lg"
             onClick={onExport}
             title="Export CSV"
           >
