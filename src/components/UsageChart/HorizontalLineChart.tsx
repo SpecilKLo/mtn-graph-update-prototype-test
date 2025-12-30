@@ -1,7 +1,7 @@
 import * as React from "react";
 import {
   ComposedChart,
-  Line,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -344,6 +344,18 @@ export function HorizontalLineChart({
                     />
                   ))}
 
+                  {/* Gradient definitions */}
+                  <defs>
+                    <linearGradient id="usageGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#1B5087" stopOpacity={0.4} />
+                      <stop offset="100%" stopColor="#1B5087" stopOpacity={0.05} />
+                    </linearGradient>
+                    <linearGradient id="overUsageGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#EBB220" stopOpacity={0.4} />
+                      <stop offset="100%" stopColor="#EBB220" stopOpacity={0.05} />
+                    </linearGradient>
+                  </defs>
+
                   <CartesianGrid 
                     strokeDasharray="3 3" 
                     horizontal={true} 
@@ -371,25 +383,27 @@ export function HorizontalLineChart({
                   {/* Invisible bar to force bar-based positioning alignment */}
                   <Bar dataKey="usage" fill="transparent" />
                   
-                  {/* Usage line */}
-                  <Line 
+                  {/* Usage area with gradient fill */}
+                  <Area 
                     type="monotone"
                     dataKey="usage"
-                    stroke="hsl(var(--chart-2))"
+                    stroke="#1B5087"
                     strokeWidth={2}
+                    fill="url(#usageGradient)"
                     dot={<CustomDot />}
                     activeDot={<CustomActiveDot />}
                     animationDuration={ANIMATION_CONFIG.BAR_DURATION}
                   />
                   
-                  {/* Over usage line (if any data has overUsage) */}
+                  {/* Over usage area with gradient fill (if any data has overUsage) */}
                   {chartData.some(d => d.overUsage && d.overUsage > 0) && (
-                    <Line 
+                    <Area 
                       type="monotone"
                       dataKey="overUsage"
-                      stroke="hsl(var(--chart-3))"
+                      stroke="#EBB220"
                       strokeWidth={2}
                       strokeDasharray="4 4"
+                      fill="url(#overUsageGradient)"
                       dot={false}
                       animationDuration={ANIMATION_CONFIG.BAR_DURATION}
                     />
