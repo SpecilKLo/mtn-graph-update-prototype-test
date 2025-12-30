@@ -133,32 +133,34 @@ export const calculateWeekBlocks = (chartData: ChartData[]): WeekBlock[] => {
 };
 
 // Calculate nice tick values for Y-axis with intelligent scaling
+// All intervals are multiples of 5 or 10 for clean, round tick values
 export const calculateNiceTicks = (maxValue: number, tickCount: number = 5): number[] => {
   if (maxValue <= 0) return [0];
   
   // Add 10% buffer to max value for headroom
   const bufferedMax = maxValue * 1.1;
   
-  // Calculate the raw interval needed
-  const rawInterval = bufferedMax / (tickCount - 1);
+  // Calculate the ideal interval needed
+  const idealInterval = bufferedMax / (tickCount - 1);
   
-  // Find the order of magnitude of the interval
-  const magnitude = Math.pow(10, Math.floor(Math.log10(rawInterval)));
+  // Predefined nice intervals - all multiples of 5 or 10
+  const niceIntervals = [
+    5, 10, 15, 20, 25, 50, 75, 100,
+    125, 150, 200, 250, 300, 400, 500, 750, 1000,
+    1250, 1500, 2000, 2500, 3000, 4000, 5000, 7500, 10000,
+    15000, 20000, 25000, 50000, 75000, 100000
+  ];
   
-  // Nice interval multipliers (produces round numbers)
-  const niceMultipliers = [1, 2, 2.5, 5, 10];
-  
-  // Find the smallest nice interval that covers the raw interval
-  let niceInterval = magnitude * 10;
-  for (const multiplier of niceMultipliers) {
-    const candidate = magnitude * multiplier;
-    if (candidate >= rawInterval) {
-      niceInterval = candidate;
+  // Find the smallest nice interval that accommodates the ideal interval
+  let niceInterval = niceIntervals[niceIntervals.length - 1];
+  for (const interval of niceIntervals) {
+    if (interval >= idealInterval) {
+      niceInterval = interval;
       break;
     }
   }
   
-  // Generate ticks using the nice interval (all values will be round)
+  // Generate ticks using this nice interval
   const ticks: number[] = [];
   for (let i = 0; i < tickCount; i++) {
     ticks.push(niceInterval * i);
