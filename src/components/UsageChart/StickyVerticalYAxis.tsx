@@ -23,7 +23,7 @@ export function StickyVerticalYAxis({
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={[]}
-            margin={{ top: 10, right: 0, left: 0, bottom: 15 }}
+            margin={{ top: 10, right: 0, left: 0, bottom: 5 }}
           >
             <YAxis
               type="number"
