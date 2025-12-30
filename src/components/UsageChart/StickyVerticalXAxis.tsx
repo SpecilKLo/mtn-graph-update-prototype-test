@@ -3,9 +3,7 @@ import {
   Bar,
   BarChart,
   XAxis,
-  YAxis,
   ResponsiveContainer,
-  ReferenceArea,
 } from "recharts";
 import { ANIMATION_CONFIG, CHART_CONFIG } from "./constants";
 import type { ChartData, ViewMode, WeekBlock, MonthBlock } from "./types";
@@ -34,9 +32,51 @@ export function StickyVerticalXAxis({
   monthBlocks,
 }: StickyVerticalXAxisProps) {
   const barWidth = Math.max(dynamicBarSize, MIN_VERTICAL_BAR_WIDTH);
+  const totalBarSlotWidth = barWidth + BAR_SPACING;
+
+  // Calculate which data indices belong to which block for background coloring
+  const getBackgroundForIndex = (index: number): string => {
+    const label = chartData[index]?.label;
+    if (!label) return 'transparent';
+
+    if (viewMode === 'day') {
+      const blockIndex = weekBlocks.findIndex(block => {
+        const startIdx = chartData.findIndex(d => d.label === block.start);
+        const endIdx = chartData.findIndex(d => d.label === block.end);
+        return index >= startIdx && index <= endIdx;
+      });
+      return blockIndex !== -1 && blockIndex % 2 === 0 ? '#F5F5F5' : 'transparent';
+    }
+
+    if (viewMode === 'week') {
+      const blockIndex = monthBlocks.findIndex(block => {
+        const startIdx = chartData.findIndex(d => d.label === block.start);
+        const endIdx = chartData.findIndex(d => d.label === block.end);
+        return index >= startIdx && index <= endIdx;
+      });
+      return blockIndex !== -1 && blockIndex % 2 === 0 ? '#F5F5F5' : 'transparent';
+    }
+
+    return 'transparent';
+  };
 
   return (
-    <div style={{ minWidth: `${chartWidth}px`, height: 40 }} className="pr-4">
+    <div style={{ minWidth: `${chartWidth}px`, height: 40 }} className="relative pr-4">
+      {/* Background layer for alternating colors */}
+      <div className="absolute inset-0 flex" style={{ paddingRight: 16 }}>
+        {chartData.map((_, index) => (
+          <div
+            key={index}
+            style={{
+              width: totalBarSlotWidth,
+              height: '100%',
+              backgroundColor: getBackgroundForIndex(index),
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Chart layer for X-axis labels */}
       {isMounted && (
         <ResponsiveContainer width="100%" height="100%" debounce={ANIMATION_CONFIG.DEBOUNCE}>
           <BarChart
@@ -45,34 +85,6 @@ export function StickyVerticalXAxis({
             barGap={8}
             barSize={barWidth}
           >
-            {/* Reference areas for alternating backgrounds - extends into X-axis */}
-            {viewMode === 'day' && weekBlocks.map((block, index) => (
-              <ReferenceArea
-                key={`xaxis-week-${block.weekNumber}-${index}`}
-                x1={block.start}
-                x2={block.end}
-                fill={index % 2 === 0 ? "#F5F5F5" : "transparent"}
-                fillOpacity={1}
-                strokeOpacity={0}
-                ifOverflow="extendDomain"
-              />
-            ))}
-            
-            {viewMode === 'week' && monthBlocks.map((block, index) => (
-              <ReferenceArea
-                key={`xaxis-${block.month}-${index}`}
-                x1={block.start}
-                x2={block.end}
-                fill={index % 2 === 0 ? "#F5F5F5" : "transparent"}
-                fillOpacity={1}
-                strokeOpacity={0}
-                ifOverflow="extendDomain"
-              />
-            ))}
-
-            {/* Hidden YAxis to establish domain for ReferenceArea */}
-            <YAxis domain={[0, 1]} hide />
-
             <XAxis
               dataKey="label"
               type="category"
