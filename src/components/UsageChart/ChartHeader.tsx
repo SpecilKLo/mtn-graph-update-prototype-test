@@ -151,13 +151,10 @@ export const ChartHeader = ({
           )}
 
           {/* Orientation toggle - styled toggle with icons */}
-          <div 
-            className="relative flex items-center bg-white rounded-[10px] border border-[#CFCFCF] p-1.5"
-            style={{ boxShadow: '0px 1px 3px 1px rgba(0, 0, 0, 0.15)' }}
-          >
+          <div className="relative flex items-center bg-white rounded-lg border border-border h-[40px] px-1">
             <button
               onClick={() => onOrientationChange('vertical')}
-              className={`flex items-center justify-center w-[46px] h-[36px] rounded-[5px] transition-all duration-200 ${
+              className={`flex items-center justify-center w-[38px] h-[32px] rounded-md transition-all duration-200 ${
                 orientation === 'vertical' ? 'bg-[#D4E5F7]' : 'hover:bg-gray-100'
               }`}
             >
@@ -169,7 +166,7 @@ export const ChartHeader = ({
             </button>
             <button
               onClick={() => onOrientationChange('horizontal')}
-              className={`flex items-center justify-center w-[46px] h-[36px] rounded-[5px] transition-all duration-200 ${
+              className={`flex items-center justify-center w-[38px] h-[32px] rounded-md transition-all duration-200 ${
                 orientation === 'horizontal' ? 'bg-[#D4E5F7]' : 'hover:bg-gray-100'
               }`}
             >
