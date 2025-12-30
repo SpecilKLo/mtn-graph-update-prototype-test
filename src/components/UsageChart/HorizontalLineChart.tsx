@@ -58,6 +58,33 @@ const CustomActiveDot = (props: any) => {
   );
 };
 
+// Custom Y-axis tick to match bar chart styling
+interface CustomYAxisTickProps {
+  x: number;
+  y: number;
+  payload: { value: number };
+}
+
+function CustomYAxisTick({ x, y, payload }: CustomYAxisTickProps) {
+  const isZero = payload.value === 0;
+  // Move 0 GB label up by 15px to match bar chart
+  const adjustedY = isZero ? y - 15 : y;
+  
+  return (
+    <text
+      x={x}
+      y={adjustedY}
+      fill="hsl(var(--muted-foreground))"
+      fontSize={11}
+      fontWeight={500}
+      textAnchor="end"
+      dominantBaseline="middle"
+    >
+      {formatGBValue(payload.value)}
+    </text>
+  );
+}
+
 export function HorizontalLineChart({
   chartData,
   maxDomainValue,
@@ -75,6 +102,9 @@ export function HorizontalLineChart({
   // Calculate dynamic width based on data count
   const minPointSpacing = 80;
   const chartWidth = Math.max(chartData.length * minPointSpacing, 600);
+
+  // Calculate Y-axis ticks to match bar chart
+  const ticks = [0, Math.round(maxDomainValue / 4), Math.round(maxDomainValue / 2), Math.round(maxDomainValue * 3 / 4), maxDomainValue];
 
   // Update scroll indicator visibility
   const updateScrollIndicators = (element: HTMLElement) => {
@@ -103,26 +133,23 @@ export function HorizontalLineChart({
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
       <div className="flex-1 flex flex-row overflow-hidden relative">
-        {/* Fixed Y-Axis */}
+        {/* Fixed Y-Axis - matches bar chart Y-axis styling */}
         <div style={{ width: 60 }} className="shrink-0 bg-card">
           {isMounted && (
             <ResponsiveContainer width="100%" height="100%" debounce={ANIMATION_CONFIG.DEBOUNCE}>
               <LineChart
-                data={processedData}
-                margin={{ top: 24, right: 0, left: 0, bottom: 24 }}
+                data={[]}
+                margin={{ top: 24, right: 0, left: 0, bottom: 40 }}
               >
                 <YAxis
                   type="number"
                   domain={[0, maxDomainValue]}
-                  axisLine={{ stroke: '#CFCFCF' }}
+                  axisLine={false}
                   tickLine={false}
-                  tick={{
-                    fill: 'hsl(var(--muted-foreground))',
-                    fontSize: 11,
-                    fontWeight: 500,
-                  }}
-                  tickFormatter={(value) => formatGBValue(value)}
-                  width={55}
+                  tick={<CustomYAxisTick x={0} y={0} payload={{ value: 0 }} />}
+                  width={60}
+                  ticks={ticks}
+                  orientation="left"
                 />
               </LineChart>
             </ResponsiveContainer>
