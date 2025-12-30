@@ -341,11 +341,6 @@ export function HorizontalLineChart({
                     vertical={false} 
                     stroke="#CFCFCF" 
                     strokeOpacity={1}
-                    horizontalCoordinatesGenerator={(props) => {
-                      const { height } = props;
-                      // Map tick values to Y coordinates
-                      return ticks.map(tick => height - (tick / maxDomainValue) * height);
-                    }}
                   />
 
                   <XAxis 
@@ -356,6 +351,7 @@ export function HorizontalLineChart({
                   <YAxis 
                     type="number"
                     domain={[0, maxDomainValue]}
+                    ticks={ticks}
                     hide
                   />
                   <Tooltip 
