@@ -4,7 +4,7 @@ import {
   YAxis,
   ResponsiveContainer,
 } from "recharts";
-import { formatGBValue } from "./utils";
+import { formatGBValue, calculateNiceTicks } from "./utils";
 
 interface StickyVerticalYAxisProps {
   maxDomainValue: number;
@@ -41,7 +41,8 @@ export function StickyVerticalYAxis({
   maxDomainValue,
   isMounted,
 }: StickyVerticalYAxisProps) {
-  const ticks = [0, Math.round(maxDomainValue / 4), Math.round(maxDomainValue / 2), Math.round(maxDomainValue * 3 / 4), maxDomainValue];
+  // Use nice ticks for round values
+  const ticks = calculateNiceTicks(maxDomainValue, 5);
 
   return (
     <div className="shrink-0 bg-card" style={{ width: 60 }}>
