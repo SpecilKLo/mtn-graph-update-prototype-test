@@ -1,6 +1,6 @@
 import * as React from "react";
 import {
-  LineChart,
+  ComposedChart,
   Line,
   XAxis,
   YAxis,
@@ -248,7 +248,7 @@ export function HorizontalLineChart({
         <div style={{ width: 60 }} className="shrink-0 bg-card">
           {isMounted && (
             <ResponsiveContainer width="100%" height="100%" debounce={ANIMATION_CONFIG.DEBOUNCE}>
-              <LineChart
+              <ComposedChart
                 data={[]}
                 margin={{ top: 24, right: 0, left: 0, bottom: 0 }}
               >
@@ -262,7 +262,7 @@ export function HorizontalLineChart({
                   ticks={ticks}
                   orientation="left"
                 />
-              </LineChart>
+              </ComposedChart>
             </ResponsiveContainer>
           )}
         </div>
@@ -294,9 +294,11 @@ export function HorizontalLineChart({
           <div style={{ minWidth: `${chartWidth}px`, height: '100%' }} className="pr-4">
             {isMounted && (
               <ResponsiveContainer width="100%" height="100%" debounce={ANIMATION_CONFIG.DEBOUNCE}>
-                <LineChart
+                <ComposedChart
                   data={processedData}
                   margin={{ top: 24, right: CHART_CONFIG.RIGHT_MARGIN, left: 0, bottom: 0 }}
+                  barGap={8}
+                  barSize={barWidth}
                 >
                   {/* Reference areas for alternating backgrounds */}
                   {viewMode === 'day' && weekBlocks.map((block, index) => (
@@ -359,6 +361,9 @@ export function HorizontalLineChart({
                     cursor={{ stroke: 'hsl(var(--muted-foreground))', strokeDasharray: '3 3' }} 
                   />
                   
+                  {/* Invisible bar to force bar-based positioning alignment */}
+                  <Bar dataKey="usage" fill="transparent" />
+                  
                   {/* Usage line */}
                   <Line 
                     type="monotone"
@@ -382,7 +387,7 @@ export function HorizontalLineChart({
                       animationDuration={ANIMATION_CONFIG.BAR_DURATION}
                     />
                   )}
-                </LineChart>
+                </ComposedChart>
               </ResponsiveContainer>
             )}
           </div>
