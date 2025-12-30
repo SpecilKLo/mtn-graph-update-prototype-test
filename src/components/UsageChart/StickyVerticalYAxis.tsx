@@ -41,8 +41,8 @@ export function StickyVerticalYAxis({
   maxDomainValue,
   isMounted,
 }: StickyVerticalYAxisProps) {
-  // Use nice ticks for round values
-  const ticks = calculateNiceTicks(maxDomainValue, 5);
+  // Use nice ticks for round values - no buffer since maxDomainValue is already calculated
+  const ticks = calculateNiceTicks(maxDomainValue, 5, false);
 
   return (
     <div className="shrink-0 bg-card" style={{ width: 60 }}>
