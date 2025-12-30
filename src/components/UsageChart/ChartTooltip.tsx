@@ -18,7 +18,7 @@ export const ChartTooltip = ({ active, payload }: CustomTooltipProps) => {
         <div className="flex flex-col gap-1">
           <div className="flex items-center justify-between gap-3">
             <span className="text-white">Usage:</span>
-            <span className="font-semibold" style={{ color: 'hsl(var(--chart-usage-value))' }}>{formatGBValue(data.usage)}</span>
+            <span className="font-semibold" style={{ color: '#58A0D4' }}>{formatGBValue(data.usage)}</span>
           </div>
           {data.overUsage && (
             <div className="flex items-center justify-between gap-3">
