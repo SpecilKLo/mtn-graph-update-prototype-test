@@ -15,7 +15,7 @@ import { ChartTooltip } from "./ChartTooltip";
 import { StickyVerticalYAxis } from "./StickyVerticalYAxis";
 import { StickyVerticalXAxis } from "./StickyVerticalXAxis";
 import { ANIMATION_CONFIG, CHART_CONFIG } from "./constants";
-import { formatGBValue } from "./utils";
+import { formatGBValue, calculateNiceTicks } from "./utils";
 import type { ChartData, ViewMode, MonthBlock, WeekBlock } from "./types";
 
 interface VerticalBarChartProps {
@@ -257,7 +257,19 @@ export function VerticalBarChart({
                     />
                   ))}
 
-                  <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#CFCFCF" strokeOpacity={1} />
+                  <CartesianGrid 
+                    strokeDasharray="3 3" 
+                    horizontal={true} 
+                    vertical={false} 
+                    stroke="#CFCFCF" 
+                    strokeOpacity={1}
+                    horizontalCoordinatesGenerator={(props) => {
+                      const { height } = props;
+                      const ticks = calculateNiceTicks(maxDomainValue, 5);
+                      // Map tick values to Y coordinates
+                      return ticks.map(tick => height - (tick / maxDomainValue) * height);
+                    }}
+                  />
 
                   <XAxis 
                     dataKey="label"

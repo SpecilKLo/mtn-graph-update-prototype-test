@@ -13,7 +13,7 @@ import {
 } from "recharts";
 import { ChartTooltip } from "./ChartTooltip";
 import { ANIMATION_CONFIG, CHART_CONFIG } from "./constants";
-import { formatGBValue } from "./utils";
+import { formatGBValue, calculateNiceTicks } from "./utils";
 import type { ChartData, ViewMode, WeekBlock, MonthBlock } from "./types";
 
 interface HorizontalLineChartProps {
@@ -192,8 +192,8 @@ export function HorizontalLineChart({
   // Calculate dynamic width based on data count (same calculation as bar chart)
   const chartWidth = Math.max(chartData.length * (barWidth + BAR_SPACING), 600);
 
-  // Calculate Y-axis ticks to match bar chart
-  const ticks = [0, Math.round(maxDomainValue / 4), Math.round(maxDomainValue / 2), Math.round(maxDomainValue * 3 / 4), maxDomainValue];
+  // Use nice ticks for round values (same as bar chart)
+  const ticks = calculateNiceTicks(maxDomainValue, 5);
 
   // Update scroll indicator visibility
   const updateScrollIndicators = (element: HTMLElement) => {
@@ -335,7 +335,18 @@ export function HorizontalLineChart({
                     />
                   ))}
 
-                  <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#CFCFCF" strokeOpacity={1} />
+                  <CartesianGrid 
+                    strokeDasharray="3 3" 
+                    horizontal={true} 
+                    vertical={false} 
+                    stroke="#CFCFCF" 
+                    strokeOpacity={1}
+                    horizontalCoordinatesGenerator={(props) => {
+                      const { height } = props;
+                      // Map tick values to Y coordinates
+                      return ticks.map(tick => height - (tick / maxDomainValue) * height);
+                    }}
+                  />
 
                   <XAxis 
                     dataKey="label"

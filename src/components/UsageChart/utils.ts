@@ -132,10 +132,43 @@ export const calculateWeekBlocks = (chartData: ChartData[]): WeekBlock[] => {
   return blocks;
 };
 
-// Calculate max domain value for X axis
+// Calculate nice tick values for Y-axis with round numbers
+export const calculateNiceTicks = (maxValue: number, tickCount: number = 5): number[] => {
+  if (maxValue <= 0) return [0];
+  
+  // Calculate raw interval needed
+  const rawInterval = maxValue / (tickCount - 1);
+  
+  // Find the order of magnitude
+  const magnitude = Math.pow(10, Math.floor(Math.log10(rawInterval)));
+  
+  // Nice intervals to choose from (multiples of magnitude)
+  const niceMultipliers = [1, 2, 2.5, 5, 10];
+  
+  // Find the smallest nice interval that covers the data
+  let niceInterval = magnitude * 10;
+  for (const multiplier of niceMultipliers) {
+    const candidate = magnitude * multiplier;
+    if (candidate >= rawInterval) {
+      niceInterval = candidate;
+      break;
+    }
+  }
+  
+  // Generate ticks from 0 to cover the max value
+  const ticks: number[] = [];
+  for (let i = 0; i < tickCount; i++) {
+    ticks.push(Math.round(i * niceInterval));
+  }
+  
+  return ticks;
+};
+
+// Calculate max domain value for Y axis (returns the last tick from nice ticks)
 export const calculateMaxDomain = (chartData: ChartData[]): number => {
   const maxVal = Math.max(...chartData.map(d => d.usage + (d.overUsage || 0)));
-  return Math.max(Math.ceil((maxVal * 1.1) / 50) * 50, 100);
+  const ticks = calculateNiceTicks(maxVal * 1.1, 5);
+  return ticks[ticks.length - 1];
 };
 
 // Calculate total usage
