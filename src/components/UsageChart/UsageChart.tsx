@@ -136,6 +136,7 @@ export function UsageChart() {
               viewMode={viewMode}
               weekBlocks={weekBlocks}
               monthBlocks={monthBlocks}
+              dynamicBarSize={dynamicBarSize}
             />
           )}
 
