@@ -195,12 +195,28 @@ export function HorizontalLineChart({
   // Use nice ticks for round values (same as bar chart) - no buffer since maxDomainValue is already calculated
   const ticks = calculateNiceTicks(maxDomainValue, 5, false);
 
-  // Update scroll indicator visibility
-  const updateScrollIndicators = (element: HTMLElement) => {
-    const { scrollLeft, scrollWidth, clientWidth } = element;
-    setCanScrollLeft(scrollLeft > 0);
-    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
-  };
+  // Debounced scroll indicator update to prevent jitter
+  const scrollIndicatorTimeout = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  
+  const updateScrollIndicators = React.useCallback((element: HTMLElement) => {
+    if (scrollIndicatorTimeout.current) {
+      clearTimeout(scrollIndicatorTimeout.current);
+    }
+    scrollIndicatorTimeout.current = setTimeout(() => {
+      const { scrollLeft, scrollWidth, clientWidth } = element;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+    }, 100);
+  }, []);
+
+  // Cleanup timeout on unmount
+  React.useEffect(() => {
+    return () => {
+      if (scrollIndicatorTimeout.current) {
+        clearTimeout(scrollIndicatorTimeout.current);
+      }
+    };
+  }, []);
 
   // Initialize scroll to rightmost position (most recent dates) on mount and data change
   React.useEffect(() => {
@@ -212,34 +228,44 @@ export function HorizontalLineChart({
       scrollContainer.scrollLeft = maxScrollLeft;
       xAxisScrollRef.current.scrollLeft = maxScrollLeft;
       
-      updateScrollIndicators(scrollContainer);
+      // Immediate update on init (not debounced)
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainer;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
     }
   }, [chartData]);
 
-  // Sync horizontal scroll between chart and X-axis
-  const handleChartScroll = (e: React.UIEvent<HTMLDivElement>) => {
+  // Sync horizontal scroll between chart and X-axis (no state updates during scroll)
+  const handleChartScroll = React.useCallback((e: React.UIEvent<HTMLDivElement>) => {
     if (isScrollSyncing.current) return;
     isScrollSyncing.current = true;
-    updateScrollIndicators(e.currentTarget);
+    
+    const target = e.currentTarget;
     if (xAxisScrollRef.current) {
-      xAxisScrollRef.current.scrollLeft = e.currentTarget.scrollLeft;
+      xAxisScrollRef.current.scrollLeft = target.scrollLeft;
     }
+    
+    // Debounced indicator update
+    updateScrollIndicators(target);
+    
     requestAnimationFrame(() => {
       isScrollSyncing.current = false;
     });
-  };
+  }, [updateScrollIndicators]);
 
-  const handleXAxisScroll = (e: React.UIEvent<HTMLDivElement>) => {
+  const handleXAxisScroll = React.useCallback((e: React.UIEvent<HTMLDivElement>) => {
     if (isScrollSyncing.current) return;
     isScrollSyncing.current = true;
+    
     if (chartScrollRef.current) {
       chartScrollRef.current.scrollLeft = e.currentTarget.scrollLeft;
       updateScrollIndicators(chartScrollRef.current);
     }
+    
     requestAnimationFrame(() => {
       isScrollSyncing.current = false;
     });
-  };
+  }, [updateScrollIndicators]);
 
   // Combine usage and overUsage for total line value
   const processedData = chartData.map((item, idx) => ({
