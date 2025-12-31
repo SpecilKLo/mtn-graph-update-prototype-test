@@ -323,7 +323,7 @@ export function HorizontalLineChart({
         <div 
           ref={chartScrollRef}
           onScroll={handleChartScroll}
-          className="flex-1 overflow-x-auto overflow-y-hidden scroll-smooth-touch scrollbar-thin scrollbar-thumb-border/30 scrollbar-track-transparent"
+          className="flex-1 overflow-x-auto overflow-y-hidden scroll-touch scrollbar-thin scrollbar-thumb-border/30 scrollbar-track-transparent"
         >
           <div style={{ minWidth: `${chartWidth}px`, height: '100%' }} className="pr-4">
             {isMounted && (
@@ -462,7 +462,7 @@ export function HorizontalLineChart({
         <div 
           ref={xAxisScrollRef}
           onScroll={handleXAxisScroll}
-          className="flex-1 overflow-x-auto overflow-y-hidden scroll-smooth-touch scrollbar-none"
+          className="flex-1 overflow-x-auto overflow-y-hidden scroll-touch scrollbar-none"
         >
           <div style={{ minWidth: `${chartWidth}px`, height: 40 }} className="pr-4">
             {isMounted && (
