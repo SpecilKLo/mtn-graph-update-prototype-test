@@ -133,6 +133,16 @@ export function HighchartsBarChart({
     [updateScrollIndicators]
   );
 
+  // Calculate pixel height for a given value
+  const getPixelHeight = (value: number) => {
+    // Approximate chart height (excluding margins)
+    const chartHeight = 300; // This will be refined based on actual container
+    return (value / maxDomainValue) * chartHeight;
+  };
+
+  // Minimum height (in pixels) for label to fit inside the bar
+  const MIN_HEIGHT_FOR_INSIDE_LABEL = 24;
+
   // Prepare series data - usage bars get rounded tops only when there's no overage
   const usageData = chartData.map((item) => {
     const hasOverage = item.overUsage && item.overUsage > 0;
@@ -142,7 +152,29 @@ export function HighchartsBarChart({
       custom: { hasOverage },
     };
   });
-  const overUsageData = chartData.map((item) => item.overUsage || 0);
+
+  // Over usage data with conditional label positioning
+  const overUsageData = chartData.map((item) => {
+    const overUsage = item.overUsage || 0;
+    const pixelHeight = getPixelHeight(overUsage);
+    const labelShouldBeOutside = pixelHeight < MIN_HEIGHT_FOR_INSIDE_LABEL;
+    
+    return {
+      y: overUsage,
+      dataLabels: overUsage > 0 ? {
+        enabled: true,
+        inside: !labelShouldBeOutside,
+        verticalAlign: labelShouldBeOutside ? 'top' : 'middle',
+        y: labelShouldBeOutside ? -18 : 0,
+        style: {
+          color: 'black',
+          fontSize: '11px',
+          fontWeight: '700',
+          textOutline: 'none',
+        },
+      } : { enabled: false },
+    };
+  });
 
   // Main chart configuration
   const mainChartOptions: Highcharts.Options = {
@@ -196,17 +228,9 @@ export function HighchartsBarChart({
         borderRadiusTopRight: 4,
         dataLabels: {
           enabled: true,
-          inside: true,
-          verticalAlign: "middle",
           formatter: function () {
             if (!this.y || this.y === 0) return "";
             return formatGBValue(this.y);
-          },
-          style: {
-            color: "black",
-            fontSize: "11px",
-            fontWeight: "700",
-            textOutline: "none",
           },
         },
       } as Highcharts.SeriesColumnOptions,
