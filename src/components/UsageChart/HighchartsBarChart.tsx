@@ -293,7 +293,7 @@ export function HighchartsBarChart({
       marginBottom: 18,
       spacing: [0, 0, 0, 0],
       animation: false,
-      backgroundColor: "transparent",
+      backgroundColor: "#FFFFFF",
     },
     xAxis: {
       categories: chartData.map((d) => d.label),
@@ -305,14 +305,15 @@ export function HighchartsBarChart({
           fontSize: "11px",
           fontWeight: "500",
         },
+        useHTML: true,
+        formatter: function() {
+          return `<span style="position: relative; z-index: 10;">${this.value}</span>`;
+        },
       },
       lineColor: HIGHCHARTS_COLORS.grid,
       lineWidth: 0,
       tickLength: 0,
-      plotBands: createXAxisPlotBands(chartData, weekBlocks, monthBlocks, viewMode).map(band => ({
-        ...band,
-        zIndex: 0,
-      })),
+      plotBands: createXAxisPlotBands(chartData, weekBlocks, monthBlocks, viewMode),
     },
     yAxis: {
       visible: false,
