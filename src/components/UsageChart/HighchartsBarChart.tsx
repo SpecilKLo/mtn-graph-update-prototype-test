@@ -184,7 +184,7 @@ export function HighchartsBarChart({
     };
   });
 
-  const CHART_MARGIN_TOP = 24;
+  const CHART_MARGIN_TOP = 0;
 
   // Main chart configuration
   const mainChartOptions: Highcharts.Options = {
@@ -340,19 +340,18 @@ export function HighchartsBarChart({
   };
 
   // Y-axis labels (rendered manually for sticky positioning)
-  // Chart area starts at CHART_MARGIN_TOP and ends at 100% of container height
   const yAxisLabels = ticks.map((tick) => {
     const isZero = tick === 0;
     const topOffset = isZero ? 15 : 0;
-    // Position: margin + (position within chart area as percentage of remaining space)
-    const positionPercent = (maxDomainValue - tick) / maxDomainValue;
+    // Simple percentage position since margin is 0
+    const positionPercent = ((maxDomainValue - tick) / maxDomainValue) * 100;
     
     return (
       <div
         key={tick}
         className="absolute right-2 text-right"
         style={{
-          top: `calc(${CHART_MARGIN_TOP}px + ${positionPercent * 100}% - ${positionPercent * CHART_MARGIN_TOP}px - ${topOffset}px)`,
+          top: `calc(${positionPercent}% - ${topOffset}px)`,
           color: HIGHCHARTS_COLORS.text,
           fontSize: "11px",
           fontWeight: 500,
