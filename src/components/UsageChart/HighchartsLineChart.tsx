@@ -277,17 +277,18 @@ export function HighchartsLineChart({
   const barSlotWidth = barWidth + BAR_SIZING.BAR_SPACING;
 
   // Y-axis labels (rendered manually for sticky positioning)
+  const Y_AXIS_TOP_PADDING = 12; // Prevent top label from being cut off
   const yAxisLabels = ticks.map((tick) => {
     const isZero = tick === 0;
-    const topOffset = isZero ? 15 : 0;
-    const position = ((maxDomainValue - tick) / maxDomainValue) * 100;
+    const positionPercent = ((maxDomainValue - tick) / maxDomainValue) * 100;
+    const bottomOffset = isZero ? 15 : 0;
 
     return (
       <div
         key={tick}
         className="absolute right-2 text-right"
         style={{
-          top: `calc(24px + ${position}% * 0.92 - ${topOffset}px)`,
+          top: `calc(${Y_AXIS_TOP_PADDING}px + ${positionPercent}% * (1 - ${Y_AXIS_TOP_PADDING * 2 / 100}) - ${bottomOffset}px)`,
           color: HIGHCHARTS_COLORS.text,
           fontSize: "11px",
           fontWeight: 500,
@@ -306,7 +307,7 @@ export function HighchartsLineChart({
       {/* Main content row: Fixed Y-Axis + Scrollable Chart */}
       <div className="flex-1 flex flex-row overflow-hidden relative">
         {/* Fixed Y-Axis - matches bar chart Y-axis styling */}
-        <div className="shrink-0 bg-card relative" style={{ width: 60 }}>
+        <div className="shrink-0 bg-card relative" style={{ width: 60, paddingTop: Y_AXIS_TOP_PADDING }}>
           {yAxisLabels}
         </div>
 
@@ -337,13 +338,19 @@ export function HighchartsLineChart({
           ref={chartScrollRef}
           onScroll={handleChartScroll}
           className="flex-1 overflow-x-auto overflow-y-hidden scroll-touch scrollbar-thin scrollbar-thumb-border/30 scrollbar-track-transparent"
+          style={{ paddingTop: Y_AXIS_TOP_PADDING }}
         >
-          <div style={{ width: `${chartWidth}px`, height: "100%" }} className="pr-4">
+          <div style={{ width: `${chartWidth}px`, height: "100%" }} className="pr-4 relative">
             <HighchartsReact
               ref={mainChartRef}
               highcharts={Highcharts}
               options={mainChartOptions}
               containerProps={{ style: { height: "100%", width: "100%" } }}
+            />
+            {/* X-axis baseline */}
+            <div 
+              className="absolute bottom-0 left-0 right-0" 
+              style={{ height: 1, backgroundColor: HIGHCHARTS_COLORS.grid }} 
             />
           </div>
         </div>
