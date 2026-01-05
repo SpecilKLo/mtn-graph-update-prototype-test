@@ -288,7 +288,7 @@ export function HighchartsLineChart({
         key={tick}
         className="absolute right-2 text-right"
         style={{
-          top: `calc(${Y_AXIS_TOP_PADDING}px + ${positionPercent}% * (1 - ${Y_AXIS_TOP_PADDING * 2 / 100}) - ${bottomOffset}px)`,
+          top: `calc(${positionPercent}% - ${bottomOffset}px)`,
           color: HIGHCHARTS_COLORS.text,
           fontSize: "11px",
           fontWeight: 500,
@@ -307,8 +307,10 @@ export function HighchartsLineChart({
       {/* Main content row: Fixed Y-Axis + Scrollable Chart */}
       <div className="flex-1 flex flex-row overflow-hidden relative">
         {/* Fixed Y-Axis - matches bar chart Y-axis styling */}
-        <div className="shrink-0 bg-card relative" style={{ width: 60, paddingTop: Y_AXIS_TOP_PADDING }}>
-          {yAxisLabels}
+        <div className="shrink-0 bg-card relative overflow-visible" style={{ width: 60, paddingTop: Y_AXIS_TOP_PADDING }}>
+          <div className="relative h-full">
+            {yAxisLabels}
+          </div>
         </div>
 
         {/* Left fade indicator */}
