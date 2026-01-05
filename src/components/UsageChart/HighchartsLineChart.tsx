@@ -168,7 +168,10 @@ export function HighchartsLineChart({
     },
     xAxis: {
       categories: chartData.map((d) => d.label),
-      visible: false,
+      visible: true,
+      labels: { enabled: false },
+      lineWidth: 0,
+      tickWidth: 0,
       plotBands: createPlotBands(chartData, weekBlocks, monthBlocks, viewMode),
     },
     yAxis: {
