@@ -206,6 +206,7 @@ export function HighchartsLineChart({
         },
         lineWidth: 2,
         marker: {
+          enabled: true,
           fillColor: HIGHCHARTS_COLORS.usage,
         },
       },
@@ -226,6 +227,7 @@ export function HighchartsLineChart({
               lineWidth: 2,
               dashStyle: "ShortDash" as const,
               marker: {
+                enabled: true,
                 fillColor: HIGHCHARTS_COLORS.overUsage,
               },
             },
