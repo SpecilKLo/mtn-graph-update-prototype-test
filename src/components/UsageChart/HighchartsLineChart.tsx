@@ -209,6 +209,11 @@ export function HighchartsLineChart({
         lineWidth: 2,
         marker: {
           enabled: true,
+          enabledThreshold: 0,
+          symbol: "circle",
+          radius: 4,
+          lineWidth: 2,
+          lineColor: "white",
           fillColor: HIGHCHARTS_COLORS.usage,
         },
       },
@@ -230,6 +235,11 @@ export function HighchartsLineChart({
               dashStyle: "ShortDash" as const,
               marker: {
                 enabled: true,
+                enabledThreshold: 0,
+                symbol: "circle",
+                radius: 4,
+                lineWidth: 2,
+                lineColor: "white",
                 fillColor: HIGHCHARTS_COLORS.overUsage,
               },
             },
