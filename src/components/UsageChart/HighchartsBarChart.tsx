@@ -283,7 +283,7 @@ export function HighchartsBarChart({
   const xAxisChartOptions: Highcharts.Options = {
     chart: {
       type: "column",
-      height: 40,
+      height: 36,
       marginTop: 0,
       marginRight: CHART_CONFIG.RIGHT_MARGIN,
       marginLeft: 0,
@@ -296,7 +296,7 @@ export function HighchartsBarChart({
       categories: chartData.map((d) => d.label),
       labels: {
         enabled: true,
-        y: 25,
+        y: 22,
         style: {
           color: HIGHCHARTS_COLORS.text,
           fontSize: "11px",
@@ -304,11 +304,10 @@ export function HighchartsBarChart({
         },
       },
       lineColor: HIGHCHARTS_COLORS.grid,
-      lineWidth: 1,
+      lineWidth: 0,
       tickLength: 0,
       plotBands: createXAxisPlotBands(chartData, weekBlocks, monthBlocks, viewMode).map(band => ({
         ...band,
-        // Extend plotBands to cover entire x-axis area height
         zIndex: 0,
       })),
     },
