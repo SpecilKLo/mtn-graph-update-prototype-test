@@ -184,11 +184,13 @@ export function HighchartsBarChart({
     };
   });
 
+  const CHART_MARGIN_TOP = 24;
+
   // Main chart configuration
   const mainChartOptions: Highcharts.Options = {
     chart: {
       type: "column",
-      marginTop: 0,
+      marginTop: CHART_MARGIN_TOP,
       marginRight: CHART_CONFIG.RIGHT_MARGIN,
       marginLeft: 0,
       marginBottom: 0,
@@ -334,14 +336,15 @@ export function HighchartsBarChart({
   const yAxisLabels = ticks.map((tick) => {
     const isZero = tick === 0;
     const topOffset = isZero ? 15 : 0;
-    const position = ((maxDomainValue - tick) / maxDomainValue) * 100;
+    // Position relative to chart area (after margin)
+    const chartAreaPercent = ((maxDomainValue - tick) / maxDomainValue) * 100;
     
     return (
       <div
         key={tick}
         className="absolute right-2 text-right"
         style={{
-          top: `calc(${position}% - ${topOffset}px)`,
+          top: `calc(${CHART_MARGIN_TOP}px + ${chartAreaPercent}% * (1 - ${CHART_MARGIN_TOP} / 100) - ${topOffset}px)`,
           color: HIGHCHARTS_COLORS.text,
           fontSize: "11px",
           fontWeight: 500,
