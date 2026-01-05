@@ -6,9 +6,7 @@ import {
   HIGHCHARTS_COLORS,
   HIGHCHARTS_ANIMATION,
   initHighchartsOptions,
-  calculateHighchartsChartWidth,
-  calculateHighchartsBarWidth,
-  BAR_SIZING,
+  calculateResponsiveChartDimensions,
 } from "./highchartsConfig";
 import { createPlotBands } from "./highchartsUtils";
 import { getTooltipConfig } from "./HighchartsTooltip";
@@ -40,18 +38,37 @@ export function HighchartsBarChart({
 }: HighchartsBarChartProps) {
   const chartScrollRef = React.useRef<HTMLDivElement>(null);
   const xAxisScrollRef = React.useRef<HTMLDivElement>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
   const isScrollSyncing = React.useRef(false);
   const mainChartRef = React.useRef<HighchartsReact.RefObject>(null);
+
+  // Track container width for responsive sizing
+  const [containerWidth, setContainerWidth] = React.useState(0);
 
   // Scroll fade indicator states - start at right (newest dates)
   const [canScrollLeft, setCanScrollLeft] = React.useState(true);
   const [canScrollRight, setCanScrollRight] = React.useState(false);
 
-  // Calculate bar size - ensure minimum width for labels
-  const barWidth = calculateHighchartsBarWidth(dynamicBarSize);
+  // Monitor container width with ResizeObserver
+  React.useEffect(() => {
+    if (!containerRef.current) return;
 
-  // Calculate dynamic width based on data count with generous spacing
-  const chartWidth = calculateHighchartsChartWidth(chartData.length, barWidth);
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        // Subtract Y-axis width (60px) to get usable chart area
+        setContainerWidth(entry.contentRect.width - 60);
+      }
+    });
+
+    resizeObserver.observe(containerRef.current);
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  // Calculate responsive chart dimensions
+  const { chartWidth, barWidth, barSpacing } = React.useMemo(
+    () => calculateResponsiveChartDimensions(chartData.length, containerWidth, dynamicBarSize),
+    [chartData.length, containerWidth, dynamicBarSize]
+  );
 
   // Get ticks for Y-axis
   const ticks = calculateNiceTicks(maxDomainValue, 5, false);
@@ -321,8 +338,8 @@ export function HighchartsBarChart({
     return "transparent";
   };
 
-  // Calculate bar slot width for x-axis
-  const barSlotWidth = barWidth + BAR_SIZING.BAR_SPACING;
+  // Calculate bar slot width for x-axis (using responsive values)
+  const barSlotWidth = barWidth + barSpacing;
 
   // Y-axis labels (rendered manually for sticky positioning)
   const Y_AXIS_TOP_PADDING = 12; // Prevent top label from being cut off
@@ -353,7 +370,7 @@ export function HighchartsBarChart({
   if (!isMounted) return null;
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden">
+    <div ref={containerRef} className="flex-1 flex flex-col overflow-hidden">
       {/* Main content row: Fixed Y-Axis + Scrollable Chart */}
       <div className="flex-1 flex flex-row overflow-hidden relative">
         {/* Sticky Y-Axis - doesn't scroll horizontally */}
