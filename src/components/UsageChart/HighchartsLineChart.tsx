@@ -179,6 +179,9 @@ export function HighchartsLineChart({
           lineWidth: 2,
           lineColor: "white",
           states: {
+            normal: {
+              opacity: 1, // Force markers visible in normal state
+            } as Highcharts.PointStatesNormalOptionsObject & { opacity: number },
             hover: {
               enabled: true,
               radius: 6,
@@ -215,6 +218,11 @@ export function HighchartsLineChart({
           lineWidth: 2,
           lineColor: "white",
           fillColor: HIGHCHARTS_COLORS.usage,
+          states: {
+            normal: {
+              opacity: 1, // Force markers visible in normal state
+            } as Highcharts.PointStatesNormalOptionsObject & { opacity: number },
+          },
         },
       },
       ...(hasOverUsage
@@ -241,6 +249,11 @@ export function HighchartsLineChart({
                 lineWidth: 2,
                 lineColor: "white",
                 fillColor: HIGHCHARTS_COLORS.overUsage,
+                states: {
+                  normal: {
+                    opacity: 1, // Force markers visible in normal state
+                  } as Highcharts.PointStatesNormalOptionsObject & { opacity: number },
+                },
               },
             },
           ]
