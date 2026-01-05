@@ -173,12 +173,14 @@ export function HighchartsLineChart({
         animation: { duration: HIGHCHARTS_ANIMATION.duration },
         marker: {
           enabled: true,
+          enabledThreshold: 0, // Always show markers regardless of data point count
           symbol: "circle",
           radius: 4,
           lineWidth: 2,
           lineColor: "white",
           states: {
             hover: {
+              enabled: true,
               radius: 6,
             },
           },
