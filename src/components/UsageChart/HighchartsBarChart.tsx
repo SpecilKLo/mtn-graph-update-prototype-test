@@ -143,17 +143,20 @@ export function HighchartsBarChart({
   // Minimum height (in pixels) for label to fit inside the bar
   const MIN_HEIGHT_FOR_INSIDE_LABEL = 24;
 
-  // Prepare series data - usage bars get rounded tops only when there's no overage
+  // Prepare series data - usage bars get flat tops when there's overage (rounded otherwise)
   const usageData = chartData.map((item) => {
     const hasOverage = item.overUsage && item.overUsage > 0;
     return {
       y: item.usage,
-      // Custom property to track if this bar should have rounded corners
-      custom: { hasOverage },
+      // Rounded top only when NO overage, flat top when overage stacks on top
+      borderRadiusTopLeft: hasOverage ? 0 : 4,
+      borderRadiusTopRight: hasOverage ? 0 : 4,
+      borderRadiusBottomLeft: 0,
+      borderRadiusBottomRight: 0,
     };
   });
 
-  // Over usage data with conditional label positioning
+  // Over usage data with conditional label positioning and rounded top corners
   const overUsageData = chartData.map((item) => {
     const overUsage = item.overUsage || 0;
     const pixelHeight = getPixelHeight(overUsage);
@@ -161,6 +164,11 @@ export function HighchartsBarChart({
     
     return {
       y: overUsage,
+      // Over usage bars always have rounded tops and flat bottoms
+      borderRadiusTopLeft: 4,
+      borderRadiusTopRight: 4,
+      borderRadiusBottomLeft: 0,
+      borderRadiusBottomRight: 0,
       dataLabels: overUsage > 0 ? {
         enabled: true,
         inside: !labelShouldBeOutside,
@@ -215,17 +223,28 @@ export function HighchartsBarChart({
         borderWidth: 0,
         borderRadius: 0,
         animation: { duration: HIGHCHARTS_ANIMATION.duration },
+        // Unified hover: treat both series as one bar for tooltip
+        states: {
+          hover: {
+            brightness: 0.1,
+          },
+        },
+      },
+      series: {
+        // Make both series share the same hover state
+        stickyTracking: false,
       },
     },
-    tooltip: getTooltipConfig(chartData),
+    tooltip: {
+      ...getTooltipConfig(chartData),
+      shared: true, // Show both series in one tooltip
+    },
     series: [
       {
         name: "Over Usage",
         type: "column",
         data: overUsageData,
         color: HIGHCHARTS_COLORS.overUsage,
-        borderRadiusTopLeft: 4,
-        borderRadiusTopRight: 4,
         dataLabels: {
           enabled: true,
           formatter: function () {
@@ -239,8 +258,6 @@ export function HighchartsBarChart({
         type: "column",
         data: usageData,
         color: HIGHCHARTS_COLORS.usage,
-        borderRadiusTopLeft: 4,
-        borderRadiusTopRight: 4,
         dataLabels: {
           enabled: true,
           inside: true,
