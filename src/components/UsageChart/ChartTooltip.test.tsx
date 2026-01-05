@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { ChartTooltip } from './ChartTooltip';
 
 describe('ChartTooltip', () => {
@@ -39,17 +39,17 @@ describe('ChartTooltip', () => {
   });
 
   it('should render tooltip when active with payload', () => {
-    render(<ChartTooltip active={true} payload={mockPayload} />);
+    const { getByText } = render(<ChartTooltip active={true} payload={mockPayload} />);
     
-    expect(screen.getByText('Usage:')).toBeInTheDocument();
-    expect(screen.getByText('123.46 GB')).toBeInTheDocument();
+    expect(getByText('Usage:')).toBeInTheDocument();
+    expect(getByText('123.46 GB')).toBeInTheDocument();
   });
 
   it('should display over usage when present', () => {
-    render(<ChartTooltip active={true} payload={mockPayload} />);
+    const { getByText } = render(<ChartTooltip active={true} payload={mockPayload} />);
     
-    expect(screen.getByText('Over Usage:')).toBeInTheDocument();
-    expect(screen.getByText('25 GB')).toBeInTheDocument();
+    expect(getByText('Over Usage:')).toBeInTheDocument();
+    expect(getByText('25 GB')).toBeInTheDocument();
   });
 
   it('should not display over usage when not present', () => {
@@ -63,9 +63,9 @@ describe('ChartTooltip', () => {
       },
     ];
     
-    render(<ChartTooltip active={true} payload={payloadWithoutOverUsage} />);
+    const { queryByText } = render(<ChartTooltip active={true} payload={payloadWithoutOverUsage} />);
     
-    expect(screen.queryByText('Over Usage:')).not.toBeInTheDocument();
+    expect(queryByText('Over Usage:')).not.toBeInTheDocument();
   });
 
   it('should display dateRange when available', () => {
@@ -80,16 +80,16 @@ describe('ChartTooltip', () => {
       },
     ];
     
-    render(<ChartTooltip active={true} payload={payloadWithDateRange} />);
+    const { getByText } = render(<ChartTooltip active={true} payload={payloadWithDateRange} />);
     
-    expect(screen.getByText('Jan 1 - Jan 7')).toBeInTheDocument();
+    expect(getByText('Jan 1 - Jan 7')).toBeInTheDocument();
   });
 
   it('should format date when dateRange is not available', () => {
-    render(<ChartTooltip active={true} payload={mockPayload} />);
+    const { getByText } = render(<ChartTooltip active={true} payload={mockPayload} />);
     
     // date-fns "PP" format for Jan 15, 2024 
-    expect(screen.getByText('Jan 15, 2024')).toBeInTheDocument();
+    expect(getByText('Jan 15, 2024')).toBeInTheDocument();
   });
 
   it('should handle zero usage', () => {
@@ -103,8 +103,8 @@ describe('ChartTooltip', () => {
       },
     ];
     
-    render(<ChartTooltip active={true} payload={payloadWithZeroUsage} />);
+    const { getByText } = render(<ChartTooltip active={true} payload={payloadWithZeroUsage} />);
     
-    expect(screen.getByText('0.00 GB')).toBeInTheDocument();
+    expect(getByText('0.00 GB')).toBeInTheDocument();
   });
 });

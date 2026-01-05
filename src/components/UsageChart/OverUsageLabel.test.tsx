@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { OverUsageLabel } from './OverUsageLabel';
 
 describe('OverUsageLabel', () => {
@@ -24,13 +24,13 @@ describe('OverUsageLabel', () => {
   });
 
   it('should render text with value when provided', () => {
-    render(
+    const { getByText } = render(
       <svg>
         <OverUsageLabel x={0} y={0} width={100} height={20} value={25} />
       </svg>
     );
     
-    expect(screen.getByText('25 GB')).toBeInTheDocument();
+    expect(getByText('25 GB')).toBeInTheDocument();
   });
 
   it('should position inside (end anchor) for wide bars', () => {
