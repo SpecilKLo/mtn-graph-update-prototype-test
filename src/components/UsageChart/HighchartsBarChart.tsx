@@ -325,21 +325,19 @@ export function HighchartsBarChart({
   const barSlotWidth = barWidth + BAR_SIZING.BAR_SPACING;
 
   // Y-axis labels (rendered manually for sticky positioning)
-  // Add padding at top to prevent first label from being cut off
-  const Y_AXIS_TOP_PADDING = 8; // Space for the top label
   const yAxisLabels = ticks.map((tick) => {
     const isZero = tick === 0;
-    const topOffset = isZero ? 12 : 0;
-    // Position within the padded area
+    // Simple percentage-based positioning that matches chart grid lines
     const positionPercent = ((maxDomainValue - tick) / maxDomainValue) * 100;
+    // Offset the 0 label slightly up to prevent clipping at bottom
+    const bottomOffset = isZero ? 15 : 0;
     
     return (
       <div
         key={tick}
         className="absolute right-2 text-right"
         style={{
-          // Account for top padding in positioning
-          top: `calc(${Y_AXIS_TOP_PADDING}px + ${positionPercent}% * (1 - ${Y_AXIS_TOP_PADDING * 2} / 100) - ${topOffset}px)`,
+          top: `calc(${positionPercent}% - ${bottomOffset}px)`,
           color: HIGHCHARTS_COLORS.text,
           fontSize: "11px",
           fontWeight: 500,
@@ -358,7 +356,7 @@ export function HighchartsBarChart({
       {/* Main content row: Fixed Y-Axis + Scrollable Chart */}
       <div className="flex-1 flex flex-row overflow-hidden relative">
         {/* Sticky Y-Axis - doesn't scroll horizontally */}
-        <div className="shrink-0 bg-card relative" style={{ width: 60, paddingTop: Y_AXIS_TOP_PADDING, paddingBottom: Y_AXIS_TOP_PADDING }}>
+        <div className="shrink-0 bg-card relative" style={{ width: 60 }}>
           {yAxisLabels}
         </div>
 
@@ -389,7 +387,7 @@ export function HighchartsBarChart({
           ref={chartScrollRef}
           onScroll={handleChartScroll}
           className="flex-1 overflow-x-auto overflow-y-hidden scroll-touch scrollbar-thin scrollbar-thumb-border/30 scrollbar-track-transparent"
-          style={{ paddingTop: Y_AXIS_TOP_PADDING, paddingBottom: Y_AXIS_TOP_PADDING }}
+          style={{  }}
         >
           <div style={{ width: `${chartWidth}px`, height: "100%" }} className="pr-4">
             <HighchartsReact
