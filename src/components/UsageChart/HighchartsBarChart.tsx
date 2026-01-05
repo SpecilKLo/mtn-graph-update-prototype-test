@@ -283,11 +283,11 @@ export function HighchartsBarChart({
   const xAxisChartOptions: Highcharts.Options = {
     chart: {
       type: "column",
-      height: 36,
+      height: 32,
       marginTop: 0,
       marginRight: CHART_CONFIG.RIGHT_MARGIN,
       marginLeft: 0,
-      marginBottom: 0,
+      marginBottom: 18,
       spacing: [0, 0, 0, 0],
       animation: false,
       backgroundColor: "transparent",
@@ -296,7 +296,7 @@ export function HighchartsBarChart({
       categories: chartData.map((d) => d.label),
       labels: {
         enabled: true,
-        y: 22,
+        y: 14,
         style: {
           color: HIGHCHARTS_COLORS.text,
           fontSize: "11px",
@@ -421,7 +421,7 @@ export function HighchartsBarChart({
           onScroll={handleXAxisScroll}
           className="flex-1 overflow-x-auto overflow-y-hidden scroll-touch scrollbar-none"
         >
-          <div style={{ width: `${chartWidth}px`, height: 36 }} className="pr-4">
+          <div style={{ width: `${chartWidth}px`, height: 32 }} className="pr-4">
             <HighchartsReact
               ref={xAxisChartRef}
               highcharts={Highcharts}
