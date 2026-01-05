@@ -420,8 +420,7 @@ export function HighchartsLineChart({
             style={{ 
               width: `${chartWidth}px`, 
               height: X_AXIS_HEIGHT,
-              paddingLeft: barSlotWidth / 2,
-              paddingRight: CHART_CONFIG.RIGHT_MARGIN + barSlotWidth / 2,
+              paddingRight: CHART_CONFIG.RIGHT_MARGIN,
             }} 
             className="flex"
           >
