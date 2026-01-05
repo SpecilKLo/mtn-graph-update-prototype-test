@@ -8,8 +8,9 @@ import {
   initHighchartsOptions,
   calculateHighchartsChartWidth,
   calculateHighchartsBarWidth,
+  BAR_SIZING,
 } from "./highchartsConfig";
-import { createPlotBands, createXAxisPlotBands } from "./highchartsUtils";
+import { createPlotBands } from "./highchartsUtils";
 import { getTooltipConfig } from "./HighchartsTooltip";
 import { CHART_CONFIG } from "./constants";
 import { formatGBValue, calculateNiceTicks } from "./utils";
@@ -41,7 +42,6 @@ export function HighchartsBarChart({
   const xAxisScrollRef = React.useRef<HTMLDivElement>(null);
   const isScrollSyncing = React.useRef(false);
   const mainChartRef = React.useRef<HighchartsReact.RefObject>(null);
-  const xAxisChartRef = React.useRef<HighchartsReact.RefObject>(null);
 
   // Scroll fade indicator states - start at right (newest dates)
   const [canScrollLeft, setCanScrollLeft] = React.useState(true);
@@ -282,68 +282,55 @@ export function HighchartsBarChart({
     ],
   };
 
-  // X-axis chart configuration (for sticky x-axis)
-  const xAxisChartOptions: Highcharts.Options = {
-    chart: {
-      type: "column",
-      height: 32,
-      marginTop: 0,
-      marginRight: CHART_CONFIG.RIGHT_MARGIN,
-      marginLeft: 0,
-      marginBottom: 18,
-      spacing: [0, 0, 0, 0],
-      animation: false,
-      backgroundColor: "#FFFFFF",
-    },
-    xAxis: {
-      categories: chartData.map((d) => d.label),
-      labels: {
-        enabled: true,
-        y: 14,
-        style: {
-          color: HIGHCHARTS_COLORS.text,
-          fontSize: "11px",
-          fontWeight: "500",
-        },
-        useHTML: true,
-        formatter: function() {
-          return `<span style="position: relative; z-index: 10;">${this.value}</span>`;
-        },
-      },
-      lineColor: HIGHCHARTS_COLORS.grid,
-      lineWidth: 0,
-      tickLength: 0,
-      plotBands: createXAxisPlotBands(chartData, weekBlocks, monthBlocks, viewMode),
-    },
-    yAxis: {
-      visible: false,
-      min: 0,
-      max: 1,
-    },
-    plotOptions: {
-      column: {
-        pointWidth: barWidth,
-        groupPadding: 0,
-        pointPadding: 0,
-      },
-    },
-    tooltip: { enabled: false },
-    series: [
-      {
-        name: "Hidden",
-        type: "column",
-        data: chartData.map(() => null),
-        color: "transparent",
-        enableMouseTracking: false,
-      },
-    ],
+  // X-axis rendered manually for proper control over backgrounds and labels
+  const X_AXIS_HEIGHT = 28;
+  
+  // Calculate which bars belong to which week for background coloring
+  const getBarBackgroundColor = (index: number): string => {
+    if (viewMode === "day") {
+      // Find which week block this index belongs to
+      if (weekBlocks.length === 0) {
+        // No week blocks - use every 7 days
+        const weekIndex = Math.floor(index / 7);
+        return weekIndex % 2 === 0 ? HIGHCHARTS_COLORS.background : "transparent";
+      }
+      // Check which week block contains this bar
+      for (let i = 0; i < weekBlocks.length; i++) {
+        const startIdx = chartData.findIndex((d) => d.label === weekBlocks[i].start);
+        const endIdx = chartData.findIndex((d) => d.label === weekBlocks[i].end);
+        if (index >= startIdx && index <= endIdx) {
+          return i % 2 === 0 ? HIGHCHARTS_COLORS.background : "transparent";
+        }
+      }
+      return "transparent";
+    }
+    if (viewMode === "week") {
+      // Find which month block this index belongs to
+      for (let i = 0; i < monthBlocks.length; i++) {
+        const startIdx = chartData.findIndex((d) => d.label === monthBlocks[i].start);
+        const endIdx = chartData.findIndex((d) => d.label === monthBlocks[i].end);
+        if (index >= startIdx && index <= endIdx) {
+          return i % 2 === 0 ? HIGHCHARTS_COLORS.background : "transparent";
+        }
+      }
+      return "transparent";
+    }
+    if (viewMode === "month") {
+      return index % 2 === 0 ? HIGHCHARTS_COLORS.background : "transparent";
+    }
+    return "transparent";
   };
 
+  // Calculate bar slot width for x-axis
+  const barSlotWidth = barWidth + BAR_SIZING.BAR_SPACING;
+
   // Y-axis labels (rendered manually for sticky positioning)
+  // Add padding at top to prevent first label from being cut off
+  const Y_AXIS_TOP_PADDING = 8; // Space for the top label
   const yAxisLabels = ticks.map((tick) => {
     const isZero = tick === 0;
-    const topOffset = isZero ? 15 : 0;
-    // Simple percentage position since margin is 0
+    const topOffset = isZero ? 12 : 0;
+    // Position within the padded area
     const positionPercent = ((maxDomainValue - tick) / maxDomainValue) * 100;
     
     return (
@@ -351,7 +338,8 @@ export function HighchartsBarChart({
         key={tick}
         className="absolute right-2 text-right"
         style={{
-          top: `calc(${positionPercent}% - ${topOffset}px)`,
+          // Account for top padding in positioning
+          top: `calc(${Y_AXIS_TOP_PADDING}px + ${positionPercent}% * (1 - ${Y_AXIS_TOP_PADDING * 2} / 100) - ${topOffset}px)`,
           color: HIGHCHARTS_COLORS.text,
           fontSize: "11px",
           fontWeight: 500,
@@ -370,7 +358,7 @@ export function HighchartsBarChart({
       {/* Main content row: Fixed Y-Axis + Scrollable Chart */}
       <div className="flex-1 flex flex-row overflow-hidden relative">
         {/* Sticky Y-Axis - doesn't scroll horizontally */}
-        <div className="shrink-0 bg-card relative" style={{ width: 60 }}>
+        <div className="shrink-0 bg-card relative" style={{ width: 60, paddingTop: Y_AXIS_TOP_PADDING, paddingBottom: Y_AXIS_TOP_PADDING }}>
           {yAxisLabels}
         </div>
 
@@ -401,6 +389,7 @@ export function HighchartsBarChart({
           ref={chartScrollRef}
           onScroll={handleChartScroll}
           className="flex-1 overflow-x-auto overflow-y-hidden scroll-touch scrollbar-thin scrollbar-thumb-border/30 scrollbar-track-transparent"
+          style={{ paddingTop: Y_AXIS_TOP_PADDING, paddingBottom: Y_AXIS_TOP_PADDING }}
         >
           <div style={{ width: `${chartWidth}px`, height: "100%" }} className="pr-4">
             <HighchartsReact
@@ -413,24 +402,48 @@ export function HighchartsBarChart({
         </div>
       </div>
 
-      {/* Sticky X-Axis - synced horizontal scroll */}
+      {/* Sticky X-Axis - manually rendered for proper background coverage */}
       <div className="flex flex-row shrink-0 overflow-hidden">
         {/* Corner area to align with Y-axis */}
         <div style={{ width: 60 }} className="shrink-0 bg-card" />
 
-        {/* Scrollable X-axis */}
+        {/* Scrollable X-axis with manual labels and backgrounds */}
         <div
           ref={xAxisScrollRef}
           onScroll={handleXAxisScroll}
           className="flex-1 overflow-x-auto overflow-y-hidden scroll-touch scrollbar-none"
         >
-          <div style={{ width: `${chartWidth}px`, height: 32 }} className="pr-4">
-            <HighchartsReact
-              ref={xAxisChartRef}
-              highcharts={Highcharts}
-              options={xAxisChartOptions}
-              containerProps={{ style: { height: "100%", width: "100%" } }}
-            />
+          <div 
+            style={{ 
+              width: `${chartWidth}px`, 
+              height: X_AXIS_HEIGHT,
+              paddingRight: CHART_CONFIG.RIGHT_MARGIN,
+            }} 
+            className="flex"
+          >
+            {chartData.map((item, index) => (
+              <div
+                key={item.label}
+                style={{
+                  width: barSlotWidth,
+                  height: "100%",
+                  backgroundColor: getBarBackgroundColor(index),
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <span
+                  style={{
+                    color: HIGHCHARTS_COLORS.text,
+                    fontSize: "11px",
+                    fontWeight: 500,
+                  }}
+                >
+                  {item.label}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
