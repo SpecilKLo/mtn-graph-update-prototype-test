@@ -328,7 +328,7 @@ export function HighchartsBarChart({
   const Y_AXIS_TOP_PADDING = 12; // Prevent top label from being cut off
   const yAxisLabels = ticks.map((tick) => {
     const isZero = tick === 0;
-    // Simple percentage-based positioning that matches chart grid lines
+    // Position as percentage of available height (after padding)
     const positionPercent = ((maxDomainValue - tick) / maxDomainValue) * 100;
     // Offset the 0 label slightly up to prevent clipping at bottom
     const bottomOffset = isZero ? 15 : 0;
@@ -338,7 +338,7 @@ export function HighchartsBarChart({
         key={tick}
         className="absolute right-2 text-right"
         style={{
-          top: `calc(${Y_AXIS_TOP_PADDING}px + ${positionPercent}% * (1 - ${Y_AXIS_TOP_PADDING * 2 / 100}) - ${bottomOffset}px)`,
+          top: `calc(${positionPercent}% - ${bottomOffset}px)`,
           color: HIGHCHARTS_COLORS.text,
           fontSize: "11px",
           fontWeight: 500,
@@ -357,8 +357,10 @@ export function HighchartsBarChart({
       {/* Main content row: Fixed Y-Axis + Scrollable Chart */}
       <div className="flex-1 flex flex-row overflow-hidden relative">
         {/* Sticky Y-Axis - doesn't scroll horizontally */}
-        <div className="shrink-0 bg-card relative" style={{ width: 60, paddingTop: Y_AXIS_TOP_PADDING }}>
-          {yAxisLabels}
+        <div className="shrink-0 bg-card relative overflow-visible" style={{ width: 60, paddingTop: Y_AXIS_TOP_PADDING }}>
+          <div className="relative h-full">
+            {yAxisLabels}
+          </div>
         </div>
 
         {/* Left fade indicator */}
