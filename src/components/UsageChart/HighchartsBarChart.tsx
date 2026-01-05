@@ -284,10 +284,10 @@ export function HighchartsBarChart({
     chart: {
       type: "column",
       height: 40,
-      marginTop: 10,
+      marginTop: 0,
       marginRight: CHART_CONFIG.RIGHT_MARGIN,
       marginLeft: 0,
-      marginBottom: 20,
+      marginBottom: 0,
       spacing: [0, 0, 0, 0],
       animation: false,
       backgroundColor: "transparent",
@@ -296,7 +296,7 @@ export function HighchartsBarChart({
       categories: chartData.map((d) => d.label),
       labels: {
         enabled: true,
-        y: 15,
+        y: 25,
         style: {
           color: HIGHCHARTS_COLORS.text,
           fontSize: "11px",
@@ -306,7 +306,11 @@ export function HighchartsBarChart({
       lineColor: HIGHCHARTS_COLORS.grid,
       lineWidth: 1,
       tickLength: 0,
-      plotBands: createXAxisPlotBands(chartData, weekBlocks, monthBlocks, viewMode),
+      plotBands: createXAxisPlotBands(chartData, weekBlocks, monthBlocks, viewMode).map(band => ({
+        ...band,
+        // Extend plotBands to cover entire x-axis area height
+        zIndex: 0,
+      })),
     },
     yAxis: {
       visible: false,
@@ -333,18 +337,19 @@ export function HighchartsBarChart({
   };
 
   // Y-axis labels (rendered manually for sticky positioning)
+  // Chart area starts at CHART_MARGIN_TOP and ends at 100% of container height
   const yAxisLabels = ticks.map((tick) => {
     const isZero = tick === 0;
     const topOffset = isZero ? 15 : 0;
-    // Position relative to chart area (after margin)
-    const chartAreaPercent = ((maxDomainValue - tick) / maxDomainValue) * 100;
+    // Position: margin + (position within chart area as percentage of remaining space)
+    const positionPercent = (maxDomainValue - tick) / maxDomainValue;
     
     return (
       <div
         key={tick}
         className="absolute right-2 text-right"
         style={{
-          top: `calc(${CHART_MARGIN_TOP}px + ${chartAreaPercent}% * (1 - ${CHART_MARGIN_TOP} / 100) - ${topOffset}px)`,
+          top: `calc(${CHART_MARGIN_TOP}px + ${positionPercent * 100}% - ${positionPercent * CHART_MARGIN_TOP}px - ${topOffset}px)`,
           color: HIGHCHARTS_COLORS.text,
           fontSize: "11px",
           fontWeight: 500,
@@ -407,7 +412,7 @@ export function HighchartsBarChart({
       </div>
 
       {/* Sticky X-Axis - synced horizontal scroll */}
-      <div className="flex flex-row shrink-0 overflow-hidden border-t border-border/20">
+      <div className="flex flex-row shrink-0 overflow-hidden">
         {/* Corner area to align with Y-axis */}
         <div style={{ width: 60 }} className="shrink-0 bg-card" />
 
@@ -417,7 +422,7 @@ export function HighchartsBarChart({
           onScroll={handleXAxisScroll}
           className="flex-1 overflow-x-auto overflow-y-hidden scroll-touch scrollbar-none"
         >
-          <div style={{ width: `${chartWidth}px`, height: 40 }} className="pr-4">
+          <div style={{ width: `${chartWidth}px`, height: 36 }} className="pr-4">
             <HighchartsReact
               ref={xAxisChartRef}
               highcharts={Highcharts}
