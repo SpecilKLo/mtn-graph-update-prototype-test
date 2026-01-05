@@ -226,7 +226,7 @@ export function HighchartsLineChart({
               lineWidth: 2,
               dashStyle: "ShortDash" as const,
               marker: {
-                enabled: false,
+                fillColor: HIGHCHARTS_COLORS.overUsage,
               },
             },
           ]
