@@ -68,3 +68,46 @@ export function calculateHighchartsChartWidth(
 export function calculateHighchartsBarWidth(dynamicBarSize: number): number {
   return Math.max(dynamicBarSize, BAR_SIZING.MIN_VERTICAL_BAR_WIDTH);
 }
+
+// Responsive chart dimensions that fill available container space
+export interface ResponsiveChartDimensions {
+  chartWidth: number;
+  barWidth: number;
+  barSpacing: number;
+}
+
+export function calculateResponsiveChartDimensions(
+  dataCount: number,
+  containerWidth: number,
+  dynamicBarSize: number
+): ResponsiveChartDimensions {
+  if (dataCount === 0) {
+    return { chartWidth: containerWidth, barWidth: 75, barSpacing: 35 };
+  }
+
+  const minBarWidth = Math.max(dynamicBarSize, BAR_SIZING.MIN_VERTICAL_BAR_WIDTH);
+  const minSlotWidth = minBarWidth + BAR_SIZING.BAR_SPACING;
+  const minRequiredWidth = dataCount * minSlotWidth;
+
+  // If container is wider than required, expand bars/spacing to fill it
+  if (containerWidth > minRequiredWidth && containerWidth > 0) {
+    const availableSlotWidth = containerWidth / dataCount;
+    // Cap maximum bar width to prevent excessively wide bars
+    const maxBarWidth = 150;
+    const expandedBarWidth = Math.min(maxBarWidth, availableSlotWidth * 0.68);
+    const expandedSpacing = availableSlotWidth - expandedBarWidth;
+
+    return {
+      chartWidth: containerWidth,
+      barWidth: expandedBarWidth,
+      barSpacing: expandedSpacing,
+    };
+  }
+
+  // Otherwise use minimum sizing (scrolling will be enabled)
+  return {
+    chartWidth: minRequiredWidth,
+    barWidth: minBarWidth,
+    barSpacing: BAR_SIZING.BAR_SPACING,
+  };
+}
