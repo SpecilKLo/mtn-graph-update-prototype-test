@@ -188,7 +188,7 @@ export function HighchartsBarChart({
   const mainChartOptions: Highcharts.Options = {
     chart: {
       type: "column",
-      marginTop: 24,
+      marginTop: 0,
       marginRight: CHART_CONFIG.RIGHT_MARGIN,
       marginLeft: 0,
       marginBottom: 0,
@@ -341,7 +341,7 @@ export function HighchartsBarChart({
         key={tick}
         className="absolute right-2 text-right"
         style={{
-          top: `calc(24px + ${position}% * 0.92 - ${topOffset}px)`,
+          top: `calc(${position}% - ${topOffset}px)`,
           color: HIGHCHARTS_COLORS.text,
           fontSize: "11px",
           fontWeight: 500,
