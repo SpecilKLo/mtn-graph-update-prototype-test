@@ -4,8 +4,8 @@ import { subMonths, startOfMonth } from "date-fns";
 import { Card } from "../ui/card";
 import { ChartHeader } from "./ChartHeader";
 import { ChartFooter } from "./ChartFooter";
-import { VerticalBarChart } from "./VerticalBarChart";
-import { HorizontalLineChart } from "./HorizontalLineChart";
+import { HighchartsBarChart } from "./HighchartsBarChart";
+import { HighchartsLineChart } from "./HighchartsLineChart";
 import { CHART_CONFIG } from "./constants";
 import {
   generateDailyData,
@@ -117,8 +117,8 @@ export function UsageChart() {
         {/* Main Chart Content Area */}
         <div className="flex-1 overflow-hidden flex flex-col w-full bg-card">
           {orientation === 'vertical' ? (
-            /* Vertical orientation - standard bar chart */
-            <VerticalBarChart
+            /* Vertical orientation - Highcharts bar chart */
+            <HighchartsBarChart
               chartData={chartData}
               maxDomainValue={maxDomainValue}
               dynamicBarSize={dynamicBarSize}
@@ -128,8 +128,8 @@ export function UsageChart() {
               monthBlocks={monthBlocks}
             />
           ) : (
-            /* Horizontal orientation - line chart */
-            <HorizontalLineChart
+            /* Horizontal orientation - Highcharts line chart */
+            <HighchartsLineChart
               chartData={chartData}
               maxDomainValue={maxDomainValue}
               isMounted={isMounted}
