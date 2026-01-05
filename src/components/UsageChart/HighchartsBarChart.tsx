@@ -440,7 +440,8 @@ export function HighchartsBarChart({
             style={{ 
               width: `${chartWidth}px`, 
               height: X_AXIS_HEIGHT,
-              paddingRight: CHART_CONFIG.RIGHT_MARGIN,
+              paddingLeft: barSlotWidth / 2,
+              paddingRight: CHART_CONFIG.RIGHT_MARGIN + barSlotWidth / 2,
             }} 
             className="flex"
           >
