@@ -47,6 +47,8 @@
     "cmdk": "^1.1.1",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.6.0",
+    "highcharts": "^12.4.0",
+    "highcharts-react-official": "^3.2.3",
     "input-otp": "^1.4.2",
     "jsdom": "^27.3.0",
     "lucide-react": "^0.462.0",
