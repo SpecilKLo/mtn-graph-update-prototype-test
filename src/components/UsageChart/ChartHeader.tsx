@@ -104,14 +104,8 @@ export const ChartHeader = ({
                 </SelectContent>
               </Select>
 
-              {/* Custom range inputs - smooth inline expand */}
-              <div 
-                className={`flex items-center transition-all duration-300 ease-out overflow-hidden ${
-                  rangePreset === "custom" 
-                    ? "max-w-[300px] opacity-100" 
-                    : "max-w-0 opacity-0"
-                }`}
-              >
+              {/* Custom range inputs - only render when custom is selected */}
+              {rangePreset === "custom" && (
                 <div className="flex items-center gap-1 bg-muted px-2 py-1.5 rounded-lg border border-border">
                   <Select 
                     value={format(customRange.from, "yyyy-MM")} 
@@ -147,7 +141,7 @@ export const ChartHeader = ({
                     </SelectContent>
                   </Select>
                 </div>
-              </div>
+              )}
             </>
           )}
 
