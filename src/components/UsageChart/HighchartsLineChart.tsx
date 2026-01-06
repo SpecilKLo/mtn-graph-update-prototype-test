@@ -326,10 +326,18 @@ export function HighchartsLineChart({
   const barSlotWidth = chartData.length > 0 ? highchartsPlotWidth / chartData.length : barWidth + barSpacing;
 
   // Y-axis labels (rendered manually for sticky positioning)
+  // Line chart uses marginTop: 24 in Highcharts, which shifts the plot area down.
+  // We must account for this in our manual label positioning.
+  const CHART_MARGIN_TOP = 24; // Must match mainChartOptions.chart.marginTop
   const Y_AXIS_TOP_PADDING = 12; // Prevent top label from being cut off
+  
+  // Calculate total available height for labels (excluding the top padding applied to container)
+  // The plot area starts at CHART_MARGIN_TOP within Highcharts, so labels need the same offset
   const yAxisLabels = ticks.map((tick) => {
     const isZero = tick === 0;
+    // Position as percentage of plot height (0% = top of plot area at max value, 100% = bottom at 0)
     const positionPercent = ((maxDomainValue - tick) / maxDomainValue) * 100;
+    // Offset for 0 label to prevent clipping
     const bottomOffset = isZero ? 15 : 0;
 
     return (
@@ -337,7 +345,9 @@ export function HighchartsLineChart({
         key={tick}
         className="absolute right-2 text-right"
         style={{
-          top: `calc(${positionPercent}% - ${bottomOffset}px)`,
+          // Start from CHART_MARGIN_TOP (where Highcharts plot actually begins), 
+          // then apply percentage within the remaining plot height
+          top: `calc(${CHART_MARGIN_TOP}px + (100% - ${CHART_MARGIN_TOP}px) * ${positionPercent / 100} - ${bottomOffset}px)`,
           color: HIGHCHARTS_COLORS.text,
           fontSize: "11px",
           fontWeight: 500,
