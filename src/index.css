@@ -162,3 +162,29 @@
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain;
 }
+
+/* M3 Motion Design Tokens */
+:root {
+  /* M3 Easing curves */
+  --m3-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --m3-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --m3-easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --m3-easing-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+  
+  /* M3 Duration tokens */
+  --m3-duration-short1: 50ms;
+  --m3-duration-short2: 100ms;
+  --m3-duration-short3: 150ms;
+  --m3-duration-short4: 200ms;
+  --m3-duration-medium1: 250ms;
+  --m3-duration-medium2: 300ms;
+  --m3-duration-medium3: 350ms;
+  --m3-duration-medium4: 400ms;
+  --m3-duration-long1: 450ms;
+  --m3-duration-long2: 500ms;
+}
+
+/* M3 Transition utility */
+.m3-transition {
+  transition: all var(--m3-duration-short4) var(--m3-easing-standard);
+}
