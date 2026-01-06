@@ -268,9 +268,18 @@ export function HighchartsBarChart({
         color: HIGHCHARTS_COLORS.overUsage,
         dataLabels: {
           enabled: true,
+          inside: true,
+          verticalAlign: "top",
+          y: 4,
           formatter: function () {
             if (!this.y || this.y === 0) return "";
             return formatGBValue(this.y);
+          },
+          style: {
+            color: "black",
+            fontSize: "11px",
+            fontWeight: "600",
+            textOutline: "none",
           },
         },
       } as Highcharts.SeriesColumnOptions,
