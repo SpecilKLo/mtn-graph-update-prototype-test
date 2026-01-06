@@ -189,12 +189,12 @@ export function HighchartsBarChart({
       dataLabels: overUsage > 0 ? {
         enabled: true,
         inside: !labelShouldBeOutside,
-        verticalAlign: labelShouldBeOutside ? 'top' : 'middle',
-        y: labelShouldBeOutside ? -18 : 0,
+        verticalAlign: 'top' as const,
+        y: labelShouldBeOutside ? -18 : 4,
         style: {
           color: 'black',
           fontSize: '11px',
-          fontWeight: '700',
+          fontWeight: '600',
           textOutline: 'none',
         },
       } : { enabled: false },
