@@ -201,7 +201,7 @@ export function HighchartsBarChart({
     };
   });
 
-  const CHART_MARGIN_TOP = 0;
+  const CHART_MARGIN_TOP = 24; // Matches line chart for consistent Y-axis label alignment
 
   // Main chart configuration
   const mainChartOptions: Highcharts.Options = {
@@ -355,12 +355,15 @@ export function HighchartsBarChart({
   const barSlotWidth = chartData.length > 0 ? highchartsPlotWidth / chartData.length : barWidth + barSpacing;
 
   // Y-axis labels (rendered manually for sticky positioning)
+  // Bar chart uses marginTop: 24 in Highcharts, which shifts the plot area down.
+  // We must account for this in our manual label positioning.
   const Y_AXIS_TOP_PADDING = 12; // Prevent top label from being cut off
+  
   const yAxisLabels = ticks.map((tick) => {
     const isZero = tick === 0;
-    // Position as percentage of available height (after padding)
+    // Position as percentage of plot height (0% = top of plot area at max value, 100% = bottom at 0)
     const positionPercent = ((maxDomainValue - tick) / maxDomainValue) * 100;
-    // Offset the 0 label slightly up to prevent clipping at bottom
+    // Offset for 0 label to prevent clipping
     const bottomOffset = isZero ? 15 : 0;
     
     return (
@@ -368,7 +371,9 @@ export function HighchartsBarChart({
         key={tick}
         className="absolute right-2 text-right"
         style={{
-          top: `calc(${positionPercent}% - ${bottomOffset}px)`,
+          // Start from CHART_MARGIN_TOP (where Highcharts plot actually begins), 
+          // then apply percentage within the remaining plot height
+          top: `calc(${CHART_MARGIN_TOP}px + (100% - ${CHART_MARGIN_TOP}px) * ${positionPercent / 100} - ${bottomOffset}px)`,
           color: HIGHCHARTS_COLORS.text,
           fontSize: "11px",
           fontWeight: 500,
