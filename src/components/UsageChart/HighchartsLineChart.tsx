@@ -320,8 +320,10 @@ export function HighchartsLineChart({
     return "transparent";
   };
 
-  // Calculate bar slot width for x-axis (using responsive values)
-  const barSlotWidth = barWidth + barSpacing;
+  // Calculate ACTUAL Highcharts slot width - must match exactly what Highcharts uses
+  // Highcharts plot width = chartWidth - marginRight, then divided by category count
+  const highchartsPlotWidth = chartWidth - CHART_CONFIG.RIGHT_MARGIN;
+  const barSlotWidth = chartData.length > 0 ? highchartsPlotWidth / chartData.length : barWidth + barSpacing;
 
   // Y-axis labels (rendered manually for sticky positioning)
   const Y_AXIS_TOP_PADDING = 12; // Prevent top label from being cut off
