@@ -92,7 +92,8 @@ export const ChartHeader = ({
           ) : (
             <>
               <Select value={rangePreset} onValueChange={onPresetChange}>
-                <SelectTrigger className="w-[180px] h-[40px] bg-background border border-border rounded-lg text-primary font-normal focus:ring-0 focus:ring-offset-0 text-sm">
+                <SelectTrigger className="w-[200px] h-[40px] bg-background border border-border rounded-lg text-primary font-normal focus:ring-0 focus:ring-offset-0 text-sm">
+                  <CalendarIcon className="mr-2 h-4 w-4 text-muted-foreground shrink-0" />
                   <SelectValue placeholder="Select range" />
                 </SelectTrigger>
                 <SelectContent className="bg-popover border-border">
