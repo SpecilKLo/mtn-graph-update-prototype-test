@@ -243,7 +243,6 @@ export function HighchartsBarChart({
         groupPadding: 0,
         pointPadding: 0,
         borderWidth: 0,
-        borderRadius: 0,
         animation: { duration: HIGHCHARTS_ANIMATION.duration },
         // Unified hover: treat both series as one bar for tooltip
         states: {
