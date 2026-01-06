@@ -326,18 +326,22 @@ export function HighchartsLineChart({
   const barSlotWidth = chartData.length > 0 ? highchartsPlotWidth / chartData.length : barWidth + barSpacing;
 
   // Y-axis labels (rendered manually for sticky positioning)
+  // Must match bar chart: padding creates offset, labels positioned relative to plot area
   const Y_AXIS_TOP_PADDING = 12; // Prevent top label from being cut off
+  const CHART_TOP_MARGIN = 24; // Matches mainChartOptions.chart.marginTop
   const yAxisLabels = ticks.map((tick) => {
     const isZero = tick === 0;
-    const positionPercent = ((maxDomainValue - tick) / maxDomainValue) * 100;
     const bottomOffset = isZero ? 15 : 0;
+    // Position relative to the plot area, accounting for Y_AXIS_TOP_PADDING and chart marginTop
+    const positionPercent = ((maxDomainValue - tick) / maxDomainValue) * 100;
 
     return (
       <div
         key={tick}
         className="absolute right-2 text-right"
         style={{
-          top: `calc(${positionPercent}% - ${bottomOffset}px)`,
+          // Offset by marginTop to align with the chart's plot area start
+          top: `calc(${CHART_TOP_MARGIN}px + ${positionPercent}% - ${bottomOffset}px)`,
           color: HIGHCHARTS_COLORS.text,
           fontSize: "11px",
           fontWeight: 500,
