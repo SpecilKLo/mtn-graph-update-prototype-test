@@ -198,10 +198,10 @@ export const ChartHeader = ({
       <div className="shrink-0 flex flex-col gap-3 px-4 sm:px-6 py-3 sm:py-4 border-b border-border/50 relative z-10 bg-card font-display">
         {/* Row 1: View mode tabs with menu on mobile/tablet */}
         <div className="flex items-center justify-between gap-3">
-          <div className="flex-1 flex items-center justify-center lg:justify-start">
+          <div className="flex-1 flex items-center justify-center lg:justify-start min-w-0">
             <Tooltip>
               <TooltipTrigger asChild>
-                <div>
+                <div className="w-full lg:w-auto">
                   <Tabs value={viewMode} onValueChange={(v) => onViewModeChange(v as ViewMode)} className="w-full lg:w-auto">
                     <AnimatedTabsList 
                       activeValue={viewMode}
@@ -222,8 +222,8 @@ export const ChartHeader = ({
             </Tooltip>
           </div>
           
-          {/* Mobile/Tablet menu button - hidden on desktop */}
-          <div className="lg:hidden">
+          {/* Mobile/Tablet menu button - visible below lg breakpoint */}
+          <div className="flex lg:hidden shrink-0">
             <MobileChartMenu />
           </div>
         </div>
