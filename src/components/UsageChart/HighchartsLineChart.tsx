@@ -420,11 +420,11 @@ export function HighchartsLineChart({
         >
           <div 
             style={{ 
-              width: `${chartWidth - CHART_CONFIG.RIGHT_MARGIN}px`, 
+              width: `${chartWidth}px`, 
               height: X_AXIS_HEIGHT,
               display: 'grid',
-              gridTemplateColumns: `repeat(${chartData.length}, 1fr)`,
-            }} 
+              gridTemplateColumns: `repeat(${chartData.length}, 1fr) ${CHART_CONFIG.RIGHT_MARGIN}px`,
+            }}
           >
             {chartData.map((item, index) => (
               <div
