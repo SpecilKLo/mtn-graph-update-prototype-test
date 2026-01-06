@@ -61,33 +61,34 @@ export const ChartHeader = ({
   return (
     <TooltipProvider delayDuration={200}>
       <div className="shrink-0 flex flex-col gap-3 px-4 sm:px-6 py-3 sm:py-4 border-b border-border/50 relative z-10 bg-card font-display">
-        {/* Top row: Tabs and controls */}
-        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 lg:gap-4">
-          <div className="flex items-center justify-center lg:justify-start">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div>
-                  <Tabs value={viewMode} onValueChange={(v) => onViewModeChange(v as ViewMode)} className="w-full lg:w-auto">
-                    <AnimatedTabsList 
-                      activeValue={viewMode}
-                      tabs={[
-                        { value: "day", label: "Daily View" },
-                        { value: "week", label: "Weekly View" },
-                        { value: "month", label: "Monthly View" },
-                      ]}
-                      onTabChange={(v) => onViewModeChange(v as ViewMode)}
-                      className="bg-muted h-10 p-1.5 rounded-lg gap-1 w-full lg:w-auto"
-                    />
-                  </Tabs>
-                </div>
-              </TooltipTrigger>
-              <TooltipContent className="m3-tooltip">
-                <p>Switch between daily, weekly, or monthly data views</p>
-              </TooltipContent>
-            </Tooltip>
-          </div>
+        {/* Row 1: View mode tabs - always on its own line on mobile */}
+        <div className="flex items-center justify-center lg:justify-start">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div>
+                <Tabs value={viewMode} onValueChange={(v) => onViewModeChange(v as ViewMode)} className="w-full lg:w-auto">
+                  <AnimatedTabsList 
+                    activeValue={viewMode}
+                    tabs={[
+                      { value: "day", label: "Daily View" },
+                      { value: "week", label: "Weekly View" },
+                      { value: "month", label: "Monthly View" },
+                    ]}
+                    onTabChange={(v) => onViewModeChange(v as ViewMode)}
+                    className="bg-muted h-10 p-1.5 rounded-lg gap-1 w-full lg:w-auto"
+                  />
+                </Tabs>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent className="m3-tooltip">
+              <p>Switch between daily, weekly, or monthly data views</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
 
-          <div className="flex items-center gap-3">
+        {/* Row 2: Date selector - its own line on mobile, inline on desktop */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          <div className="flex items-center justify-center sm:justify-start">
             {viewMode === "day" ? (
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -115,7 +116,7 @@ export const ChartHeader = ({
                 </TooltipContent>
               </Tooltip>
             ) : (
-              <>
+              <div className="flex items-center gap-3 flex-wrap justify-center sm:justify-start">
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div>
@@ -183,9 +184,12 @@ export const ChartHeader = ({
                     </TooltipContent>
                   </Tooltip>
                 )}
-              </>
+              </div>
             )}
+          </div>
 
+          {/* Chart toggle and Export - grouped together on their own line on mobile */}
+          <div className="flex items-center justify-center sm:justify-end gap-3">
             {/* Orientation toggle - styled toggle with icons */}
             <div className="relative flex items-center bg-white rounded-lg border border-border h-[40px] px-1">
               <Tooltip>
