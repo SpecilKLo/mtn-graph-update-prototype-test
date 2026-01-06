@@ -270,7 +270,10 @@ export function HighchartsBarChart({
           enabled: true,
           inside: true,
           verticalAlign: "top",
+          align: "center",
           y: 4,
+          crop: false,
+          overflow: "allow",
           formatter: function () {
             if (!this.y || this.y === 0) return "";
             return formatGBValue(this.y);
