@@ -257,7 +257,7 @@ export function HighchartsBarChart({
       },
     },
     tooltip: {
-      ...getTooltipConfig(chartData),
+      ...getTooltipConfig(chartData, true), // flip order for bar chart to match visual stacking
       shared: true, // Show both series in one tooltip
     },
     series: [
