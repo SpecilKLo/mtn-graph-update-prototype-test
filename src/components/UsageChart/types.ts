@@ -18,6 +18,7 @@ export type MonthBlock = {
   month: string;
   start: string;
   end: string;
+  totalUsage?: number;
 };
 
 // Week block for daily view reference areas
