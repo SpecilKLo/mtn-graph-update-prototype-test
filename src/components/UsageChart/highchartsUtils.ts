@@ -67,17 +67,20 @@ export function createPlotBands(
     return monthBlocks.map((block, index) => {
       const startIdx = chartData.findIndex((d) => d.label === block.start);
       const endIdx = chartData.findIndex((d) => d.label === block.end);
-      const totalUsageText = block.totalUsage !== undefined 
-        ? `Total Usage: ${formatGBValue(block.totalUsage)}`
+      const totalUsageHtml = block.totalUsage !== undefined 
+        ? `<div style="display: inline-block; background-color: rgba(0,0,0,0.06); border-radius: 9999px; padding: 4px 12px; margin-top: 6px;">
+            <span style="font-size: 12px; font-weight: 400; color: #888;">Total Usage: </span>
+            <span style="font-size: 12px; font-weight: 600; color: #888;">${formatGBValue(block.totalUsage)}</span>
+          </div>`
         : '';
       return {
         from: startIdx - 0.5,
         to: endIdx + 0.5,
         color: index % 2 === 0 ? HIGHCHARTS_COLORS.background : "transparent",
         label: {
-          text: `<div style="display: flex; flex-direction: column; gap: 2px;">
+          text: `<div style="display: flex; flex-direction: column; align-items: flex-start;">
             <span style="font-size: 12px; font-weight: 500; color: ${HIGHCHARTS_COLORS.text};">${block.month}</span>
-            <span style="font-size: 10px; font-weight: 400; color: #888;">${totalUsageText}</span>
+            ${totalUsageHtml}
           </div>`,
           useHTML: true,
           style: {
@@ -87,8 +90,8 @@ export function createPlotBands(
           },
           align: "left" as const,
           verticalAlign: "top" as const,
-          x: 10,
-          y: 12,
+          x: 8,
+          y: 8,
         },
       };
     });
