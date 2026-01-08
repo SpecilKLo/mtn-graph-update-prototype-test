@@ -29,7 +29,7 @@ export function createPlotBands(
   monthBlocks: MonthBlock[],
   viewMode: ViewMode
 ): PlotBand[] {
-  // Daily view: alternating backgrounds for each week
+  // Daily view: alternating backgrounds for each week with week labels
   if (viewMode === "day") {
     // If no week blocks provided, create alternating bands per bar
     if (weekBlocks.length === 0) {
@@ -38,27 +38,52 @@ export function createPlotBands(
       let weekIndex = 0;
       for (let i = 0; i < chartData.length; i += 7) {
         const endIndex = Math.min(i + 6, chartData.length - 1);
-        // First week gets gray, then alternates
-        if (weekIndex % 2 === 0) {
-          bands.push({
-            from: i - 0.5,
-            to: endIndex + 0.5,
-            color: HIGHCHARTS_COLORS.background,
-          });
-        }
+        const weekNumber = weekIndex + 1;
+        bands.push({
+          from: i - 0.5,
+          to: endIndex + 0.5,
+          color: weekIndex % 2 === 0 ? HIGHCHARTS_COLORS.background : "transparent",
+          label: {
+            text: `<span style="font-size: 12px; font-weight: 500; color: ${HIGHCHARTS_COLORS.text};">Week ${weekNumber}</span>`,
+            useHTML: true,
+            style: {
+              color: HIGHCHARTS_COLORS.text,
+              fontSize: "12px",
+              fontWeight: "500",
+            },
+            align: "left" as const,
+            verticalAlign: "top" as const,
+            x: 12,
+            y: 20,
+          },
+        });
         weekIndex++;
       }
       return bands;
     }
     
-    // Gray background for even-indexed weeks (0, 2, 4...)
+    // Gray background for even-indexed weeks (0, 2, 4...) with week labels
     return weekBlocks.map((block, index) => {
       const startIdx = chartData.findIndex((d) => d.label === block.start);
       const endIdx = chartData.findIndex((d) => d.label === block.end);
+      const weekNumber = index + 1;
       return {
         from: startIdx - 0.5,
         to: endIdx + 0.5,
         color: index % 2 === 0 ? HIGHCHARTS_COLORS.background : "transparent",
+        label: {
+          text: `<span style="font-size: 12px; font-weight: 500; color: ${HIGHCHARTS_COLORS.text};">Week ${weekNumber}</span>`,
+          useHTML: true,
+          style: {
+            color: HIGHCHARTS_COLORS.text,
+            fontSize: "12px",
+            fontWeight: "500",
+          },
+          align: "left" as const,
+          verticalAlign: "top" as const,
+          x: 12,
+          y: 20,
+        },
       };
     });
   }
