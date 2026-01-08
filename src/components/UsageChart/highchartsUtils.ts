@@ -90,8 +90,8 @@ export function createPlotBands(
           },
           align: "left" as const,
           verticalAlign: "top" as const,
-          x: 8,
-          y: 8,
+          x: 12,
+          y: 20,
         },
       };
     });
