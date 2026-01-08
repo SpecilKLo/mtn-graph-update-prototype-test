@@ -1,5 +1,6 @@
 import type { ChartData, ViewMode, WeekBlock, MonthBlock } from "./types";
 import { HIGHCHARTS_COLORS, BAR_SIZING } from "./highchartsConfig";
+import { formatGBValue } from "./utils";
 
 // PlotBand interface for Highcharts
 export interface PlotBand {
@@ -8,6 +9,7 @@ export interface PlotBand {
   color: string;
   label?: {
     text: string;
+    useHTML?: boolean;
     style: {
       color: string;
       fontSize: string;
@@ -65,12 +67,19 @@ export function createPlotBands(
     return monthBlocks.map((block, index) => {
       const startIdx = chartData.findIndex((d) => d.label === block.start);
       const endIdx = chartData.findIndex((d) => d.label === block.end);
+      const totalUsageText = block.totalUsage !== undefined 
+        ? `Total Usage: ${formatGBValue(block.totalUsage)}`
+        : '';
       return {
         from: startIdx - 0.5,
         to: endIdx + 0.5,
         color: index % 2 === 0 ? HIGHCHARTS_COLORS.background : "transparent",
         label: {
-          text: block.month,
+          text: `<div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 12px; font-weight: 500; color: ${HIGHCHARTS_COLORS.text};">${block.month}</span>
+            <span style="font-size: 10px; font-weight: 400; color: #888;">${totalUsageText}</span>
+          </div>`,
+          useHTML: true,
           style: {
             color: HIGHCHARTS_COLORS.text,
             fontSize: "12px",
@@ -79,7 +88,7 @@ export function createPlotBands(
           align: "left" as const,
           verticalAlign: "top" as const,
           x: 10,
-          y: 18,
+          y: 12,
         },
       };
     });

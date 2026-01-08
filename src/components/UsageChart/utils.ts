@@ -114,26 +114,43 @@ export const generateMonthlyData = (from: Date, to: Date): ChartData[] => {
   });
 };
 
-// Calculate month blocks for weekly view reference areas
+// Calculate month blocks for weekly view reference areas with total usage
 export const calculateMonthBlocks = (chartData: ChartData[]): MonthBlock[] => {
   const blocks: MonthBlock[] = [];
   let currentBlock: MonthBlock | null = null;
+  let currentBlockData: ChartData[] = [];
   
   chartData.forEach((item) => {
     const monthName = format(item.date, "MMMM");
     if (!currentBlock || currentBlock.month !== monthName) {
-      if (currentBlock) blocks.push(currentBlock);
+      if (currentBlock) {
+        // Calculate total usage for the completed block
+        currentBlock.totalUsage = currentBlockData.reduce(
+          (acc, d) => acc + d.usage + (d.overUsage || 0), 
+          0
+        );
+        blocks.push(currentBlock);
+      }
       currentBlock = {
         month: monthName,
         start: item.label,
         end: item.label
       };
+      currentBlockData = [item];
     } else {
       currentBlock.end = item.label;
+      currentBlockData.push(item);
     }
   });
   
-  if (currentBlock) blocks.push(currentBlock);
+  if (currentBlock) {
+    // Calculate total usage for the last block
+    currentBlock.totalUsage = currentBlockData.reduce(
+      (acc, d) => acc + d.usage + (d.overUsage || 0), 
+      0
+    );
+    blocks.push(currentBlock);
+  }
   return blocks;
 };
 

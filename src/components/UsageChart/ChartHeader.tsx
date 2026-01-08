@@ -1,4 +1,4 @@
-import { format, subMonths } from "date-fns";
+import { format, subMonths, startOfMonth, endOfMonth, startOfYear, endOfYear } from "date-fns";
 import { Calendar as CalendarIcon, Download, BarChart3, TrendingUp, Menu } from "lucide-react";
 import { Button } from "../ui/button";
 import {
@@ -265,9 +265,31 @@ export const ChartHeader = ({
                       <Select value={rangePreset} onValueChange={onPresetChange}>
                         <SelectTrigger className="w-full lg:w-[200px] h-[40px] bg-background border border-border rounded-lg text-primary font-normal focus:ring-0 focus:ring-offset-0 text-sm">
                           <CalendarIcon className="mr-2 h-4 w-4 text-muted-foreground shrink-0" />
-                          <SelectValue placeholder="Select range" />
+                          <SelectValue>
+                            {rangePreset === "currentMonth" 
+                              ? format(new Date(), "MMMM yyyy")
+                              : rangePreset === "currentYear"
+                              ? format(new Date(), "yyyy")
+                              : rangePreset === "12months"
+                              ? "Last 12 Months"
+                              : rangePreset === "6months"
+                              ? "Last 6 Months"
+                              : rangePreset === "ytd"
+                              ? "Year to Date"
+                              : "Custom Range"}
+                          </SelectValue>
                         </SelectTrigger>
                         <SelectContent className="bg-popover border-border">
+                          {viewMode === "week" && (
+                            <SelectItem value="currentMonth">
+                              <span>{format(new Date(), "MMMM yyyy")}</span>
+                            </SelectItem>
+                          )}
+                          {viewMode === "month" && (
+                            <SelectItem value="currentYear">
+                              <span>{format(new Date(), "yyyy")}</span>
+                            </SelectItem>
+                          )}
                           <SelectItem value="12months"><span>Last 12 Months</span></SelectItem>
                           <SelectItem value="6months"><span>Last 6 Months</span></SelectItem>
                           <SelectItem value="ytd"><span>Year to Date</span></SelectItem>

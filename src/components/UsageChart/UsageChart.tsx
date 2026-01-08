@@ -1,5 +1,5 @@
 import * as React from "react";
-import { subMonths, startOfMonth } from "date-fns";
+import { subMonths, startOfMonth, endOfMonth, startOfYear, endOfYear } from "date-fns";
 
 import { Card } from "../ui/card";
 import { ChartHeader } from "./ChartHeader";
@@ -27,10 +27,11 @@ export function UsageChart() {
   
   // Date selection state
   const [selectedMonth, setSelectedMonth] = React.useState<Date>(new Date());
-  const [rangePreset, setRangePreset] = React.useState<string>("12months");
+  // Default: weekly view -> current month, monthly view -> current year
+  const [rangePreset, setRangePreset] = React.useState<string>("currentMonth");
   const [customRange, setCustomRange] = React.useState<DateRange>({
-    from: subMonths(new Date(), 11),
-    to: new Date(),
+    from: startOfMonth(new Date()),
+    to: endOfMonth(new Date()),
   });
   
   // UI state
@@ -73,7 +74,11 @@ export function UsageChart() {
   const handlePresetChange = (value: string) => {
     setRangePreset(value);
     const today = new Date();
-    if (value === "12months") {
+    if (value === "currentMonth") {
+      setCustomRange({ from: startOfMonth(today), to: endOfMonth(today) });
+    } else if (value === "currentYear") {
+      setCustomRange({ from: startOfYear(today), to: endOfYear(today) });
+    } else if (value === "12months") {
       setCustomRange({ from: subMonths(today, 11), to: today });
     } else if (value === "6months") {
       setCustomRange({ from: subMonths(today, 5), to: today });
@@ -81,6 +86,18 @@ export function UsageChart() {
       setCustomRange({ from: startOfMonth(new Date(today.getFullYear(), 0, 1)), to: today });
     }
   };
+
+  // Update preset when view mode changes
+  React.useEffect(() => {
+    const today = new Date();
+    if (viewMode === "week") {
+      setRangePreset("currentMonth");
+      setCustomRange({ from: startOfMonth(today), to: endOfMonth(today) });
+    } else if (viewMode === "month") {
+      setRangePreset("currentYear");
+      setCustomRange({ from: startOfYear(today), to: endOfYear(today) });
+    }
+  }, [viewMode]);
 
   const handleCustomRangeChange = (type: 'from' | 'to', value: string) => {
     if (!value) return;
