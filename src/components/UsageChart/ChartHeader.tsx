@@ -36,6 +36,8 @@ interface ChartHeaderProps {
   onExport: () => void;
   orientation: ChartOrientation;
   onOrientationChange: (orientation: ChartOrientation) => void;
+  totalUsage: number;
+  onJumpToToday: () => void;
 }
 
 export const ChartHeader = ({
@@ -50,7 +52,16 @@ export const ChartHeader = ({
   onExport,
   orientation,
   onOrientationChange,
+  totalUsage,
+  onJumpToToday,
 }: ChartHeaderProps) => {
+  // Format total usage with proper units
+  const formatUsage = (value: number) => {
+    if (value >= 1000) {
+      return `${(value / 1000).toFixed(2)} TB`;
+    }
+    return `${value.toFixed(2)} GB`;
+  };
   // Generate month options for the last 24 months
   const monthOptions = (() => {
     const options = [];
@@ -111,6 +122,23 @@ export const ChartHeader = ({
   // Desktop chart controls
   const DesktopChartControls = () => (
     <>
+      {/* Jump to Today button */}
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button 
+            variant="outline" 
+            size="icon"
+            className="h-[40px] w-[40px] border-border text-muted-foreground hover:bg-[#EAF2FB] hover:text-foreground rounded-lg m3-transition"
+            onClick={onJumpToToday}
+          >
+            <CalendarIcon className="h-4 w-4" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent className="m3-tooltip">
+          <p>Jump to today</p>
+        </TooltipContent>
+      </Tooltip>
+
       {/* Orientation toggle - styled toggle with icons */}
       <div className="relative flex items-center bg-white rounded-lg border border-border h-[40px] px-1">
         <Tooltip>
@@ -346,10 +374,27 @@ export const ChartHeader = ({
             </TooltipContent>
           </Tooltip>
 
-          {/* Right: Date selector + Orientation toggle + Export button */}
+          {/* Right: Date selector + Jump to Today + Orientation toggle + Export button + Total Usage */}
           <div className="flex items-center gap-3">
-            <DateSelector />
             <DesktopChartControls />
+            <DateSelector />
+            
+            {/* Total Usage display */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center gap-2 px-3 py-2 bg-background border border-border rounded-lg cursor-default">
+                  <span className="text-[13px] text-muted-foreground font-medium whitespace-nowrap">
+                    Total Usage:
+                  </span>
+                  <span className="text-[14px] font-bold text-primary whitespace-nowrap">
+                    {formatUsage(totalUsage)}
+                  </span>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent className="m3-tooltip">
+                <p>Combined regular and over usage for the selected period</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
 
@@ -365,9 +410,9 @@ export const ChartHeader = ({
                       <AnimatedTabsList 
                         activeValue={viewMode}
                         tabs={[
-                          { value: "day", label: "Daily View" },
-                          { value: "week", label: "Weekly View" },
-                          { value: "month", label: "Monthly View" },
+                          { value: "day", label: "Daily" },
+                          { value: "week", label: "Weekly" },
+                          { value: "month", label: "Monthly" },
                         ]}
                         onTabChange={(v) => onViewModeChange(v as ViewMode)}
                         className="bg-muted h-10 p-1.5 rounded-lg gap-1 w-full"

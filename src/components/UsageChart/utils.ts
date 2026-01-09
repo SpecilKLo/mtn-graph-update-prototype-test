@@ -226,6 +226,13 @@ export const calculateTotalUsage = (chartData: ChartData[]): number => {
   return chartData.reduce((acc, curr) => acc + curr.usage + (curr.overUsage || 0), 0);
 };
 
+// Calculate average usage per data point
+export const calculateAverageUsage = (chartData: ChartData[]): number => {
+  if (chartData.length === 0) return 0;
+  const total = chartData.reduce((acc, curr) => acc + curr.usage + (curr.overUsage || 0), 0);
+  return total / chartData.length;
+};
+
 // Calculate dynamic chart height based on data count
 export const calculateChartHeight = (dataCount: number): number => {
   const { 
