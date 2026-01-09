@@ -427,7 +427,7 @@ export function HighchartsBarChart({
           className="flex-1 overflow-x-auto overflow-y-hidden scroll-touch scrollbar-thin scrollbar-thumb-border/30 scrollbar-track-transparent"
           style={{ paddingTop: Y_AXIS_TOP_PADDING }}
         >
-          <div style={{ width: `${chartWidth}px`, height: "100%" }} className="relative">
+          <div style={{ width: `${Math.max(chartWidth, containerWidth)}px`, height: "100%" }} className="relative">
             <HighchartsReact
               ref={mainChartRef}
               highcharts={Highcharts}
@@ -456,7 +456,7 @@ export function HighchartsBarChart({
         >
           <div 
             style={{ 
-              width: `${chartWidth}px`, 
+              width: `${Math.max(chartWidth, containerWidth)}px`, 
               height: X_AXIS_HEIGHT,
               display: 'grid',
               gridTemplateColumns: `repeat(${chartData.length}, 1fr) ${CHART_CONFIG.RIGHT_MARGIN}px`,
