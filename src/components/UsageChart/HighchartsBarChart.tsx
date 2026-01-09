@@ -25,6 +25,7 @@ interface HighchartsBarChartProps {
   viewMode: ViewMode;
   weekBlocks: WeekBlock[];
   monthBlocks: MonthBlock[];
+  averageUsage: number;
 }
 
 export function HighchartsBarChart({
@@ -35,6 +36,7 @@ export function HighchartsBarChart({
   viewMode,
   weekBlocks,
   monthBlocks,
+  averageUsage,
 }: HighchartsBarChartProps) {
   const chartScrollRef = React.useRef<HTMLDivElement>(null);
   const xAxisScrollRef = React.useRef<HTMLDivElement>(null);
@@ -235,6 +237,25 @@ export function HighchartsBarChart({
       title: {
         text: null,
       },
+      plotLines: [{
+        value: averageUsage,
+        color: '#D4E5F7',
+        dashStyle: 'Dash',
+        width: 2,
+        zIndex: 5,
+        label: {
+          text: `<span style="background-color: #D4E5F7; color: #1B5087; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">${formatGBValue(averageUsage)}</span>`,
+          useHTML: true,
+          align: 'left',
+          x: 0,
+          y: -2,
+          style: {
+            color: '#1B5087',
+            fontSize: '11px',
+            fontWeight: '600',
+          },
+        },
+      }],
     },
     plotOptions: {
       column: {
@@ -385,6 +406,32 @@ export function HighchartsBarChart({
     );
   });
 
+  // Average usage label for sticky Y-axis
+  const averagePositionPercent = ((maxDomainValue - averageUsage) / maxDomainValue) * 100;
+  const averageLabel = (
+    <div
+      className="absolute left-0 z-20"
+      style={{
+        top: `calc(${CHART_MARGIN_TOP}px + (100% - ${CHART_MARGIN_TOP}px) * ${averagePositionPercent / 100})`,
+        transform: "translateY(-50%)",
+      }}
+    >
+      <span 
+        style={{
+          backgroundColor: '#D4E5F7',
+          color: '#1B5087',
+          padding: '2px 6px',
+          borderRadius: '4px',
+          fontSize: '11px',
+          fontWeight: 600,
+          whiteSpace: 'nowrap',
+        }}
+      >
+        {formatGBValue(averageUsage)}
+      </span>
+    </div>
+  );
+
   if (!isMounted) return null;
 
   return (
@@ -395,6 +442,7 @@ export function HighchartsBarChart({
         <div className="shrink-0 bg-card relative overflow-visible" style={{ width: 60, paddingTop: Y_AXIS_TOP_PADDING }}>
           <div className="relative h-full">
             {yAxisLabels}
+            {averageLabel}
           </div>
         </div>
 

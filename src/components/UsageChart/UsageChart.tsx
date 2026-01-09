@@ -15,6 +15,7 @@ import {
   calculateWeekBlocks,
   calculateMaxDomain,
   calculateTotalUsage,
+  calculateAverageUsage,
   calculateDynamicBarSize,
   exportToCSV,
 } from "./utils";
@@ -50,6 +51,7 @@ export function UsageChart() {
 
   // Computed values
   const totalUsage = React.useMemo(() => calculateTotalUsage(chartData), [chartData]);
+  const averageUsage = React.useMemo(() => calculateAverageUsage(chartData), [chartData]);
   const maxDomainValue = React.useMemo(() => calculateMaxDomain(chartData), [chartData]);
   const dynamicBarSize = React.useMemo(() => calculateDynamicBarSize(chartData.length), [chartData.length]);
   
@@ -111,6 +113,20 @@ export function UsageChart() {
     setSelectedMonth(new Date(year, month - 1, 1));
   };
 
+  // Jump to today - reset date selection to current date
+  const handleJumpToToday = () => {
+    const today = new Date();
+    if (viewMode === "day") {
+      setSelectedMonth(today);
+    } else if (viewMode === "week") {
+      setRangePreset("currentMonth");
+      setCustomRange({ from: startOfMonth(today), to: endOfMonth(today) });
+    } else {
+      setRangePreset("currentYear");
+      setCustomRange({ from: startOfYear(today), to: endOfYear(today) });
+    }
+  };
+
   const handleExport = () => exportToCSV(chartData);
 
   return (
@@ -129,6 +145,8 @@ export function UsageChart() {
           onExport={handleExport}
           orientation={orientation}
           onOrientationChange={setOrientation}
+          totalUsage={totalUsage}
+          onJumpToToday={handleJumpToToday}
         />
         
         {/* Main Chart Content Area */}
@@ -143,6 +161,7 @@ export function UsageChart() {
               viewMode={viewMode}
               weekBlocks={weekBlocks}
               monthBlocks={monthBlocks}
+              averageUsage={averageUsage}
             />
           ) : (
             /* Horizontal orientation - Highcharts line chart */
@@ -154,11 +173,12 @@ export function UsageChart() {
               weekBlocks={weekBlocks}
               monthBlocks={monthBlocks}
               dynamicBarSize={dynamicBarSize}
+              averageUsage={averageUsage}
             />
           )}
 
           {/* Footer stays fixed, doesn't scroll horizontally */}
-          <ChartFooter totalUsage={totalUsage} />
+          <ChartFooter />
         </div>
       </Card>
     </div>
