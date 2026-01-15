@@ -222,8 +222,10 @@ export function HighchartsLineChart({
             },
           },
         },
-        // Unified hover: treat both series as one for tooltip
-        stickyTracking: false,
+        // Enable tracking across the entire chart area
+        stickyTracking: true,
+        // Snap to nearest point by x-coordinate for smooth horizontal tracking
+        findNearestPointBy: "x",
       },
     },
     tooltip: {
