@@ -361,13 +361,11 @@ export const ChartHeader = ({
             </TooltipContent>
           </Tooltip>
 
-          {/* Right: Orientation toggle + Export + Date selector + Jump to Today + Total Usage */}
+          {/* Right: Orientation toggle + Jump to Today + Date selector + Export + Total Usage */}
           <div className="flex items-center gap-3">
             <DesktopChartControls />
-            <ExportButton />
-            <DateSelector />
             
-            {/* Jump to Today button - after date selector */}
+            {/* Jump to Today button - before date selector */}
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button 
@@ -383,6 +381,9 @@ export const ChartHeader = ({
                 <p>Jump to today</p>
               </TooltipContent>
             </Tooltip>
+            
+            <DateSelector />
+            <ExportButton />
             
             {/* Total Usage display */}
             <Tooltip>
