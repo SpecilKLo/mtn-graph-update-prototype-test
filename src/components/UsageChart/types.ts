@@ -26,6 +26,7 @@ export type WeekBlock = {
   weekNumber: number;
   start: string;
   end: string;
+  totalUsage?: number;
 };
 
 // Custom range type

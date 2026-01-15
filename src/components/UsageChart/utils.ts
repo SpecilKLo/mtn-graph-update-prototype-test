@@ -154,26 +154,43 @@ export const calculateMonthBlocks = (chartData: ChartData[]): MonthBlock[] => {
   return blocks;
 };
 
-// Calculate week blocks for daily view reference areas
+// Calculate week blocks for daily view reference areas with total usage
 export const calculateWeekBlocks = (chartData: ChartData[]): WeekBlock[] => {
   const blocks: WeekBlock[] = [];
   let currentBlock: WeekBlock | null = null;
+  let currentBlockData: ChartData[] = [];
   
   chartData.forEach((item) => {
     const weekNumber = getISOWeek(item.date);
     if (!currentBlock || currentBlock.weekNumber !== weekNumber) {
-      if (currentBlock) blocks.push(currentBlock);
+      if (currentBlock) {
+        // Calculate total usage for the completed block
+        currentBlock.totalUsage = currentBlockData.reduce(
+          (acc, d) => acc + d.usage + (d.overUsage || 0), 
+          0
+        );
+        blocks.push(currentBlock);
+      }
       currentBlock = {
         weekNumber,
         start: item.label,
         end: item.label
       };
+      currentBlockData = [item];
     } else {
       currentBlock.end = item.label;
+      currentBlockData.push(item);
     }
   });
   
-  if (currentBlock) blocks.push(currentBlock);
+  if (currentBlock) {
+    // Calculate total usage for the last block
+    currentBlock.totalUsage = currentBlockData.reduce(
+      (acc, d) => acc + d.usage + (d.overUsage || 0), 
+      0
+    );
+    blocks.push(currentBlock);
+  }
   return blocks;
 };
 

@@ -62,17 +62,26 @@ export function createPlotBands(
       return bands;
     }
     
-    // Gray background for even-indexed weeks (0, 2, 4...) with week labels
+    // Gray background for even-indexed weeks (0, 2, 4...) with week labels and total usage
     return weekBlocks.map((block, index) => {
       const startIdx = chartData.findIndex((d) => d.label === block.start);
       const endIdx = chartData.findIndex((d) => d.label === block.end);
       const weekNumber = index + 1;
+      const totalUsageHtml = block.totalUsage !== undefined 
+        ? `<div style="display: inline-block; background-color: rgba(0,0,0,0.06); border-radius: 9999px; padding: 4px 12px; margin-top: 6px;">
+            <span style="font-size: 12px; font-weight: 400; color: #888;">Total Usage: </span>
+            <span style="font-size: 12px; font-weight: 600; color: #888;">${formatGBValue(block.totalUsage)}</span>
+          </div>`
+        : '';
       return {
         from: startIdx - 0.5,
         to: endIdx + 0.5,
         color: index % 2 === 0 ? HIGHCHARTS_COLORS.background : "transparent",
         label: {
-          text: `<span style="font-size: 12px; font-weight: 500; color: ${HIGHCHARTS_COLORS.text};">Week ${weekNumber}</span>`,
+          text: `<div style="display: flex; flex-direction: column; align-items: flex-start;">
+            <span style="font-size: 12px; font-weight: 500; color: ${HIGHCHARTS_COLORS.text};">Week ${weekNumber}</span>
+            ${totalUsageHtml}
+          </div>`,
           useHTML: true,
           style: {
             color: HIGHCHARTS_COLORS.text,
