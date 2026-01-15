@@ -54,7 +54,7 @@ export function createPlotBands(
             align: "left" as const,
             verticalAlign: "top" as const,
             x: 12,
-            y: 10,
+            y: 20,
           },
         });
         weekIndex++;
@@ -82,7 +82,7 @@ export function createPlotBands(
           align: "left" as const,
           verticalAlign: "top" as const,
           x: 12,
-          y: 10,
+          y: 20,
         },
       };
     });
@@ -116,7 +116,7 @@ export function createPlotBands(
           align: "left" as const,
           verticalAlign: "top" as const,
           x: 12,
-          y: 10,
+          y: 20,
         },
       };
     });
