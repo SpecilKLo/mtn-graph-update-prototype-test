@@ -84,5 +84,8 @@ export function getTooltipConfig(chartData: ChartData[], flipOrder: boolean = fa
     shadow: false,
     formatter: createTooltipFormatter(chartData, flipOrder),
     outside: false,
+    style: {
+      zIndex: 100, // Ensure tooltip appears above average line overlay
+    },
   };
 }
