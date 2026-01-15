@@ -180,7 +180,7 @@ export function HighchartsLineChart({
       tickWidth: 0,
       plotBands: createPlotBands(chartData, weekBlocks, monthBlocks, viewMode),
       crosshair: {
-        color: "#C084FC", // Purple/violet dashed line
+        color: "#737373", // Dark gray dashed line
         dashStyle: "Dash",
         width: 1,
         zIndex: 3,
