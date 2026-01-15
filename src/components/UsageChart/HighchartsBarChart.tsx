@@ -411,9 +411,9 @@ export function HighchartsBarChart({
           borderRadius: isAverageCollapsed ? 21 : 6,
         }}
         transition={{
-          type: "spring",
-          stiffness: 400,
-          damping: 25,
+          type: "tween",
+          duration: 0.25,
+          ease: [0.4, 0, 0.2, 1],
         }}
         style={{
           background: 'rgba(212, 229, 247, 0.50)',
@@ -436,7 +436,7 @@ export function HighchartsBarChart({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.15, ease: "easeInOut" }}
+              transition={{ duration: 0.12, ease: "easeOut" }}
               style={{
                 color: '#1B5087',
                 fontSize: 12,
@@ -452,7 +452,7 @@ export function HighchartsBarChart({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.15, ease: "easeInOut" }}
+              transition={{ duration: 0.12, ease: "easeOut" }}
               style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -548,12 +548,11 @@ export function HighchartsBarChart({
               initial={false}
               animate={{
                 scaleX: isAverageCollapsed ? 0 : 1,
-                opacity: isAverageCollapsed ? 0 : 1,
               }}
               transition={{
-                type: "spring",
-                stiffness: 400,
-                damping: 30,
+                type: "tween",
+                duration: 0.25,
+                ease: [0.4, 0, 0.2, 1],
               }}
             >
               <svg width="100%" height="2" style={{ display: 'block' }}>
