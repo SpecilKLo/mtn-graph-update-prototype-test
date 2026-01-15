@@ -119,26 +119,9 @@ export const ChartHeader = ({
     </DropdownMenu>
   );
 
-  // Desktop chart controls
+  // Desktop chart controls (orientation toggle + export)
   const DesktopChartControls = () => (
     <>
-      {/* Jump to Today button */}
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button 
-            variant="outline" 
-            size="icon"
-            className="h-[40px] w-[40px] border-border text-muted-foreground hover:bg-[#EAF2FB] hover:text-foreground rounded-lg m3-transition"
-            onClick={onJumpToToday}
-          >
-            <CalendarIcon className="h-4 w-4" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent className="m3-tooltip">
-          <p>Jump to today</p>
-        </TooltipContent>
-      </Tooltip>
-
       {/* Orientation toggle - styled toggle with icons */}
       <div className="relative flex items-center bg-white rounded-lg border border-border h-[40px] px-1">
         <Tooltip>
@@ -374,10 +357,27 @@ export const ChartHeader = ({
             </TooltipContent>
           </Tooltip>
 
-          {/* Right: Date selector + Jump to Today + Orientation toggle + Export button + Total Usage */}
+          {/* Right: Orientation toggle + Export + Date selector + Jump to Today + Total Usage */}
           <div className="flex items-center gap-3">
             <DesktopChartControls />
             <DateSelector />
+            
+            {/* Jump to Today button - after date selector */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  className="h-[40px] w-[40px] border-border text-muted-foreground hover:bg-[#EAF2FB] hover:text-foreground rounded-lg m3-transition"
+                  onClick={onJumpToToday}
+                >
+                  <CalendarIcon className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent className="m3-tooltip">
+                <p>Jump to today</p>
+              </TooltipContent>
+            </Tooltip>
             
             {/* Total Usage display */}
             <Tooltip>
