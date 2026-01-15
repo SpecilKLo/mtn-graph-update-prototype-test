@@ -220,7 +220,6 @@ export const ChartHeader = ({
                 onValueChange={onMonthChange}
               >
                 <SelectTrigger className="w-full lg:w-[200px] h-[40px] bg-background border border-border rounded-lg text-primary font-normal focus:ring-0 focus:ring-offset-0 text-sm">
-                  <CalendarIcon className="mr-2 h-4 w-4 text-muted-foreground shrink-0" />
                   <SelectValue>{format(selectedMonth, "MMMM yyyy")}</SelectValue>
                 </SelectTrigger>
                 <SelectContent className="bg-popover border-border">
@@ -244,7 +243,6 @@ export const ChartHeader = ({
               <div className="w-full lg:w-auto">
                 <Select value={rangePreset} onValueChange={onPresetChange}>
                   <SelectTrigger className="w-full lg:w-[200px] h-[40px] bg-background border border-border rounded-lg text-primary font-normal focus:ring-0 focus:ring-offset-0 text-sm">
-                    <CalendarIcon className="mr-2 h-4 w-4 text-muted-foreground shrink-0" />
                     <SelectValue>
                       {rangePreset === "currentMonth" 
                         ? format(new Date(), "MMMM yyyy")
