@@ -520,7 +520,7 @@ export function HighchartsLineChart({
             />
             {/* Animated average line overlay - retracts/extends smoothly */}
             <motion.div
-              className="absolute left-0 pointer-events-none"
+              className="absolute left-0 pointer-events-none z-[1]"
               style={{
                 top: `calc(${CHART_MARGIN_TOP}px + (100% - ${CHART_MARGIN_TOP}px) * ${averagePositionPercent / 100})`,
                 height: 2,
