@@ -1,6 +1,7 @@
 import * as React from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import { motion, AnimatePresence } from "framer-motion";
 
 import {
   HIGHCHARTS_COLORS,
@@ -50,6 +51,9 @@ export function HighchartsBarChart({
   // Scroll fade indicator states - start at right (newest dates)
   const [canScrollLeft, setCanScrollLeft] = React.useState(true);
   const [canScrollRight, setCanScrollRight] = React.useState(false);
+
+  // Average line collapsed state
+  const [isAverageCollapsed, setIsAverageCollapsed] = React.useState(false);
 
   // Monitor container width with ResizeObserver
   React.useEffect(() => {
@@ -237,7 +241,7 @@ export function HighchartsBarChart({
       title: {
         text: null,
       },
-      plotLines: [{
+      plotLines: isAverageCollapsed ? [] : [{
         value: averageUsage,
         color: '#58A0D4',
         dashStyle: 'Dash',
@@ -398,46 +402,78 @@ export function HighchartsBarChart({
   const averagePositionPercent = ((maxDomainValue - averageUsage) / maxDomainValue) * 100;
   const averageLabel = (
     <div
-      className="absolute left-0 z-20"
+      className="absolute left-0 z-20 cursor-pointer"
       style={{
         top: `calc(${CHART_MARGIN_TOP}px + (100% - ${CHART_MARGIN_TOP}px) * ${averagePositionPercent / 100})`,
         transform: "translateY(-50%)",
       }}
+      onClick={() => setIsAverageCollapsed(!isAverageCollapsed)}
     >
-      <div 
+      <motion.div 
+        initial={false}
+        animate={{
+          width: isAverageCollapsed ? 6 : 'auto',
+          height: isAverageCollapsed ? 6 : 'auto',
+          padding: isAverageCollapsed ? 0 : '2px 10px',
+          borderRadius: isAverageCollapsed ? 3 : 6,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 400,
+          damping: 25,
+        }}
         style={{
           background: 'rgba(212, 229, 247, 0.50)',
-          borderRadius: 6,
           backdropFilter: 'blur(3px)',
-          padding: '2px 10px',
           display: 'inline-flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'center',
+          overflow: 'hidden',
         }}
       >
-        <span style={{
-          color: '#1B5087',
-          fontSize: 8,
-          fontWeight: 700,
-          textTransform: 'uppercase',
-          letterSpacing: '0.96px',
-          lineHeight: '16px',
-          whiteSpace: 'nowrap',
-        }}>
-          AVERAGE
-        </span>
-        <span style={{
-          color: '#1B5087',
-          fontSize: 12,
-          fontWeight: 700,
-          lineHeight: '16px',
-          whiteSpace: 'nowrap',
-        }}>
-          {formatGBValue(averageUsage)}
-        </span>
-      </div>
+        <AnimatePresence>
+          {!isAverageCollapsed && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{
+                type: "spring",
+                stiffness: 400,
+                damping: 25,
+              }}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <span style={{
+                color: '#1B5087',
+                fontSize: 8,
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.96px',
+                lineHeight: '16px',
+                whiteSpace: 'nowrap',
+              }}>
+                AVERAGE
+              </span>
+              <span style={{
+                color: '#1B5087',
+                fontSize: 12,
+                fontWeight: 700,
+                lineHeight: '16px',
+                whiteSpace: 'nowrap',
+              }}>
+                {formatGBValue(averageUsage)}
+              </span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </div>
   );
 
