@@ -191,7 +191,7 @@ export function HighchartsLineChart({
       },
       plotLines: [{
         value: averageUsage,
-        color: '#D4E5F7',
+        color: '#58A0D4',
         dashStyle: 'Dash',
         width: 2,
         zIndex: 5,
