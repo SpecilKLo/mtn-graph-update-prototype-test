@@ -243,18 +243,6 @@ export function HighchartsBarChart({
         dashStyle: 'Dash',
         width: 2,
         zIndex: 5,
-        label: {
-          text: `<span style="background-color: #D4E5F7; color: #1B5087; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">${formatGBValue(averageUsage)}</span>`,
-          useHTML: true,
-          align: 'left',
-          x: 0,
-          y: -2,
-          style: {
-            color: '#1B5087',
-            fontSize: '11px',
-            fontWeight: '600',
-          },
-        },
       }],
     },
     plotOptions: {
