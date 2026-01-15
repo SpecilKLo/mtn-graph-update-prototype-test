@@ -386,10 +386,8 @@ export function HighchartsLineChart({
       <motion.div 
         initial={false}
         animate={{
-          width: isAverageCollapsed ? 6 : 'auto',
-          height: isAverageCollapsed ? 6 : 'auto',
-          padding: isAverageCollapsed ? 0 : '2px 10px',
-          borderRadius: isAverageCollapsed ? 3 : 6,
+          width: isAverageCollapsed ? 42 : 'auto',
+          borderRadius: isAverageCollapsed ? 21 : 6,
         }}
         transition={{
           type: "spring",
@@ -405,11 +403,35 @@ export function HighchartsLineChart({
           justifyContent: 'center',
           textAlign: 'center',
           overflow: 'hidden',
+          height: 42,
+          padding: '2px 10px',
+          minWidth: 42,
         }}
       >
-        <AnimatePresence>
-          {!isAverageCollapsed && (
+        <AnimatePresence mode="wait">
+          {isAverageCollapsed ? (
+            <motion.span
+              key="collapsed"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{
+                type: "spring",
+                stiffness: 400,
+                damping: 25,
+              }}
+              style={{
+                color: '#1B5087',
+                fontSize: 12,
+                fontWeight: 700,
+                whiteSpace: 'nowrap',
+              }}
+            >
+              AVG
+            </motion.span>
+          ) : (
             <motion.div
+              key="expanded"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
