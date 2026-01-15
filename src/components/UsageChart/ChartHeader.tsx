@@ -442,6 +442,18 @@ export const ChartHeader = ({
           <div className="w-full">
             <DateSelector />
           </div>
+
+          {/* Row 3: Total Usage - center aligned */}
+          <div className="flex justify-center">
+            <div className="flex items-center gap-2">
+              <span className="text-[14px] text-muted-foreground font-medium whitespace-nowrap">
+                Total Usage:
+              </span>
+              <span className="text-[15px] font-bold text-primary whitespace-nowrap">
+                {formatUsage(totalUsage)}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </TooltipProvider>
