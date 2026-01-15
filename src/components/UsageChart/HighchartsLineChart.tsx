@@ -338,7 +338,7 @@ export function HighchartsLineChart({
   // Line chart uses marginTop: 24 in Highcharts, which shifts the plot area down.
   // We must account for this in our manual label positioning.
   const CHART_MARGIN_TOP = 24; // Must match mainChartOptions.chart.marginTop
-  const Y_AXIS_TOP_PADDING = 12; // Prevent top label from being cut off
+  const Y_AXIS_TOP_PADDING = 2; // Prevent top label from being cut off
   
   // Calculate total available height for labels (excluding the top padding applied to container)
   // The plot area starts at CHART_MARGIN_TOP within Highcharts, so labels need the same offset

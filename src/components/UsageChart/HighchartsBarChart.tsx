@@ -366,7 +366,7 @@ export function HighchartsBarChart({
   // Y-axis labels (rendered manually for sticky positioning)
   // Bar chart uses marginTop: 24 in Highcharts, which shifts the plot area down.
   // We must account for this in our manual label positioning.
-  const Y_AXIS_TOP_PADDING = 12; // Prevent top label from being cut off
+  const Y_AXIS_TOP_PADDING = 2; // Prevent top label from being cut off
   
   const yAxisLabels = ticks.map((tick) => {
     const isZero = tick === 0;
