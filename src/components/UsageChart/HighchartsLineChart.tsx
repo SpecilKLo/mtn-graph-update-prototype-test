@@ -408,18 +408,14 @@ export function HighchartsLineChart({
           minWidth: 42,
         }}
       >
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="popLayout" initial={false}>
           {isAverageCollapsed ? (
             <motion.span
               key="collapsed"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{
-                type: "spring",
-                stiffness: 400,
-                damping: 25,
-              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15, ease: "easeInOut" }}
               style={{
                 color: '#1B5087',
                 fontSize: 12,
@@ -432,14 +428,10 @@ export function HighchartsLineChart({
           ) : (
             <motion.div
               key="expanded"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{
-                type: "spring",
-                stiffness: 400,
-                damping: 25,
-              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15, ease: "easeInOut" }}
               style={{
                 display: 'flex',
                 flexDirection: 'column',
