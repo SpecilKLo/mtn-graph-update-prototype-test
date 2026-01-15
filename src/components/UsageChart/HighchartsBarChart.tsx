@@ -530,15 +530,9 @@ export function HighchartsBarChart({
           style={{ paddingTop: Y_AXIS_TOP_PADDING }}
         >
           <div style={{ width: `${Math.max(chartWidth, containerWidth)}px`, height: "100%" }} className="relative">
-            <HighchartsReact
-              ref={mainChartRef}
-              highcharts={Highcharts}
-              options={mainChartOptions}
-              containerProps={{ style: { height: "100%", width: "100%" } }}
-            />
-            {/* Animated average line overlay - retracts/extends smoothly */}
+            {/* Animated average line overlay - rendered BEFORE chart so it's behind tooltip */}
             <motion.div
-              className="absolute left-0 pointer-events-none"
+              className="absolute left-0 pointer-events-none z-[1]"
               style={{
                 top: `calc(${CHART_MARGIN_TOP}px + (100% - ${CHART_MARGIN_TOP}px) * ${averagePositionPercent / 100})`,
                 height: 2,
@@ -567,6 +561,15 @@ export function HighchartsBarChart({
                 />
               </svg>
             </motion.div>
+            {/* Highcharts container with higher z-index for tooltip */}
+            <div className="relative z-[2]" style={{ height: "100%", width: "100%" }}>
+              <HighchartsReact
+                ref={mainChartRef}
+                highcharts={Highcharts}
+                options={mainChartOptions}
+                containerProps={{ style: { height: "100%", width: "100%" } }}
+              />
+            </div>
             {/* X-axis baseline */}
             <div 
               className="absolute bottom-0 left-0 right-0" 
