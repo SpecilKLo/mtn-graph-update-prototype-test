@@ -334,58 +334,63 @@ export const ChartHeader = ({
   return (
     <TooltipProvider delayDuration={200}>
       <div className="shrink-0 flex flex-col gap-3 px-4 sm:px-6 py-3 sm:py-4 border-b border-border/50 relative z-10 bg-card font-display">
-        {/* Desktop: Single row with all controls */}
-        <div className="hidden lg:flex items-center justify-between gap-3">
-          {/* Left: View mode tabs */}
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div>
-                <Tabs value={viewMode} onValueChange={(v) => onViewModeChange(v as ViewMode)}>
-                  <AnimatedTabsList 
-                    activeValue={viewMode}
-                    tabs={[
-                      { value: "day", label: "Daily View" },
-                      { value: "week", label: "Weekly View" },
-                      { value: "month", label: "Monthly View" },
-                    ]}
-                    onTabChange={(v) => onViewModeChange(v as ViewMode)}
-                    className="bg-muted h-10 p-1.5 rounded-lg gap-1"
-                  />
-                </Tabs>
-              </div>
-            </TooltipTrigger>
-            <TooltipContent className="m3-tooltip">
-              <p>Switch between daily, weekly, or monthly data views</p>
-            </TooltipContent>
-          </Tooltip>
-
-          {/* Right: Jump to Today + Date selector + Orientation toggle + Export + Total Usage */}
-          <div className="flex items-center gap-3">
-            {/* Jump to Today button */}
+        {/* Desktop: Two rows */}
+        <div className="hidden lg:flex flex-col gap-2">
+          {/* Row 1: View mode tabs + Controls */}
+          <div className="flex items-center justify-between gap-3">
+            {/* Left: View mode tabs */}
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  size="icon"
-                  className="h-[40px] w-[40px] border-border text-muted-foreground hover:bg-[#EAF2FB] hover:text-foreground rounded-lg m3-transition"
-                  onClick={onJumpToToday}
-                >
-                  <CalendarIcon className="h-4 w-4" />
-                </Button>
+                <div>
+                  <Tabs value={viewMode} onValueChange={(v) => onViewModeChange(v as ViewMode)}>
+                    <AnimatedTabsList 
+                      activeValue={viewMode}
+                      tabs={[
+                        { value: "day", label: "Daily View" },
+                        { value: "week", label: "Weekly View" },
+                        { value: "month", label: "Monthly View" },
+                      ]}
+                      onTabChange={(v) => onViewModeChange(v as ViewMode)}
+                      className="bg-muted h-10 p-1.5 rounded-lg gap-1"
+                    />
+                  </Tabs>
+                </div>
               </TooltipTrigger>
               <TooltipContent className="m3-tooltip">
-                <p>Jump to today</p>
+                <p>Switch between daily, weekly, or monthly data views</p>
               </TooltipContent>
             </Tooltip>
-            
-            <DateSelector />
-            <DesktopChartControls />
-            <ExportButton />
-            
-            {/* Total Usage display */}
+
+            {/* Right: Jump to Today + Date selector + Orientation toggle + Export */}
+            <div className="flex items-center gap-3">
+              {/* Jump to Today button */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button 
+                    variant="outline" 
+                    size="icon"
+                    className="h-[40px] w-[40px] border-border text-muted-foreground hover:bg-[#EAF2FB] hover:text-foreground rounded-lg m3-transition"
+                    onClick={onJumpToToday}
+                  >
+                    <CalendarIcon className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent className="m3-tooltip">
+                  <p>Jump to today</p>
+                </TooltipContent>
+              </Tooltip>
+              
+              <DateSelector />
+              <DesktopChartControls />
+              <ExportButton />
+            </div>
+          </div>
+          
+          {/* Row 2: Total Usage aligned right */}
+          <div className="flex justify-end">
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="flex items-center gap-2 px-3 py-2 bg-background border border-border rounded-lg cursor-default">
+                <div className="flex items-center gap-2 cursor-default">
                   <span className="text-[13px] text-muted-foreground font-medium whitespace-nowrap">
                     Total Usage:
                   </span>
