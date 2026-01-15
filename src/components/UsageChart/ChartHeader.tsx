@@ -247,7 +247,7 @@ export const ChartHeader = ({
                       {rangePreset === "currentMonth" 
                         ? format(new Date(), "MMMM yyyy")
                         : rangePreset === "currentYear"
-                        ? format(new Date(), "yyyy")
+                        ? `Year ${format(new Date(), "yyyy")}`
                         : rangePreset === "12months"
                         ? "Last 12 Months"
                         : rangePreset === "6months"
@@ -265,7 +265,7 @@ export const ChartHeader = ({
                     )}
                     {viewMode === "month" && (
                       <SelectItem value="currentYear">
-                        <span>{format(new Date(), "yyyy")}</span>
+                        <span>Year {format(new Date(), "yyyy")}</span>
                       </SelectItem>
                     )}
                     <SelectItem value="12months"><span>Last 12 Months</span></SelectItem>
