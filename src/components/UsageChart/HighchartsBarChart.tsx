@@ -424,6 +424,7 @@ export function HighchartsBarChart({
           textTransform: 'uppercase',
           letterSpacing: '0.96px',
           lineHeight: '16px',
+          whiteSpace: 'nowrap',
         }}>
           AVERAGE
         </span>
@@ -432,6 +433,7 @@ export function HighchartsBarChart({
           fontSize: 12,
           fontWeight: 700,
           lineHeight: '16px',
+          whiteSpace: 'nowrap',
         }}>
           {formatGBValue(averageUsage)}
         </span>
