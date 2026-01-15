@@ -186,22 +186,26 @@ export const ChartHeader = ({
         </Tooltip>
       </div>
 
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button 
-            variant="outline" 
-            size="icon"
-            className="h-[40px] w-[40px] border-border text-muted-foreground hover:bg-[#EAF2FB] hover:text-foreground rounded-lg m3-transition"
-            onClick={onExport}
-          >
-            <Download className="h-4 w-4" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent className="m3-tooltip">
-          <p>Export chart data as CSV file</p>
-        </TooltipContent>
-      </Tooltip>
     </>
+  );
+
+  // Export button component
+  const ExportButton = () => (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button 
+          variant="outline" 
+          size="icon"
+          className="h-[40px] w-[40px] border-border text-muted-foreground hover:bg-[#EAF2FB] hover:text-foreground rounded-lg m3-transition"
+          onClick={onExport}
+        >
+          <Download className="h-4 w-4" />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent className="m3-tooltip">
+        <p>Export chart data as CSV file</p>
+      </TooltipContent>
+    </Tooltip>
   );
 
   // Date selector component for reuse
@@ -360,6 +364,7 @@ export const ChartHeader = ({
           {/* Right: Orientation toggle + Export + Date selector + Jump to Today + Total Usage */}
           <div className="flex items-center gap-3">
             <DesktopChartControls />
+            <ExportButton />
             <DateSelector />
             
             {/* Jump to Today button - after date selector */}
