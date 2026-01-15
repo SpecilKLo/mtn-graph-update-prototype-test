@@ -512,13 +512,7 @@ export function HighchartsLineChart({
           style={{ paddingTop: Y_AXIS_TOP_PADDING }}
         >
           <div style={{ width: `${Math.max(chartWidth, containerWidth)}px`, height: "100%" }} className="relative">
-            <HighchartsReact
-              ref={mainChartRef}
-              highcharts={Highcharts}
-              options={mainChartOptions}
-              containerProps={{ style: { height: "100%", width: "100%" } }}
-            />
-            {/* Animated average line overlay - retracts/extends smoothly */}
+            {/* Animated average line overlay - rendered BEFORE chart so it's behind tooltip */}
             <motion.div
               className="absolute left-0 pointer-events-none z-[1]"
               style={{
@@ -549,6 +543,15 @@ export function HighchartsLineChart({
                 />
               </svg>
             </motion.div>
+            {/* Highcharts container with higher z-index for tooltip */}
+            <div className="relative z-[2]" style={{ height: "100%", width: "100%" }}>
+              <HighchartsReact
+                ref={mainChartRef}
+                highcharts={Highcharts}
+                options={mainChartOptions}
+                containerProps={{ style: { height: "100%", width: "100%" } }}
+              />
+            </div>
             {/* X-axis baseline */}
             <div 
               className="absolute bottom-0 left-0 right-0" 
