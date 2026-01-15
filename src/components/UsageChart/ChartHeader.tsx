@@ -219,8 +219,8 @@ export const ChartHeader = ({
                 value={format(selectedMonth, "yyyy-MM")} 
                 onValueChange={onMonthChange}
               >
-                <SelectTrigger className="w-full lg:w-[200px] h-[40px] bg-background border border-border rounded-lg text-primary font-normal focus:ring-0 focus:ring-offset-0 text-sm">
-                  <SelectValue>{format(selectedMonth, "MMMM yyyy")}</SelectValue>
+                <SelectTrigger className="w-full lg:w-[200px] h-[40px] bg-background border border-border rounded-lg text-primary font-normal focus:ring-0 focus:ring-offset-0 text-sm justify-center">
+                  <SelectValue className="text-center">{format(selectedMonth, "MMMM yyyy")}</SelectValue>
                 </SelectTrigger>
                 <SelectContent className="bg-popover border-border">
                   {monthOptions.map(opt => (
@@ -242,8 +242,8 @@ export const ChartHeader = ({
             <TooltipTrigger asChild>
               <div className="w-full lg:w-auto">
                 <Select value={rangePreset} onValueChange={onPresetChange}>
-                  <SelectTrigger className="w-full lg:w-[200px] h-[40px] bg-background border border-border rounded-lg text-primary font-normal focus:ring-0 focus:ring-offset-0 text-sm">
-                    <SelectValue>
+                  <SelectTrigger className="w-full lg:w-[200px] h-[40px] bg-background border border-border rounded-lg text-primary font-normal focus:ring-0 focus:ring-offset-0 text-sm justify-center">
+                    <SelectValue className="text-center">
                       {rangePreset === "currentMonth" 
                         ? format(new Date(), "MMMM yyyy")
                         : rangePreset === "currentYear"
