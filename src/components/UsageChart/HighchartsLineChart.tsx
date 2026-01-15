@@ -179,6 +179,12 @@ export function HighchartsLineChart({
       lineWidth: 0,
       tickWidth: 0,
       plotBands: createPlotBands(chartData, weekBlocks, monthBlocks, viewMode),
+      crosshair: {
+        color: "#C084FC", // Purple/violet dashed line
+        dashStyle: "Dash",
+        width: 1,
+        zIndex: 3,
+      },
     },
     yAxis: {
       min: 0,
