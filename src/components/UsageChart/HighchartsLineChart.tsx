@@ -193,13 +193,8 @@ export function HighchartsLineChart({
       title: {
         text: null,
       },
-      plotLines: isAverageCollapsed ? [] : [{
-        value: averageUsage,
-        color: '#58A0D4',
-        dashStyle: 'Dash',
-        width: 2,
-        zIndex: 5,
-      }],
+      // PlotLine is rendered separately as animated overlay for smooth retract/extend animation
+      plotLines: [],
     },
     plotOptions: {
       area: {
@@ -515,6 +510,38 @@ export function HighchartsLineChart({
               options={mainChartOptions}
               containerProps={{ style: { height: "100%", width: "100%" } }}
             />
+            {/* Animated average line overlay - retracts/extends smoothly */}
+            <motion.div
+              className="absolute left-0 pointer-events-none"
+              style={{
+                top: `calc(${CHART_MARGIN_TOP}px + (100% - ${CHART_MARGIN_TOP}px) * ${averagePositionPercent / 100})`,
+                height: 2,
+                right: CHART_CONFIG.RIGHT_MARGIN,
+                transformOrigin: 'left center',
+              }}
+              initial={false}
+              animate={{
+                scaleX: isAverageCollapsed ? 0 : 1,
+                opacity: isAverageCollapsed ? 0 : 1,
+              }}
+              transition={{
+                type: "spring",
+                stiffness: 400,
+                damping: 30,
+              }}
+            >
+              <svg width="100%" height="2" style={{ display: 'block' }}>
+                <line
+                  x1="0"
+                  y1="1"
+                  x2="100%"
+                  y2="1"
+                  stroke="#58A0D4"
+                  strokeWidth="2"
+                  strokeDasharray="8,4"
+                />
+              </svg>
+            </motion.div>
             {/* X-axis baseline */}
             <div 
               className="absolute bottom-0 left-0 right-0" 
