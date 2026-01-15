@@ -404,19 +404,38 @@ export function HighchartsBarChart({
         transform: "translateY(-50%)",
       }}
     >
-      <span 
+      <div 
         style={{
-          backgroundColor: '#D4E5F7',
-          color: '#1B5087',
-          padding: '2px 6px',
-          borderRadius: '4px',
-          fontSize: '11px',
-          fontWeight: 600,
-          whiteSpace: 'nowrap',
+          background: 'rgba(212, 229, 247, 0.50)',
+          borderRadius: 6,
+          backdropFilter: 'blur(3px)',
+          padding: '2px 10px',
+          display: 'inline-flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
         }}
       >
-        {formatGBValue(averageUsage)}
-      </span>
+        <span style={{
+          color: '#1B5087',
+          fontSize: 8,
+          fontWeight: 700,
+          textTransform: 'uppercase',
+          letterSpacing: '0.96px',
+          lineHeight: '16px',
+        }}>
+          AVERAGE
+        </span>
+        <span style={{
+          color: '#1B5087',
+          fontSize: 12,
+          fontWeight: 700,
+          lineHeight: '16px',
+        }}>
+          {formatGBValue(averageUsage)}
+        </span>
+      </div>
     </div>
   );
 
